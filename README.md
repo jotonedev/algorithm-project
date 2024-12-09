@@ -2,10 +2,10 @@
 
 Implementation, time complexity analysis and benchmarking of the following algorithms:
 
-- [] Quick Sort
-- [] Quick 3 Way Sort
-- [] Counting Sort
-- [] Tim Sort
+- [ ] Quick Sort
+- [ ] Quick 3 Way Sort
+- [ ] Counting Sort
+- [ ] Tim Sort
 
 ## Project Structure
 
