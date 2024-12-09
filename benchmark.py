@@ -148,7 +148,7 @@ def benchmark_algorithm(
 
     data_length = min_val
     scaling_factor = exp(log(max_val / min_val) / samples)
-    for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}"):
+    for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
         data_length = int(data_length * (scaling_factor ** i))
 
         # Generate random input data
@@ -206,7 +206,7 @@ def main(
     algorithms: list[Algorithm] = load_algorithms(input_folders)
 
     # Run the benchmark for each algorithm
-    for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms"):
+    for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True):
         try:
             results = benchmark_algorithm(
                 algorithm=algorithm,
