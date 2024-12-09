@@ -1,0 +1,6 @@
+Cython
+seaborn
+polars
+setuptools
+tqdm
+numpy
