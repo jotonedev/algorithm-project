@@ -18,22 +18,24 @@ Implementation, time complexity analysis and benchmarking of the following algor
 ## How to run
 
 ```bash
-python benchmark.py -i INPUT [-o OUTPUT] [-r REPETITIONS] [-l LEN] [--min MIN] [--max MAX] [--step STEP] [-v] [--disable-check-correctness] [--linear] [--no-progress]
+usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r REPETITIONS] [--min MIN] [--max MAX] [-v] [--disable-check-correctness]
 ```
 
 ### Arguments
 
 ```bash
--h, --help                                  show this help message and exit
--i INPUT, --input INPUT                     Input directory for algorithm inputs
--o OUTPUT, --output OUTPUT                  Output directory for benchmark results
--r REPETITIONS, --repetitions REPETITIONS   Number of repetitions for each input length to run
--l LEN, --len LEN                           Maximum length of the input data
---min MIN                                   Minimum size of the input data. Default to 1
---max MAX                                   Maximum size of the input data. Default to the length of the input data
---step STEP                                 Step size for the input data
--v, --verbose                               Increase output verbosity
---disable-check-correctness                 Check the correctness of the sorting algorithms
---linear                                    Increase the input data length linearly. Defaults to exponential
---no-progress                               Show a progress bar
+usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r REPETITIONS] [--min MIN] [--max MAX] [-v] [--disable-check-correctness]
+
+Benchmarking tool for the project
+
+options:
+  -h, --help                                    Show this help message and exit
+  -i INPUT, --input INPUT                       Input directory for algorithm inputs
+  -o OUTPUT, --output OUTPUT                    Output directory for benchmark results
+  -s SAMPLES, --samples SAMPLES                 Number of samples to get
+  -r REPETITIONS, --repetitions REPETITIONS     Number of repetitions for each input length to run
+  --min MIN                                     Minimum size of the input data. Default to 1
+  --max MAX                                     Maximum size of the input data. Default to 10000
+  -v, --verbose                                 Increase output verbosity
+  --disable-check-correctness                   Check the correctness of the sorting algorithms
 ```

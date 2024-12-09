@@ -246,7 +246,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         "-s", "--samples",
-        help="Number of samples to run",
+        help="Number of samples to get",
         type=int,
         default=100
     )
@@ -279,12 +279,6 @@ if __name__ == '__main__':
         help="Check the correctness of the sorting algorithms",
         action="store_true",
         default=False,
-    )
-    parser.add_argument(
-        "--linear",
-        help="Increase the input data length linearly. Defaults to exponential",
-        action="store_true",
-        default=False
     )
 
     args = parser.parse_args()
