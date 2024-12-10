@@ -1,6 +1,7 @@
 Cython
 seaborn
-polars
+pandas
 setuptools
 tqdm
 numpy
+psutil

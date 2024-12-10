@@ -24,7 +24,7 @@ usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r R
 ### Arguments
 
 ```bash
-usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r REPETITIONS] [--min MIN] [--max MAX] [-v] [--disable-check-correctness]
+usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r REPETITIONS] [--min MIN] [--max MAX] [-v]
 
 Benchmarking tool for the project
 
@@ -37,5 +37,4 @@ options:
   --min MIN                                     Minimum size of the input data. Default to 1
   --max MAX                                     Maximum size of the input data. Default to 10000
   -v, --verbose                                 Increase output verbosity
-  --disable-check-correctness                   Check the correctness of the sorting algorithms
 ```

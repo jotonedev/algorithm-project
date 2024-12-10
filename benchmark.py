@@ -1,18 +1,18 @@
-import sys
-import gc
-import time
-import tqdm
 import argparse
+import gc
+import importlib.util
 import logging
 import subprocess
-import importlib.util
-
-import polars as pl
-import numpy as np
-
-from math import exp, log
+import sys
+import timeit
 from dataclasses import dataclass
+from math import exp, log
 from pathlib import Path
+
+import numpy as np
+import pandas as pd
+import psutil
+import tqdm
 
 
 @dataclass
@@ -113,25 +113,16 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
     return algorithms
 
 
-def check_sorting(data: np.ndarray, result: np.ndarray) -> bool:
+def is_sorted(data: np.ndarray) -> bool:
     """
     Check the correctness of the sorting algorithm
 
     :param data: The original input data as NumPy array
-    :param result: The sorted data as NumPy array
     :return: True if the data is sorted, False otherwise
     """
-    # Use numpy sorting algorithm to check the correctness
-    return np.array_equal(result, np.sort(data))
-
-
-def create_empty_df(i: int) -> pl.DataFrame:
-    """
-    Create an empty DataFrame
-    """
-    columns = {f"rep_{n}": pl.Series(dtype=pl.Float64) for n in range(i)}
-    return pl.DataFrame(columns)
-
+    for elem in range(1, len(data)):
+        if data[elem] < data[elem - 1]:
+            return False
 
 def benchmark_algorithm(
         algorithm: Algorithm, 
@@ -139,8 +130,7 @@ def benchmark_algorithm(
         samples: int = 100,
         min_val: int = 100,
         max_val: int = 1000,
-        check_correctness: bool = True,
-    ) -> pl.DataFrame:
+) -> pd.DataFrame:
     """
     Benchmark the algorithm with random input data
 
@@ -148,56 +138,51 @@ def benchmark_algorithm(
     :param repetitions: The number of repetitions to run
     :param samples: The number of samples to run
     :param min_val: The minimum value of the input data
-    :param max_val: The maximum value of the input data. If None, set it to the length of the input data at each round
-    :param check_correctness: If True, check the correctness of the algorithm
+    :param max_val: The maximum value of the input data.
     :return: A list of execution times
     """
     logging.info(f"Benchmarking algorithm {algorithm.name}")
 
-    # Create a DataFrame to store the results
-    results = create_empty_df(repetitions)
+    # Create a DataFrame to store the results of execution times in nanoseconds
+    results = pd.DataFrame(
+        {
+            "Input Size": pd.Series(dtype="int"),
+            "Execution Time (s)": pd.Series(dtype="float"),
+        },
+        index=range(1, samples),
+    )
 
     data_length = min_val
     scaling_factor = exp(log(max_val / min_val) / samples)
-    for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+    for i in tqdm.tqdm(range(samples+1), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
         data_length = int(data_length * (scaling_factor ** i))
 
-        # Generate random input data
+        gc.collect()
+        gc.disable()
         data = generate_input_data(data_length, min_val, max_val)
-
-        # Run the algorithm for the given number of repetitions
-        values = {}
-        for i in range(repetitions):
-            # Copy the input data to avoid modifying the original list
-            input_data = data.copy()
-
-            # Disable the garbage collector to avoid interference with the execution time
-            gc.disable()
-            # Measure the execution time (without sleep or other operations)
-            start_time = time.process_time()
-            result = algorithm.function(input_data, len(input_data))
-            end_time = time.process_time()
-            gc.enable()
-
-            # Check the correctness of the algorithm
-            if check_correctness:
-                if not check_sorting(data, result):
-                    logging.error(f"Algorithm {algorithm.name} failed the correctness check")
-                    raise ValueError(f"Algorithm {algorithm.name} failed the correctness check")
-
-            # Store the execution time
-            values[f"rep_{i}"] = end_time - start_time
-
-        # Add the execution times to the DataFrame
-        results.vstack(
-            pl.DataFrame(values),
-            in_place=True
+        execution_time = timeit.timeit(
+            stmt=lambda : algorithm.function(data, len(data)),
+            number=repetitions,
+            globals=globals()
         )
+        gc.enable()
+
+        # if it's first iteration, check the correctness of the algorithm
+        # and ignore the execution time
+        if i == 0:
+            if is_sorted(data):
+                logging.error(f"Algorithm {algorithm.name} failed the correctness check")
+                raise ValueError("Algorithm failed the correctness check")
+            continue
+
+        results.loc[i] = {
+            "Input Size": data_length,
+            "Execution Time (s)": execution_time / repetitions,
+        }
 
     return results
 
 
-# noinspection PyShadowingNames
 def main(
     input_folders: list[Path],
     output: Path,
@@ -206,10 +191,12 @@ def main(
     min_val: int,
     max_val: int | None,
     verbose: bool,
-    check_correctness: bool,
 ):
     """Run the benchmarking tool"""
     setup_logger(verbose)
+
+    # Increase process priority to avoid interruptions
+    psutil.Process().nice(psutil.HIGH_PRIORITY_CLASS)
 
     # Create an output directory if it does not exist
     output.mkdir(parents=True, exist_ok=True)
@@ -228,14 +215,13 @@ def main(
                 samples=samples,
                 min_val=min_val,
                 max_val=max_val,
-                check_correctness=check_correctness,
             )
         except KeyboardInterrupt:
             logging.error("Benchmarking tool was interrupted")
             return
 
         # Save the results to a CSV file
-        results.write_csv(output / f"{algorithm.name}.csv")
+        results.to_csv(output / f"{algorithm.name}.csv", index=False)
 
     logging.info("Benchmarking tool completed successfully")
 
@@ -288,12 +274,6 @@ if __name__ == '__main__':
         action="store_true",
         default=False
     )
-    parser.add_argument(
-        "--disable-check-correctness",
-        help="Check the correctness of the sorting algorithms",
-        action="store_true",
-        default=False,
-    )
 
     args = parser.parse_args()
 
@@ -304,6 +284,5 @@ if __name__ == '__main__':
         repetitions=args.repetitions,
         min_val=args.min,
         max_val=args.max,
-        verbose=args.verbose,
-        check_correctness=not args.disable_check_correctness,
+        verbose=args.verbose
     )
