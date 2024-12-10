@@ -1,4 +1,5 @@
 import sys
+import gc
 import time
 import tqdm
 import argparse
@@ -53,23 +54,31 @@ def generate_input_data(length: int, min_val: int, max_val: int, *, use_float: b
 
 # noinspection DuplicatedCode
 def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
+    """
+    Load the sorting algorithms from the input directories
+
+    :param input_dirs: A list of input directories
+    :return: A list of Algorithm data classes
+    """
     algorithms: list[Algorithm] = []
 
     for dir_path in input_dirs:
+        # check if the directory exists
         dir_path = dir_path.resolve()
         if not dir_path.is_dir() or not dir_path.exists():
             continue
-
+        
+        # check if the setup.py file exists (needed to compile the Cython extension)
         setup_py = dir_path / 'setup.py'
+        setup_py = setup_py.resolve()
         if not setup_py.exists():
             continue
-        
-        setup_py = setup_py.resolve()
 
         # Build the Cython extension
         build_cmd = [sys.executable, str(setup_py), 'build_ext', '--inplace']
         logging.debug(f"Compiling Cython extension in {dir_path}")
         try:
+            # Run the build command ignoring the output
             subprocess.check_call(build_cmd, cwd=dir_path, stdout=subprocess.DEVNULL)
         except subprocess.CalledProcessError as e:
             logging.error(f"Failed to compile the Cython extension: {e}")
@@ -77,13 +86,15 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
 
         # Look for the compiled module with the correct name
         module_name = "sort"
+        # .pyd for Windows, .so for Unix
         for ext in ['.pyd', '.so']:
             # find a module path
             module_path = None
             for file in dir_path.glob(f"{module_name}*{ext}"):
                 module_path = file
                 break
-
+            
+            # load the module
             spec = importlib.util.spec_from_file_location(module_name, module_path)
             if spec is None:
                 continue
@@ -124,9 +135,9 @@ def create_empty_df(i: int) -> pl.DataFrame:
 
 def benchmark_algorithm(
         algorithm: Algorithm, 
-        repetitions: int = 10,
+        repetitions: int = 3,
         samples: int = 100,
-        min_val: int = 1,
+        min_val: int = 100,
         max_val: int = 1000,
         check_correctness: bool = True,
     ) -> pl.DataFrame:
@@ -160,14 +171,17 @@ def benchmark_algorithm(
             # Copy the input data to avoid modifying the original list
             input_data = data.copy()
 
+            # Disable the garbage collector to avoid interference with the execution time
+            gc.disable()
             # Measure the execution time (without sleep or other operations)
             start_time = time.process_time()
             result = algorithm.function(input_data, len(input_data))
             end_time = time.process_time()
-            
+            gc.enable()
+
             # Check the correctness of the algorithm
             if check_correctness:
-                if check_sorting(data, result):
+                if not check_sorting(data, result):
                     logging.error(f"Algorithm {algorithm.name} failed the correctness check")
                     raise ValueError(f"Algorithm {algorithm.name} failed the correctness check")
 
@@ -254,13 +268,13 @@ if __name__ == '__main__':
         "-r", "--repetitions",
         help="Number of repetitions for each input length to run",
         type=int,
-        default=4
+        default=3
     )
     parser.add_argument(
         "--min",
         help="Minimum size of the input data. Default to 1",
         type=int,
-        default=10
+        default=100
     )
     parser.add_argument(
         "--max",
