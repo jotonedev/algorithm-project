@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+        "ms-python.vscode-pylance",
+        "ms-vscode.cpptools-extension-pack",
+        "visualstudioexptteam.vscodeintellicode",
+        "ms-python.python",
+        "ms-python.debugpy"
+    ]
+}
