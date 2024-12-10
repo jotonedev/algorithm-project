@@ -200,7 +200,7 @@ def main(
     if sys.platform == 'win32':
         psutil.Process().nice(psutil.HIGH_PRIORITY_CLASS)
     elif sys.platform == 'linux':
-        psutil.Process().nice(-10)
+        psutil.Process().nice(1)
 
     # Create an output directory if it does not exist
     output.mkdir(parents=True, exist_ok=True)
