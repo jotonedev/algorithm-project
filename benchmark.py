@@ -156,6 +156,10 @@ def benchmark_algorithm(
     """
     logging.info(f"Benchmarking algorithm {algorithm.name}")
 
+    # set lower bound for max_val
+    if max_val is None or max_val < samples:
+        max_val = samples+1
+
     # Create a DataFrame to store the results of execution times in nanoseconds
     results = pd.DataFrame(
         {
@@ -233,7 +237,7 @@ def plot_results(data: pd.DataFrame, output: Path, linear: bool = False) -> None
     )
 
     # add orange line for n*log(n) function
-    y = np.multiply(data["size"], np.log10(data["size"])) * 8e-5
+    y = np.multiply(data["size"], np.log10(data["size"])) * 25e-5
     plot.ax.plot(
         data["size"],
         y,
@@ -247,7 +251,7 @@ def plot_results(data: pd.DataFrame, output: Path, linear: bool = False) -> None
     # add green line for linear function
     plot.ax.plot(
         data["size"],
-        data["size"] * 1e-4,
+        data["size"] * 5e-4,
         color="green",
         linestyle="--",
         label="O(n)",
@@ -262,7 +266,7 @@ def plot_results(data: pd.DataFrame, output: Path, linear: bool = False) -> None
         plot.set(xscale="log", yscale="log")
 
     # add legend on the bottom left outside the plot
-    plot.ax.legend(loc='lower left', ncol=4, frameon=False, bbox_to_anchor=(0, -0.05), fancybox=True)
+    plot.ax.legend(loc='lower left', ncol=4, frameon=False, bbox_to_anchor=(0, -0.25), fancybox=True)
 
     plot.savefig(output, format="svg", transparent=False)
 
