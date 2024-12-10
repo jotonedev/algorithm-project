@@ -176,30 +176,49 @@ def benchmark_algorithm(
         data_length = min_val
         scaling_factor = exp(log(max_val / min_val) / samples)
 
-    for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
-        if linear:
-            data_length += scaling_factor
-        else:
-            data_length = int(min_val * (scaling_factor ** i))
+     # warm up the cpu clock
+    timeit.Timer(
+        stmt="algorithm.function(data, 3000)",
+        setup="data = generate_input_data(3000, min_val, max_val)",
+        globals=globals() | locals()
+    ).timeit(number=10)
 
-        gc.collect()
-        gc.disable()
-        execution_time = timeit.Timer(
-            stmt="algorithm.function(data, data_length)",
-            setup="data = generate_input_data(data_length, min_val, max_val)",
-            globals=globals() | locals()
-        ).repeat(repeat=repetitions, number=1)
-        gc.enable()
+    try:
+        for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+            if linear:
+                data_length += scaling_factor
+            else:
+                data_length = int(min_val * (scaling_factor ** i))
 
-        results.loc[i] = {
-            "size": data_length,
-            "time": median(execution_time)
-        }
+            gc.collect()
+            gc.disable()
+            execution_time = timeit.Timer(
+                stmt="algorithm.function(data, data_length)",
+                setup="data = generate_input_data(data_length, min_val, max_val)",
+                globals=globals() | locals()
+            ).repeat(repeat=repetitions, number=1)
+            gc.enable()
+
+            results.loc[i] = {
+                "size": data_length,
+                "time": median(execution_time)
+            }
+    except KeyboardInterrupt:
+        logging.error("Benchmarking was interrupted")
+        return results
 
     return results
 
 
-def plot_results(data: pd.DataFrame, output: Path, linear: bool = False) -> None:
+def plot_results(
+        data: pd.DataFrame,
+        output: Path,
+        linear: bool = False,
+        name: str = "Algorithm",
+        show_linear: bool = False,
+        show_quadratic: bool = False,
+        show_nlogn: bool = False,
+) -> None:
     """
     Plot the benchmark results
 
@@ -207,6 +226,9 @@ def plot_results(data: pd.DataFrame, output: Path, linear: bool = False) -> None
     :param output: The output file path
     :param linear: If True, use linear scaling, otherwise use exponential scaling for both axes
     :param name: The name of the output plot file
+    :param show_linear: If True, show the linear function
+    :param show_quadratic: If True, show the quadratic function
+    :param show_nlogn: If True, show the n*log(n) function
     """
     # cleanup the data
     data["time"] = data["time"] * 1e3
@@ -220,44 +242,51 @@ def plot_results(data: pd.DataFrame, output: Path, linear: bool = False) -> None
         kind="line",
         size=5,
         aspect=1,
-        legend=False
+        legend=False,
+        label=name,
     )
     plot.set_xlabels("Input Size")
     plot.set_ylabels("Execution Time (ms)")
 
     # add red line for quadratic function
-    plot.ax.plot(
-        data["size"],
-        (data["size"] ** 2) * 9e-7,
-        color="red",
-        linestyle="--",
-        label="O(n^2)",
-        alpha=0.8,
-        linewidth=1.5
-    )
-
-    # add orange line for n*log(n) function
-    y = np.multiply(data["size"], np.log10(data["size"])) * 25e-5
-    plot.ax.plot(
-        data["size"],
-        y,
-        color="orange",
-        linestyle="--",
-        label="O(n*log(n))",
-        alpha=0.8,
-        linewidth=1.5
-    )
+    if show_quadratic:
+        quadratic_factor = average(data["time"] / (data["size"] ** 2)) * 0.8
+        plot.ax.plot(
+            data["size"],
+            (data["size"] ** 2) * quadratic_factor,
+            color="red",
+            linestyle="--",
+            label="O(n^2)",
+            alpha=0.8,
+            linewidth=1.5
+        )
 
     # add green line for linear function
-    plot.ax.plot(
-        data["size"],
-        data["size"] * 5e-4,
-        color="green",
-        linestyle="--",
-        label="O(n)",
-        alpha=0.8,
-        linewidth=1.5
-    )
+    if show_linear:
+        linear_factor = average(data["time"] / data["size"]) * 0.5
+        plot.ax.plot(
+            data["size"],
+            data["size"]*linear_factor,
+            color="green",
+            linestyle="--",
+            label="O(n)",
+            alpha=0.8,
+            linewidth=1.5
+        )
+
+    # add orange line for n*log(n) function
+    if show_nlogn:
+        log_factor = average([linear_factor, quadratic_factor]) * 0.5
+        y = np.multiply(data["size"], np.log(data["size"]))
+        plot.ax.plot(
+            data["size"],
+            y * log_factor,
+            color="orange",
+            linestyle="--",
+            label="O(n*log(n))",
+            alpha=0.8,
+            linewidth=1.5
+        )
 
     # set scale
     if linear:
@@ -280,12 +309,15 @@ def main(
     max_val: int | None,
     verbose: bool,
     linear: bool = False,
+    show_linear: bool = False,
+    show_quadratic: bool = False,
+    show_nlogn: bool = False,
 ):
     """Run the benchmarking tool"""
     setup_logger(verbose)
 
     # Increase process priority to avoid interruptions
-    # check if is windows
+    # check if it is windows
     process = psutil.Process()
     if sys.platform == 'win32':
         process.nice(psutil.HIGH_PRIORITY_CLASS)
@@ -298,7 +330,7 @@ def main(
         finally:
             # set the process to the highest possible priority if permission is not granted
             process.nice(1)
-    # pin process to the last core
+    # pin the process to the last core
     process.cpu_affinity([psutil.cpu_count(logical=False) - 1])
 
     # Create an output directory if it does not exist
@@ -327,7 +359,7 @@ def main(
         # Save the results to a CSV file
         results.to_csv(output / f"{algorithm.name}.csv", index=False)
         # Plot the results
-        plot_results(results, output / f"{algorithm.name}.svg", linear)
+        plot_results(results, output / f"{algorithm.name}.svg", linear, name=algorithm.name)
 
     logging.info("Benchmarking tool completed successfully")
 
@@ -366,7 +398,7 @@ if __name__ == '__main__':
         "--min",
         help="Minimum size of the input data. Default to 1",
         type=int,
-        default=100
+        default=1
     )
     parser.add_argument(
         "--max",
@@ -386,6 +418,24 @@ if __name__ == '__main__':
         action="store_true",
         default=False
     )
+    parser.add_argument(
+        "--show-linear",
+        help="Show the linear function in the plot",
+        action="store_true",
+        default=False
+    )
+    parser.add_argument(
+        "--show-quadratic",
+        help="Show the quadratic function in the plot",
+        action="store_true",
+        default=False
+    )
+    parser.add_argument(
+        "--show-nlogn",
+        help="Show the n*log(n) function in the plot",
+        action="store_true",
+        default=False
+    )
 
     args = parser.parse_args()
 
@@ -397,5 +447,8 @@ if __name__ == '__main__':
         min_val=args.min,
         max_val=args.max,
         verbose=args.verbose,
-        linear=args.linear
+        linear=args.linear,
+        show_linear=args.show_linear,
+        show_quadratic=args.show_quadratic,
+        show_nlogn=args.show_nlogn,
     )
