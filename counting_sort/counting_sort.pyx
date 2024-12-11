@@ -3,4 +3,3 @@ cdef extern from "sort.h":
 
 def py_counting_sort(int[:] a, int n):
     counting_sort(&a[0], n)
-

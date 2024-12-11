@@ -88,8 +88,7 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
         build_cmd = [sys.executable, str(setup_py), 'build_ext', '--inplace']
         logging.debug(f"Compiling Cython extension in {dir_path}")
         try:
-            # Run the build command ignoring the output
-            subprocess.check_call(build_cmd, cwd=dir_path, stdout=subprocess.DEVNULL)
+            subprocess.check_call(build_cmd, cwd=dir_path)
         except subprocess.CalledProcessError as e:
             logging.error(f"Failed to compile the Cython extension: {e}")
             exit(1)
@@ -180,8 +179,8 @@ def benchmark_algorithm(
 
      # warm up the cpu clock
     timeit.Timer(
-        stmt="algorithm.function(data, 3000)",
-        setup="data = generate_input_data(3000, min_val, max_val)",
+        stmt="algorithm.function(data, 1000)",
+        setup="data = generate_input_data(1000, min_val, max_val)",
         globals=globals() | locals()
     ).timeit(number=10)
 
@@ -267,7 +266,7 @@ def plot_results(
         )
 
     # add green line for linear function
-    linear_factor = average(data["time"] / data["size"]) * 0.45
+    linear_factor = average(data["time"] / data["size"]) * 0.40
     if show_linear:
         plot.ax.plot(
             data["size"],
@@ -280,8 +279,8 @@ def plot_results(
         )
 
     # add orange line for n*log(n) function
+    log_factor = average([linear_factor, quadratic_factor]) * 0.2
     if show_nlogn:
-        log_factor = average([linear_factor, quadratic_factor]) * 0.5
         y = np.multiply(data["size"], np.log(data["size"]))
         plot.ax.plot(
             data["size"],
@@ -350,7 +349,7 @@ def main(
     for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True):
         # Determine file name
         smp = str(samples).replace("000", "k")
-        run_type = "linear" if linear else "exponential"
+        run_type = "linear" if linear else "log"
         os_type = "win" if sys.platform == 'win32' else "lnx"
         filename = f"{algorithm.name.replace(' ', '_')}_{smp}_{run_type}_{repetitions}rep_{os_type}.csv"
 

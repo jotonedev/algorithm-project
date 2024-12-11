@@ -2355,9 +2355,6 @@ static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
 /* HasAttr.proto */
 static CYTHON_INLINE int __Pyx_HasAttr(PyObject *, PyObject *);
 
-/* BufferIndexError.proto */
-static void __Pyx_RaiseBufferIndexError(int axis);
-
 /* PyObject_GenericGetAttrNoDict.proto */
 #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
 static CYTHON_INLINE PyObject* __Pyx_PyObject_GenericGetAttrNoDict(PyObject* obj, PyObject* attr_name);
@@ -17317,7 +17314,6 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
  * 
  * def py_counting_sort(int[:] a, int n):             # <<<<<<<<<<<<<<
  *     counting_sort(&a[0], n)
- * 
  */
 
 /* Python wrapper */
@@ -17437,28 +17433,14 @@ static PyObject *__pyx_pf_13counting_sort_py_counting_sort(CYTHON_UNUSED PyObjec
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   Py_ssize_t __pyx_t_1;
-  int __pyx_t_2;
-  int __pyx_lineno = 0;
-  const char *__pyx_filename = NULL;
-  int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("py_counting_sort", 1);
 
   /* "counting_sort.pyx":5
  * 
  * def py_counting_sort(int[:] a, int n):
  *     counting_sort(&a[0], n)             # <<<<<<<<<<<<<<
- * 
  */
   __pyx_t_1 = 0;
-  __pyx_t_2 = -1;
-  if (__pyx_t_1 < 0) {
-    __pyx_t_1 += __pyx_v_a.shape[0];
-    if (unlikely(__pyx_t_1 < 0)) __pyx_t_2 = 0;
-  } else if (unlikely(__pyx_t_1 >= __pyx_v_a.shape[0])) __pyx_t_2 = 0;
-  if (unlikely(__pyx_t_2 != -1)) {
-    __Pyx_RaiseBufferIndexError(__pyx_t_2);
-    __PYX_ERR(1, 5, __pyx_L1_error)
-  }
   counting_sort((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n);
 
   /* "counting_sort.pyx":4
@@ -17466,16 +17448,10 @@ static PyObject *__pyx_pf_13counting_sort_py_counting_sort(CYTHON_UNUSED PyObjec
  * 
  * def py_counting_sort(int[:] a, int n):             # <<<<<<<<<<<<<<
  *     counting_sort(&a[0], n)
- * 
  */
 
   /* function exit code */
   __pyx_r = Py_None; __Pyx_INCREF(Py_None);
-  goto __pyx_L0;
-  __pyx_L1_error:;
-  __Pyx_AddTraceback("counting_sort.py_counting_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = NULL;
-  __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
@@ -18745,7 +18721,6 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  * 
  * def py_counting_sort(int[:] a, int n):             # <<<<<<<<<<<<<<
  *     counting_sort(&a[0], n)
- * 
  */
   __pyx_tuple__20 = PyTuple_Pack(2, __pyx_n_s_a, __pyx_n_s_n); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__20);
@@ -19806,7 +19781,6 @@ if (!__Pyx_RefNanny) {
  * 
  * def py_counting_sort(int[:] a, int n):             # <<<<<<<<<<<<<<
  *     counting_sort(&a[0], n)
- * 
  */
   __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13counting_sort_1py_counting_sort, 0, __pyx_n_s_py_counting_sort, NULL, __pyx_n_s_counting_sort, __pyx_d, ((PyObject *)__pyx_codeobj__21)); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 4, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
@@ -22305,12 +22279,6 @@ static CYTHON_INLINE int __Pyx_HasAttr(PyObject *o, PyObject *n) {
         Py_DECREF(r);
         return 1;
     }
-}
-
-/* BufferIndexError */
-static void __Pyx_RaiseBufferIndexError(int axis) {
-  PyErr_Format(PyExc_IndexError,
-     "Out of bounds on buffer access (axis %d)", axis);
 }
 
 /* PyObject_GenericGetAttrNoDict */

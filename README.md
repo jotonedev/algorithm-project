@@ -71,3 +71,18 @@ which can be imported and used in the benchmarking tool.
 
 Because it allows using the flexibility of python to write the benchmarking tool 
 and use the speed and predictability of C to run the algorithms.
+
+
+## Command used for benchmarking
+
+### Bubble Sort
+
+```bash
+python benchmark.py -i .templates/example-algorithm -v -s 12000 --max 12100 --linear -r 32 --show-quadratic --show-nlogn
+```
+
+### Counting Sort
+
+```bash
+python benchmark.py -i counting_sort/ -v -s 8000 --max 1000 --linear -r 32 --show-nlogn --show-linear
+```
