@@ -17,7 +17,7 @@ Implementation, time complexity analysis, and benchmarking of the following algo
 
 ## How to run
 
-First of all, you need to install the dependencies:
+First, you need to install the dependencies:
 
 ```bash
 pip install -r requirements.txt
@@ -62,7 +62,7 @@ options:
 ### What is Cython
 
 Cython is a static compiler for both the Python programming languages.
-It allows to write C extensions for Python, which can be used to optimize the code.
+It allows writing C extensions for Python, which can be used to optimize the code.
 
 By using Cython, we can write the algorithm in C and compile it to a Python module, 
 which can be imported and used in the benchmarking tool.
