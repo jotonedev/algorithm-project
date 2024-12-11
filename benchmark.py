@@ -230,27 +230,30 @@ def plot_results(
     :param show_quadratic: If True, show the quadratic function
     :param show_nlogn: If True, show the n*log(n) function
     """
-    # cleanup the data
+    # clean up the data
     data["time"] = data["time"] * 1e3
 
-    # prepare the plot
+    # set the style
+    sns.color_palette("rocket")
     sns.set_theme(style="whitegrid")
+
+    # prepare the plot
     plot = sns.relplot(
         data=data,
         x="size",
         y="time",
         kind="line",
-        size=5,
-        aspect=1,
-        legend=False,
+        size=5,          # marker size
+        aspect=1.33,     # aspect ratio
+        legend=False,    # declare the legend later
         label=name,
     )
     plot.set_xlabels("Input Size")
     plot.set_ylabels("Execution Time (ms)")
 
     # add red line for quadratic function
+    quadratic_factor = average(data["time"] / (data["size"] ** 2)) * 0.60
     if show_quadratic:
-        quadratic_factor = average(data["time"] / (data["size"] ** 2)) * 0.8
         plot.ax.plot(
             data["size"],
             (data["size"] ** 2) * quadratic_factor,
@@ -262,8 +265,8 @@ def plot_results(
         )
 
     # add green line for linear function
+    linear_factor = average(data["time"] / data["size"]) * 0.45
     if show_linear:
-        linear_factor = average(data["time"] / data["size"]) * 0.5
         plot.ax.plot(
             data["size"],
             data["size"]*linear_factor,
@@ -343,6 +346,12 @@ def main(
 
     # Run the benchmark for each algorithm
     for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True):
+        # Determine file name
+        smp = str(samples).replace("000", "k")
+        run_type = "linear" if linear else "exponential"
+        os_type = "win" if sys.platform == 'win32' else "lnx"
+        filename = f"{algorithm.name.replace(' ', '_')}_{smp}_{run_type}_{repetitions}rep_{os_type}.csv"
+
         try:
             results = benchmark_algorithm(
                 algorithm=algorithm,
@@ -357,9 +366,17 @@ def main(
             return
 
         # Save the results to a CSV file
-        results.to_csv(output / f"{algorithm.name}.csv", index=False)
+        results.to_csv(output / filename, index=False)
         # Plot the results
-        plot_results(results, output / f"{algorithm.name}.svg", linear, name=algorithm.name)
+        plot_results(
+            results,
+            output / filename.replace(".csv", ".svg"),
+            linear,
+            name=algorithm.name,
+            show_linear=show_linear,
+            show_quadratic=show_quadratic,
+            show_nlogn=show_nlogn,
+        )
 
     logging.info("Benchmarking tool completed successfully")
 
@@ -380,7 +397,7 @@ if __name__ == '__main__':
         "-o", "--output",
         help="Output directory for benchmark results",
         type=Path,
-        default=Path('output/')
+        default=Path('.results/')
     )
     parser.add_argument(
         "-s", "--samples",
