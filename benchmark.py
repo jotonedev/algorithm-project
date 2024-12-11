@@ -114,9 +114,9 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
 
             # Get all attributes from the module
             for attr in dir(module):
-                if attr.startswith('py_sort_'):
+                if attr.startswith('py_'):
                     algorithms.append(Algorithm(
-                        name=attr.replace('py_sort_', ''),
+                        name=attr.replace('py_', ''),
                         function=getattr(module, attr),
                         path=dir_path
                     ))

@@ -15,7 +15,7 @@
     <option name="ADD_SOURCE_ROOTS" value="true" />
     <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/benchmark.py" />
-    <option name="PARAMETERS" value="-i .templates/example-algorithm -v -s 100 --max 1000 --linear -r 3 --show-linear --show-nlogn --show-quadratic" />
+    <option name="PARAMETERS" value="-i counting_sort\ -v -s 100 --max 1000 --linear -r 3 --show-linear --show-nlogn --show-quadratic" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />
