@@ -10,8 +10,9 @@ int findK(int *a, int n) {
 }
 
 void countingSort(int *a, int n, int k) {
-    int B[n];
-    int C[k];
+    int* B = (int*)malloc(n * sizeof(int));
+    int* C = (int*)calloc(k + 1, sizeof(int));
+
 
     for (int i = 0; i <= k; i++) {
         C[i] = 0;
@@ -29,4 +30,6 @@ void countingSort(int *a, int n, int k) {
     for (int i = 0; i < n; i++) {
         a[i] = B[i];
     }
+    free(B);
+    free(C);
 }
