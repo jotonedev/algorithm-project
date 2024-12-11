@@ -95,13 +95,14 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
             exit(1)
 
         # Look for the compiled module with the correct name
-        module_name = "sort"
         # .pyd for Windows, .so for Unix
         for ext in ['.pyd', '.so']:
             # find a module path
             module_path = None
-            for file in dir_path.glob(f"{module_name}*{ext}"):
+            module_name = None
+            for file in dir_path.glob(f"*{ext}"):
                 module_path = file
+                module_name = file.stem.split('.')[0]
                 break
             
             # load the module
@@ -111,13 +112,14 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
 
-            # Get the sorting function
-            if hasattr(module, 'py_sort_test'):
-                algorithms.append(Algorithm(
-                    name="test",
-                    function=module.py_sort_test,
-                    path=dir_path
-                ))
+            # Get all attributes from the module
+            for attr in dir(module):
+                if attr.startswith('py_sort_'):
+                    algorithms.append(Algorithm(
+                        name=attr.replace('py_sort_', ''),
+                        function=getattr(module, attr),
+                        path=dir_path
+                    ))
             break
 
     return algorithms
