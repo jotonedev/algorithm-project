@@ -17700,7 +17700,7 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_counting_sort_benchmark(int
  *     if verify(b, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
  * 
- *     return end_ns - start_ns
+ *     free(<void*>b)
  */
     __pyx_t_2 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 38, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
@@ -17719,6 +17719,24 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_counting_sort_benchmark(int
 
   /* "counting_sort.pyx":40
  *         raise ValueError("Array is not sorted")
+ * 
+ *     free(<void*>b)             # <<<<<<<<<<<<<<
+ *     free(<void*>c)
+ * 
+ */
+  free(((void *)__pyx_v_b));
+
+  /* "counting_sort.pyx":41
+ * 
+ *     free(<void*>b)
+ *     free(<void*>c)             # <<<<<<<<<<<<<<
+ * 
+ *     return end_ns - start_ns
+ */
+  free(((void *)__pyx_v_c));
+
+  /* "counting_sort.pyx":43
+ *     free(<void*>c)
  * 
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
  * 
@@ -17747,7 +17765,7 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_counting_sort_benchmark(int
   return __pyx_r;
 }
 
-/* "counting_sort.pyx":43
+/* "counting_sort.pyx":46
  * 
  * # leave this function as is
  * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
@@ -17770,7 +17788,7 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_resolution", 1);
 
-  /* "counting_sort.pyx":45
+  /* "counting_sort.pyx":48
  * cdef unsigned long long get_resolution():
  *     cdef:
  *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
@@ -17779,7 +17797,7 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
  */
   __pyx_v_start_ns = 0;
 
-  /* "counting_sort.pyx":46
+  /* "counting_sort.pyx":49
  *     cdef:
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
@@ -17788,14 +17806,14 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
  */
   __pyx_v_end_ns = 0;
 
-  /* "counting_sort.pyx":47
+  /* "counting_sort.pyx":50
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0
  *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  *     end_ns = perf_counter_ns()
  *     return end_ns - start_ns
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 47, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17815,22 +17833,22 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 47, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 50, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 47, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_start_ns = __pyx_t_5;
 
-  /* "counting_sort.pyx":48
+  /* "counting_sort.pyx":51
  *         unsigned long long end_ns = 0
  *     start_ns = perf_counter_ns()
  *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  *     return end_ns - start_ns
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 48, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 51, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17850,15 +17868,15 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 48, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 51, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 48, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 51, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_end_ns = __pyx_t_5;
 
-  /* "counting_sort.pyx":49
+  /* "counting_sort.pyx":52
  *     start_ns = perf_counter_ns()
  *     end_ns = perf_counter_ns()
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
@@ -17868,7 +17886,7 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
   __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
   goto __pyx_L0;
 
-  /* "counting_sort.pyx":43
+  /* "counting_sort.pyx":46
  * 
  * # leave this function as is
  * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
@@ -17888,7 +17906,7 @@ static unsigned PY_LONG_LONG __pyx_f_13counting_sort_get_resolution(void) {
   return __pyx_r;
 }
 
-/* "counting_sort.pyx":52
+/* "counting_sort.pyx":55
  * 
  * # the function must have the specified signature
  * def py_counting_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -17951,7 +17969,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -17959,14 +17977,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("py_counting_sort", 1, 2, 2, 1); __PYX_ERR(0, 52, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("py_counting_sort", 1, 2, 2, 1); __PYX_ERR(0, 55, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_counting_sort") < 0)) __PYX_ERR(0, 52, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_counting_sort") < 0)) __PYX_ERR(0, 55, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -17974,12 +17992,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[0] = __Pyx_Arg_FASTCALL(__pyx_args, 0);
       values[1] = __Pyx_Arg_FASTCALL(__pyx_args, 1);
     }
-    __pyx_v_a = __Pyx_PyObject_to_MemoryviewSlice_ds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_a.memview)) __PYX_ERR(0, 52, __pyx_L3_error)
-    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L3_error)
+    __pyx_v_a = __Pyx_PyObject_to_MemoryviewSlice_ds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_a.memview)) __PYX_ERR(0, 55, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 55, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("py_counting_sort", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 52, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("py_counting_sort", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 55, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -18021,32 +18039,32 @@ static PyObject *__pyx_pf_13counting_sort_py_counting_sort(CYTHON_UNUSED PyObjec
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("py_counting_sort", 1);
 
-  /* "counting_sort.pyx":53
+  /* "counting_sort.pyx":56
  * # the function must have the specified signature
  * def py_counting_sort(int[:] a, int n) -> tuple[int, int]:
  *     return counting_sort_benchmark(&a[0], n), get_resolution()             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = 0;
-  __pyx_t_2 = __pyx_f_13counting_sort_counting_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_13counting_sort_counting_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __pyx_f_13counting_sort_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_13counting_sort_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 53, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 53, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 56, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 53, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error);
   __pyx_t_3 = 0;
   __pyx_t_4 = 0;
   __pyx_r = ((PyObject*)__pyx_t_5);
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "counting_sort.pyx":52
+  /* "counting_sort.pyx":55
  * 
  * # the function must have the specified signature
  * def py_counting_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -19234,7 +19252,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
  *     if verify(b, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
  * 
- *     return end_ns - start_ns
+ *     free(<void*>b)
  */
   __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Array_is_not_sorted); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
@@ -19341,16 +19359,16 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__19);
   __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "counting_sort.pyx":52
+  /* "counting_sort.pyx":55
  * 
  * # the function must have the specified signature
  * def py_counting_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *     return counting_sort_benchmark(&a[0], n), get_resolution()
  */
-  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_a, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_a, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_counting_sort_pyx, __pyx_n_s_py_counting_sort, 52, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_counting_sort_pyx, __pyx_n_s_py_counting_sort, 55, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -20420,20 +20438,20 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "counting_sort.pyx":52
+  /* "counting_sort.pyx":55
  * 
  * # the function must have the specified signature
  * def py_counting_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *     return counting_sort_benchmark(&a[0], n), get_resolution()
  */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 52, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_return, __pyx_kp_s_tuple_int_int) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13counting_sort_1py_counting_sort, 0, __pyx_n_s_py_counting_sort, NULL, __pyx_n_s_counting_sort, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 52, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_return, __pyx_kp_s_tuple_int_int) < 0) __PYX_ERR(0, 55, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_13counting_sort_1py_counting_sort, 0, __pyx_n_s_py_counting_sort, NULL, __pyx_n_s_counting_sort, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_7, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_counting_sort, __pyx_t_7) < 0) __PYX_ERR(0, 52, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_counting_sort, __pyx_t_7) < 0) __PYX_ERR(0, 55, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "counting_sort.pyx":1
