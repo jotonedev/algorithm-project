@@ -166,6 +166,7 @@ def benchmark_algorithm(
         {
             "size": pd.Series(dtype="int"),
             "time": pd.Series(dtype="float"),
+            "resolution": pd.Series(dtype="int"),
         },
         index=range(samples),
     )
@@ -173,16 +174,15 @@ def benchmark_algorithm(
     if linear:
         data_length = 0
         scaling_factor = int((max_val - min_val) / samples)
+        if scaling_factor <= 0:
+            scaling_factor = 1
     else:
         data_length = min_val
         scaling_factor = exp(log(max_val / min_val) / samples)
 
-     # warm up the cpu clock
-    timeit.Timer(
-        stmt="algorithm.function(data, 1000)",
-        setup="data = generate_input_data(1000, min_val, max_val)",
-        globals=globals() | locals()
-    ).timeit(number=10)
+    # warm up the cpu clock
+    for _ in range(5):
+        algorithm.function(generate_input_data(100, 0, 100), 100)
 
     try:
         for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
@@ -193,16 +193,19 @@ def benchmark_algorithm(
 
             gc.collect()
             gc.disable()
-            execution_time = timeit.Timer(
-                stmt="algorithm.function(data, data_length)",
-                setup="data = generate_input_data(data_length, min_val, max_val)",
-                globals=globals() | locals()
-            ).repeat(repeat=repetitions, number=1)
+            execution_times: list[int] = []
+            resolutions: list[int] = []
+            for _ in range(repetitions):
+                data = generate_input_data(data_length, min_val, max_val)
+                exec_time, res = algorithm.function(data, data_length)
+                execution_times.append(exec_time)
+                resolutions.append(res)
             gc.enable()
 
             results.loc[i] = {
                 "size": data_length,
-                "time": median(execution_time)
+                "time": median(execution_times),
+                "resolution": average(resolutions)
             }
     except KeyboardInterrupt:
         logging.error("Benchmarking was interrupted")
@@ -231,8 +234,8 @@ def plot_results(
     :param show_quadratic: If True, show the quadratic function
     :param show_nlogn: If True, show the n*log(n) function
     """
-    # clean up the data
-    data["time"] = data["time"] * 1e3
+    # convert the time to milliseconds from nanoseconds
+    data["time"] = data["time"] / 1_000_000
 
     # set the style
     sns.color_palette("rocket")
