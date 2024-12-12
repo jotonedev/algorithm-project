@@ -4,19 +4,16 @@ import importlib.util
 import logging
 import subprocess
 import sys
-import timeit
-from statistics import median
-
-import psutil
-import tqdm
-
 from dataclasses import dataclass
 from math import exp, log
 from pathlib import Path
+from statistics import median
 
 import numpy as np
 import pandas as pd
+import psutil
 import seaborn as sns
+import tqdm
 from numpy.ma.extras import average
 
 
@@ -43,22 +40,19 @@ def setup_logger(verbose: bool) -> None:
         datefmt='%Y-%m-%d %H:%M:%S',
         handlers=[handler]
     )
-    # disable seaborn logs
+    # disable seaborn/matplotlib logs
     logging.getLogger("matplotlib").setLevel(logging.ERROR)
 
 
-def generate_input_data(length: int, min_val: int, max_val: int, *, use_float: bool = False) -> np.ndarray:
+def generate_input_data(length: int, min_val: int, max_val: int) -> np.ndarray:
     """
     Generate a numpy array of random numbers
     
     :param length: The length of the array
     :param min_val: The minimum value
-    :param max_val: The maximum value 
-    :param use_float: If True, generate an array of floats, else integers
+    :param max_val: The maximum value
     :return: A numpy array of random numbers
     """
-    if use_float:
-        return np.random.uniform(min_val, max_val, size=length).astype(np.float64)
     return np.random.randint(min_val, max_val + 1, size=length, dtype=np.intc)
 
 
@@ -73,18 +67,18 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
     algorithms: list[Algorithm] = []
 
     for dir_path in input_dirs:
-        # check if the directory exists
+        # make sure the path is absolute
         dir_path = dir_path.resolve()
-        if not dir_path.is_dir() or not dir_path.exists():
+        # check if the directory exists
+        if not dir_path.exists() or not dir_path.is_dir() :
             continue
-        
+
         # check if the setup.py file exists (needed to compile the Cython extension)
         setup_py = dir_path / 'setup.py'
-        setup_py = setup_py.resolve()
         if not setup_py.exists():
             continue
 
-        # Build the Cython extension
+        # Build the Cython module
         build_cmd = [sys.executable, str(setup_py), 'build_ext', '--inplace']
         logging.debug(f"Compiling Cython extension in {dir_path}")
         try:
@@ -93,17 +87,17 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
             logging.error(f"Failed to compile the Cython extension: {e}")
             exit(1)
 
-        # Look for the compiled module with the correct name
+        # Look for the compiled module to load into the process
         # .pyd for Windows, .so for Unix
         for ext in ['.pyd', '.so']:
-            # find a module path
+            # find the module file
             module_path = None
             module_name = None
             for file in dir_path.glob(f"*{ext}"):
                 module_path = file
                 module_name = file.stem.split('.')[0]
                 break
-            
+
             # load the module
             spec = importlib.util.spec_from_file_location(module_name, module_path)
             if spec is None:
@@ -113,53 +107,41 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
 
             # Get all attributes from the module
             for attr in dir(module):
+                # find the sorting function by checking the attribute name
                 if attr.startswith('py_'):
                     algorithms.append(Algorithm(
                         name=attr.replace('py_', ''),
                         function=getattr(module, attr),
                         path=dir_path
                     ))
-            break
+                    # break the loop to avoid adding the same algorithm multiple times
+                    break
 
     return algorithms
 
 
-def is_sorted(data: np.ndarray) -> bool:
-    """
-    Check the correctness of the sorting algorithm
-
-    :param data: The original input data as NumPy array
-    :return: True if the data is sorted, False otherwise
-    """
-    for elem in range(1, len(data)):
-        if data[elem] < data[elem - 1]:
-            return False
-
-
 def benchmark_algorithm(
-        algorithm: Algorithm, 
+        algorithm: Algorithm,
         repetitions: int = 5,
         samples: int = 100,
-        min_val: int = 100,
-        max_val: int | None = None,
+        min_val: int = 1,
+        max_val: int = 1000,
         linear: bool = False,
 ) -> pd.DataFrame:
     """
     Benchmark the algorithm with random input data
 
     :param algorithm: The Algorithm data class
-    :param repetitions: The number of repetitions to run
-    :param samples: The number of samples to run
+    :param repetitions: The number of repetitions to run for each sample
+    :param samples: The number of samples to run for each input size
     :param min_val: The minimum value of the input data
-    :param max_val: The maximum value of the input data.
+    :param max_val: The maximum value of the input data (must be greater than min_val)
     :param linear: If True, use linear scaling, otherwise use exponential scaling
-    :return: A list of execution times
+
+    :return: A DataFrame containing the results of the benchmark
+             (size, time, average resolution between repetitions)
     """
     logging.info(f"Benchmarking algorithm {algorithm.name}")
-
-    # set lower bound for max_val
-    if max_val is None or max_val < samples:
-        max_val = samples+1
 
     # Create a DataFrame to store the results of execution times in nanoseconds
     results = pd.DataFrame(
@@ -246,15 +228,17 @@ def plot_results(
         data=data,
         x="size",
         y="time",
-        kind="line",
-        size=5,          # marker size
-        aspect=1.33,     # aspect ratio
-        legend=False,    # declare the legend later
+        kind="scatter",
+        size=5,  # marker size
+        aspect=1.33,  # aspect ratio
+        legend=False,  # declare the legend later
         label=name,
     )
+    # set the labels
     plot.set_xlabels("Input Size")
     plot.set_ylabels("Execution Time (ms)")
 
+    # TODO: Refactor the function overlay
     # add red line for quadratic function
     quadratic_factor = average(data["time"] / (data["size"] ** 2)) * 0.60
     if show_quadratic:
@@ -273,7 +257,7 @@ def plot_results(
     if show_linear:
         plot.ax.plot(
             data["size"],
-            data["size"]*linear_factor,
+            data["size"] * linear_factor,
             color="green",
             linestyle="--",
             label="O(n)",
@@ -308,17 +292,17 @@ def plot_results(
 
 
 def main(
-    input_folders: list[Path],
-    output: Path,
-    repetitions: int,
-    samples: int,
-    min_val: int,
-    max_val: int | None,
-    verbose: bool,
-    linear: bool = False,
-    show_linear: bool = False,
-    show_quadratic: bool = False,
-    show_nlogn: bool = False,
+        input_folders: list[Path],
+        output: Path,
+        repetitions: int,
+        samples: int,
+        min_val: int,
+        max_val: int | None,
+        verbose: bool,
+        linear: bool = False,
+        show_linear: bool = False,
+        show_quadratic: bool = False,
+        show_nlogn: bool = False,
 ):
     """Run the benchmarking tool"""
     setup_logger(verbose)
@@ -337,7 +321,6 @@ def main(
             logging.warning("Could not set the process to the highest priority")
             process.nice(1)
             logging.info("Set process to 1 nice")
-
     # pin the process to the last core
     process.cpu_affinity([psutil.cpu_count(logical=False) - 1])
 
