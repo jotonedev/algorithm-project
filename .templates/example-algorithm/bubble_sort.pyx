@@ -1,5 +1,6 @@
 from time import perf_counter_ns
 
+
 cdef extern from "sort.h":
     void bubble_sort(int *arr, int n)
 
@@ -9,7 +10,6 @@ cdef int verify(int *a, int n):
         if a[i] < a[i - 1]:
             return 0
     return 1
-
 
 cdef unsigned long long bubble_sort_benchmark(int* a, int n):
     cdef:

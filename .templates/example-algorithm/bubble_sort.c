@@ -2733,6 +2733,7 @@ static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
 static int __pyx_f_11bubble_sort_verify(int *, int); /*proto*/
 static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *, int); /*proto*/
+static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_get_resolution(void); /*proto*/
 static int __pyx_array_allocate_buffer(struct __pyx_array_obj *); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -2834,6 +2835,7 @@ static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_name_2[] = "__name__";
 static const char __pyx_k_pickle[] = "pickle";
 static const char __pyx_k_reduce[] = "__reduce__";
+static const char __pyx_k_return[] = "return";
 static const char __pyx_k_struct[] = "struct";
 static const char __pyx_k_unpack[] = "unpack";
 static const char __pyx_k_update[] = "update";
@@ -2867,6 +2869,7 @@ static const char __pyx_k_stringsource[] = "<stringsource>";
 static const char __pyx_k_version_info[] = "version_info";
 static const char __pyx_k_class_getitem[] = "__class_getitem__";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
+static const char __pyx_k_tuple_int_int[] = "tuple[int, int]";
 static const char __pyx_k_AssertionError[] = "AssertionError";
 static const char __pyx_k_py_bubble_sort[] = "py_bubble_sort";
 static const char __pyx_k_View_MemoryView[] = "View.MemoryView";
@@ -3098,6 +3101,7 @@ typedef struct {
   PyObject *__pyx_n_s_reduce_cython;
   PyObject *__pyx_n_s_reduce_ex;
   PyObject *__pyx_n_s_register;
+  PyObject *__pyx_n_s_return;
   PyObject *__pyx_n_s_setstate;
   PyObject *__pyx_n_s_setstate_cython;
   PyObject *__pyx_n_s_shape;
@@ -3114,6 +3118,7 @@ typedef struct {
   PyObject *__pyx_n_s_sys;
   PyObject *__pyx_n_s_test;
   PyObject *__pyx_n_s_time;
+  PyObject *__pyx_kp_s_tuple_int_int;
   PyObject *__pyx_kp_s_unable_to_allocate_array_data;
   PyObject *__pyx_kp_s_unable_to_allocate_shape_and_str;
   PyObject *__pyx_n_s_unpack;
@@ -3297,6 +3302,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_reduce_cython);
   Py_CLEAR(clear_module_state->__pyx_n_s_reduce_ex);
   Py_CLEAR(clear_module_state->__pyx_n_s_register);
+  Py_CLEAR(clear_module_state->__pyx_n_s_return);
   Py_CLEAR(clear_module_state->__pyx_n_s_setstate);
   Py_CLEAR(clear_module_state->__pyx_n_s_setstate_cython);
   Py_CLEAR(clear_module_state->__pyx_n_s_shape);
@@ -3313,6 +3319,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_sys);
   Py_CLEAR(clear_module_state->__pyx_n_s_test);
   Py_CLEAR(clear_module_state->__pyx_n_s_time);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_tuple_int_int);
   Py_CLEAR(clear_module_state->__pyx_kp_s_unable_to_allocate_array_data);
   Py_CLEAR(clear_module_state->__pyx_kp_s_unable_to_allocate_shape_and_str);
   Py_CLEAR(clear_module_state->__pyx_n_s_unpack);
@@ -3474,6 +3481,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_reduce_cython);
   Py_VISIT(traverse_module_state->__pyx_n_s_reduce_ex);
   Py_VISIT(traverse_module_state->__pyx_n_s_register);
+  Py_VISIT(traverse_module_state->__pyx_n_s_return);
   Py_VISIT(traverse_module_state->__pyx_n_s_setstate);
   Py_VISIT(traverse_module_state->__pyx_n_s_setstate_cython);
   Py_VISIT(traverse_module_state->__pyx_n_s_shape);
@@ -3490,6 +3498,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_sys);
   Py_VISIT(traverse_module_state->__pyx_n_s_test);
   Py_VISIT(traverse_module_state->__pyx_n_s_time);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_tuple_int_int);
   Py_VISIT(traverse_module_state->__pyx_kp_s_unable_to_allocate_array_data);
   Py_VISIT(traverse_module_state->__pyx_kp_s_unable_to_allocate_shape_and_str);
   Py_VISIT(traverse_module_state->__pyx_n_s_unpack);
@@ -3661,6 +3670,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_reduce_cython __pyx_mstate_global->__pyx_n_s_reduce_cython
 #define __pyx_n_s_reduce_ex __pyx_mstate_global->__pyx_n_s_reduce_ex
 #define __pyx_n_s_register __pyx_mstate_global->__pyx_n_s_register
+#define __pyx_n_s_return __pyx_mstate_global->__pyx_n_s_return
 #define __pyx_n_s_setstate __pyx_mstate_global->__pyx_n_s_setstate
 #define __pyx_n_s_setstate_cython __pyx_mstate_global->__pyx_n_s_setstate_cython
 #define __pyx_n_s_shape __pyx_mstate_global->__pyx_n_s_shape
@@ -3677,6 +3687,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_sys __pyx_mstate_global->__pyx_n_s_sys
 #define __pyx_n_s_test __pyx_mstate_global->__pyx_n_s_test
 #define __pyx_n_s_time __pyx_mstate_global->__pyx_n_s_time
+#define __pyx_kp_s_tuple_int_int __pyx_mstate_global->__pyx_kp_s_tuple_int_int
 #define __pyx_kp_s_unable_to_allocate_array_data __pyx_mstate_global->__pyx_kp_s_unable_to_allocate_array_data
 #define __pyx_kp_s_unable_to_allocate_shape_and_str __pyx_mstate_global->__pyx_kp_s_unable_to_allocate_shape_and_str
 #define __pyx_n_s_unpack __pyx_mstate_global->__pyx_n_s_unpack
@@ -17336,7 +17347,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "bubble_sort.pyx":6
+/* "bubble_sort.pyx":7
  *     void bubble_sort(int *arr, int n)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
@@ -17352,7 +17363,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   int __pyx_t_3;
   int __pyx_t_4;
 
-  /* "bubble_sort.pyx":8
+  /* "bubble_sort.pyx":9
  * cdef int verify(int *a, int n):
  *     cdef int i
  *     for i in range(1, n):             # <<<<<<<<<<<<<<
@@ -17364,7 +17375,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   for (__pyx_t_3 = 1; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "bubble_sort.pyx":9
+    /* "bubble_sort.pyx":10
  *     cdef int i
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:             # <<<<<<<<<<<<<<
@@ -17374,7 +17385,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
     __pyx_t_4 = ((__pyx_v_a[__pyx_v_i]) < (__pyx_v_a[(__pyx_v_i - 1)]));
     if (__pyx_t_4) {
 
-      /* "bubble_sort.pyx":10
+      /* "bubble_sort.pyx":11
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:
  *             return 0             # <<<<<<<<<<<<<<
@@ -17384,7 +17395,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "bubble_sort.pyx":9
+      /* "bubble_sort.pyx":10
  *     cdef int i
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:             # <<<<<<<<<<<<<<
@@ -17394,7 +17405,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
     }
   }
 
-  /* "bubble_sort.pyx":11
+  /* "bubble_sort.pyx":12
  *         if a[i] < a[i - 1]:
  *             return 0
  *     return 1             # <<<<<<<<<<<<<<
@@ -17404,7 +17415,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "bubble_sort.pyx":6
+  /* "bubble_sort.pyx":7
  *     void bubble_sort(int *arr, int n)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
@@ -17417,7 +17428,7 @@ static int __pyx_f_11bubble_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   return __pyx_r;
 }
 
-/* "bubble_sort.pyx":13
+/* "bubble_sort.pyx":14
  *     return 1
  * 
  * cdef unsigned long long bubble_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
@@ -17442,7 +17453,7 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("bubble_sort_benchmark", 1);
 
-  /* "bubble_sort.pyx":15
+  /* "bubble_sort.pyx":16
  * cdef unsigned long long bubble_sort_benchmark(int* a, int n):
  *     cdef:
  *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
@@ -17451,7 +17462,7 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
  */
   __pyx_v_start_ns = 0;
 
-  /* "bubble_sort.pyx":16
+  /* "bubble_sort.pyx":17
  *     cdef:
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
@@ -17460,14 +17471,14 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
  */
   __pyx_v_end_ns = 0;
 
-  /* "bubble_sort.pyx":18
+  /* "bubble_sort.pyx":19
  *         unsigned long long end_ns = 0
  * 
  *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  *     bubble_sort(a, n)
  *     end_ns = perf_counter_ns()
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 18, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17487,15 +17498,15 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 18, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 19, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 18, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 19, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_start_ns = __pyx_t_5;
 
-  /* "bubble_sort.pyx":19
+  /* "bubble_sort.pyx":20
  * 
  *     start_ns = perf_counter_ns()
  *     bubble_sort(a, n)             # <<<<<<<<<<<<<<
@@ -17504,14 +17515,14 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
  */
   bubble_sort(__pyx_v_a, __pyx_v_n);
 
-  /* "bubble_sort.pyx":20
+  /* "bubble_sort.pyx":21
  *     start_ns = perf_counter_ns()
  *     bubble_sort(a, n)
  *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  * 
  *     if verify(a, n) == 0:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 21, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17531,39 +17542,39 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 20, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 21, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_end_ns = __pyx_t_5;
 
-  /* "bubble_sort.pyx":22
+  /* "bubble_sort.pyx":23
  *     end_ns = perf_counter_ns()
  * 
  *     if verify(a, n) == 0:             # <<<<<<<<<<<<<<
  *         raise ValueError("Array is not sorted")
  * 
  */
-  __pyx_t_6 = __pyx_f_11bubble_sort_verify(__pyx_v_a, __pyx_v_n); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 22, __pyx_L1_error)
+  __pyx_t_6 = __pyx_f_11bubble_sort_verify(__pyx_v_a, __pyx_v_n); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 23, __pyx_L1_error)
   __pyx_t_7 = (__pyx_t_6 == 0);
   if (unlikely(__pyx_t_7)) {
 
-    /* "bubble_sort.pyx":23
+    /* "bubble_sort.pyx":24
  * 
  *     if verify(a, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
  * 
  *     return end_ns - start_ns
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 23, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 24, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 23, __pyx_L1_error)
+    __PYX_ERR(0, 24, __pyx_L1_error)
 
-    /* "bubble_sort.pyx":22
+    /* "bubble_sort.pyx":23
  *     end_ns = perf_counter_ns()
  * 
  *     if verify(a, n) == 0:             # <<<<<<<<<<<<<<
@@ -17572,17 +17583,17 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
  */
   }
 
-  /* "bubble_sort.pyx":25
+  /* "bubble_sort.pyx":26
  *         raise ValueError("Array is not sorted")
  * 
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
  * 
- * def py_bubble_sort(int[:] arr, int n):
+ * # leave this function as is
  */
   __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
   goto __pyx_L0;
 
-  /* "bubble_sort.pyx":13
+  /* "bubble_sort.pyx":14
  *     return 1
  * 
  * cdef unsigned long long bubble_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
@@ -17602,11 +17613,152 @@ static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_bubble_sort_benchmark(int *__
   return __pyx_r;
 }
 
-/* "bubble_sort.pyx":27
+/* "bubble_sort.pyx":29
+ * 
+ * # leave this function as is
+ * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
+ *     cdef:
+ *         unsigned long long start_ns = 0
+ */
+
+static unsigned PY_LONG_LONG __pyx_f_11bubble_sort_get_resolution(void) {
+  unsigned PY_LONG_LONG __pyx_v_start_ns;
+  unsigned PY_LONG_LONG __pyx_v_end_ns;
+  unsigned PY_LONG_LONG __pyx_r;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  unsigned int __pyx_t_4;
+  unsigned PY_LONG_LONG __pyx_t_5;
+  int __pyx_lineno = 0;
+  const char *__pyx_filename = NULL;
+  int __pyx_clineno = 0;
+  __Pyx_RefNannySetupContext("get_resolution", 1);
+
+  /* "bubble_sort.pyx":31
+ * cdef unsigned long long get_resolution():
+ *     cdef:
+ *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
+ *         unsigned long long end_ns = 0
+ *     start_ns = perf_counter_ns()
+ */
+  __pyx_v_start_ns = 0;
+
+  /* "bubble_sort.pyx":32
+ *     cdef:
+ *         unsigned long long start_ns = 0
+ *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
+ *     start_ns = perf_counter_ns()
+ *     end_ns = perf_counter_ns()
+ */
+  __pyx_v_end_ns = 0;
+
+  /* "bubble_sort.pyx":33
+ *         unsigned long long start_ns = 0
+ *         unsigned long long end_ns = 0
+ *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
+ *     end_ns = perf_counter_ns()
+ *     return end_ns - start_ns
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  __pyx_t_4 = 0;
+  #if CYTHON_UNPACK_METHODS
+  if (unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_4 = 1;
+    }
+  }
+  #endif
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
+    __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  }
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 33, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_start_ns = __pyx_t_5;
+
+  /* "bubble_sort.pyx":34
+ *         unsigned long long end_ns = 0
+ *     start_ns = perf_counter_ns()
+ *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  *     return end_ns - start_ns
  * 
- * def py_bubble_sort(int[:] arr, int n):             # <<<<<<<<<<<<<<
- *     return bubble_sort_benchmark(&arr[0], n)
+ */
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = NULL;
+  __pyx_t_4 = 0;
+  #if CYTHON_UNPACK_METHODS
+  if (unlikely(PyMethod_Check(__pyx_t_2))) {
+    __pyx_t_3 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_3)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
+      __Pyx_INCREF(__pyx_t_3);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_2, function);
+      __pyx_t_4 = 1;
+    }
+  }
+  #endif
+  {
+    PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
+    __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
+    __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  }
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v_end_ns = __pyx_t_5;
+
+  /* "bubble_sort.pyx":35
+ *     start_ns = perf_counter_ns()
+ *     end_ns = perf_counter_ns()
+ *     return end_ns - start_ns             # <<<<<<<<<<<<<<
+ * 
+ * # the function must have the specified signature
+ */
+  __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
+  goto __pyx_L0;
+
+  /* "bubble_sort.pyx":29
+ * 
+ * # leave this function as is
+ * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
+ *     cdef:
+ *         unsigned long long start_ns = 0
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_AddTraceback("bubble_sort.get_resolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "bubble_sort.pyx":38
+ * 
+ * # the function must have the specified signature
+ * def py_bubble_sort(int[:] arr, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return bubble_sort_benchmark(&arr[0], n), get_resolution()
  */
 
 /* Python wrapper */
@@ -17665,7 +17817,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -17673,14 +17825,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("py_bubble_sort", 1, 2, 2, 1); __PYX_ERR(0, 27, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("py_bubble_sort", 1, 2, 2, 1); __PYX_ERR(0, 38, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_bubble_sort") < 0)) __PYX_ERR(0, 27, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_bubble_sort") < 0)) __PYX_ERR(0, 38, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -17688,12 +17840,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[0] = __Pyx_Arg_FASTCALL(__pyx_args, 0);
       values[1] = __Pyx_Arg_FASTCALL(__pyx_args, 1);
     }
-    __pyx_v_arr = __Pyx_PyObject_to_MemoryviewSlice_ds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_arr.memview)) __PYX_ERR(0, 27, __pyx_L3_error)
-    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 27, __pyx_L3_error)
+    __pyx_v_arr = __Pyx_PyObject_to_MemoryviewSlice_ds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_arr.memview)) __PYX_ERR(0, 38, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("py_bubble_sort", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 27, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("py_bubble_sort", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 38, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17728,35 +17880,50 @@ static PyObject *__pyx_pf_11bubble_sort_py_bubble_sort(CYTHON_UNUSED PyObject *_
   Py_ssize_t __pyx_t_1;
   unsigned PY_LONG_LONG __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("py_bubble_sort", 1);
 
-  /* "bubble_sort.pyx":28
- * 
- * def py_bubble_sort(int[:] arr, int n):
- *     return bubble_sort_benchmark(&arr[0], n)             # <<<<<<<<<<<<<<
+  /* "bubble_sort.pyx":39
+ * # the function must have the specified signature
+ * def py_bubble_sort(int[:] arr, int n) -> tuple[int, int]:
+ *     return bubble_sort_benchmark(&arr[0], n), get_resolution()             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = 0;
-  __pyx_t_2 = __pyx_f_11bubble_sort_bubble_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_arr.data + __pyx_t_1 * __pyx_v_arr.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_11bubble_sort_bubble_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_arr.data + __pyx_t_1 * __pyx_v_arr.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_r = __pyx_t_3;
+  __pyx_t_2 = __pyx_f_11bubble_sort_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_3);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 39, __pyx_L1_error);
+  __Pyx_GIVEREF(__pyx_t_4);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error);
   __pyx_t_3 = 0;
+  __pyx_t_4 = 0;
+  __pyx_r = ((PyObject*)__pyx_t_5);
+  __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "bubble_sort.pyx":27
- *     return end_ns - start_ns
+  /* "bubble_sort.pyx":38
  * 
- * def py_bubble_sort(int[:] arr, int n):             # <<<<<<<<<<<<<<
- *     return bubble_sort_benchmark(&arr[0], n)
+ * # the function must have the specified signature
+ * def py_bubble_sort(int[:] arr, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return bubble_sort_benchmark(&arr[0], n), get_resolution()
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_AddTraceback("bubble_sort.py_bubble_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -18843,6 +19010,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
     {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
     {&__pyx_n_s_register, __pyx_k_register, sizeof(__pyx_k_register), 0, 0, 1, 1},
+    {&__pyx_n_s_return, __pyx_k_return, sizeof(__pyx_k_return), 0, 0, 1, 1},
     {&__pyx_n_s_setstate, __pyx_k_setstate, sizeof(__pyx_k_setstate), 0, 0, 1, 1},
     {&__pyx_n_s_setstate_cython, __pyx_k_setstate_cython, sizeof(__pyx_k_setstate_cython), 0, 0, 1, 1},
     {&__pyx_n_s_shape, __pyx_k_shape, sizeof(__pyx_k_shape), 0, 0, 1, 1},
@@ -18859,6 +19027,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_sys, __pyx_k_sys, sizeof(__pyx_k_sys), 0, 0, 1, 1},
     {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
     {&__pyx_n_s_time, __pyx_k_time, sizeof(__pyx_k_time), 0, 0, 1, 1},
+    {&__pyx_kp_s_tuple_int_int, __pyx_k_tuple_int_int, sizeof(__pyx_k_tuple_int_int), 0, 0, 1, 0},
     {&__pyx_kp_s_unable_to_allocate_array_data, __pyx_k_unable_to_allocate_array_data, sizeof(__pyx_k_unable_to_allocate_array_data), 0, 0, 1, 0},
     {&__pyx_kp_s_unable_to_allocate_shape_and_str, __pyx_k_unable_to_allocate_shape_and_str, sizeof(__pyx_k_unable_to_allocate_shape_and_str), 0, 0, 1, 0},
     {&__pyx_n_s_unpack, __pyx_k_unpack, sizeof(__pyx_k_unpack), 0, 0, 1, 1},
@@ -18870,8 +19039,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 8, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 9, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 24, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 159, __pyx_L1_error)
@@ -18926,14 +19095,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "bubble_sort.pyx":23
+  /* "bubble_sort.pyx":24
  * 
  *     if verify(a, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
  * 
  *     return end_ns - start_ns
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Array_is_not_sorted); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 23, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Array_is_not_sorted); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 24, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
@@ -19038,16 +19207,16 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__19);
   __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "bubble_sort.pyx":27
- *     return end_ns - start_ns
+  /* "bubble_sort.pyx":38
  * 
- * def py_bubble_sort(int[:] arr, int n):             # <<<<<<<<<<<<<<
- *     return bubble_sort_benchmark(&arr[0], n)
+ * # the function must have the specified signature
+ * def py_bubble_sort(int[:] arr, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return bubble_sort_benchmark(&arr[0], n), get_resolution()
  */
-  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_arr, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_arr, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bubble_sort_pyx, __pyx_n_s_py_bubble_sort, 27, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_bubble_sort_pyx, __pyx_n_s_py_bubble_sort, 38, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -20101,7 +20270,7 @@ if (!__Pyx_RefNanny) {
   /* "bubble_sort.pyx":1
  * from time import perf_counter_ns             # <<<<<<<<<<<<<<
  * 
- * cdef extern from "sort.h":
+ * 
  */
   __pyx_t_7 = PyList_New(1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
@@ -20117,26 +20286,31 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "bubble_sort.pyx":27
- *     return end_ns - start_ns
+  /* "bubble_sort.pyx":38
  * 
- * def py_bubble_sort(int[:] arr, int n):             # <<<<<<<<<<<<<<
- *     return bubble_sort_benchmark(&arr[0], n)
+ * # the function must have the specified signature
+ * def py_bubble_sort(int[:] arr, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return bubble_sort_benchmark(&arr[0], n), get_resolution()
  */
-  __pyx_t_4 = __Pyx_CyFunction_New(&__pyx_mdef_11bubble_sort_1py_bubble_sort, 0, __pyx_n_s_py_bubble_sort, NULL, __pyx_n_s_bubble_sort, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 27, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 38, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_bubble_sort, __pyx_t_4) < 0) __PYX_ERR(0, 27, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_return, __pyx_kp_s_tuple_int_int) < 0) __PYX_ERR(0, 38, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_11bubble_sort_1py_bubble_sort, 0, __pyx_n_s_py_bubble_sort, NULL, __pyx_n_s_bubble_sort, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_7, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_bubble_sort, __pyx_t_7) < 0) __PYX_ERR(0, 38, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "bubble_sort.pyx":1
  * from time import perf_counter_ns             # <<<<<<<<<<<<<<
  * 
- * cdef extern from "sort.h":
+ * 
  */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_4) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_7 = __Pyx_PyDict_NewPresized(0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_test, __pyx_t_7) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /*--- Wrapped vars code ---*/
 
