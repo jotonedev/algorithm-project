@@ -332,11 +332,13 @@ def main(
         # set the process to the highest priority if permission is granted
         try:
             process.nice(-20)
+            logging.info("Set process to -20 nice")
         except psutil.AccessDenied:
             logging.warning("Could not set the process to the highest priority")
         finally:
             # set the process to the highest possible priority if permission is not granted
             process.nice(1)
+            logging.info("Set process to 1 nice")
     # pin the process to the last core
     process.cpu_affinity([psutil.cpu_count(logical=False) - 1])
 
