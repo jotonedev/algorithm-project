@@ -34,6 +34,9 @@ cdef unsigned long long counting_sort_benchmark(int* a, int n):
     counting_sort(n, a, b, c, max_val)
     end_ns = perf_counter_ns()
 
+    free(<void*>b)
+    free(<void*>c)
+
     if verify(b, n) == 0:
         raise ValueError("Array is not sorted")
     
