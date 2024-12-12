@@ -297,7 +297,7 @@ def main(
         repetitions: int,
         samples: int,
         min_val: int,
-        max_val: int | None,
+        max_val: int,
         verbose: bool,
         linear: bool = False,
         show_linear: bool = False,
