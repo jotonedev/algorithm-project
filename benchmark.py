@@ -7,12 +7,13 @@ import sys
 from dataclasses import dataclass
 from math import exp, log
 from pathlib import Path
+from random import randint
 from statistics import median, mean
+from typing import Callable
 
 import numpy as np
 import pandas as pd
 import psutil
-import seaborn as sns
 import tqdm
 
 
@@ -39,21 +40,27 @@ def setup_logger(verbose: bool) -> None:
         datefmt='%Y-%m-%d %H:%M:%S',
         handlers=[handler]
     )
-    # disable seaborn/matplotlib logs
-    logging.getLogger("matplotlib").setLevel(logging.ERROR)
 
 
-def generate_input_data(length: int, min_val: int, max_val: int) -> np.ndarray:
+def generate_input_data(
+        length: int,
+        min_val: int,
+        max_val: int,
+        ensure_max_presence: bool = False,
+) -> np.ndarray:
     """
     Generate a numpy array of random numbers
-    
+
     :param length: The length of the array
     :param min_val: The minimum value
     :param max_val: The maximum value
+    :param ensure_max_presence: If True, ensure that the maximum value is present in the array
     :return: A numpy array of random numbers
     """
-    return np.random.randint(min_val, max_val + 1, size=length, dtype=np.intc)
-
+    data = np.random.randint(min_val, max_val + 1, size=length, dtype=np.intc)
+    if ensure_max_presence:
+        data[randint(0, length - 1)] = max_val
+    return data
 
 # noinspection DuplicatedCode
 def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
@@ -119,77 +126,177 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
     return algorithms
 
 
-def benchmark_algorithm(
-        algorithm: Algorithm,
-        repetitions: int = 5,
-        samples: int = 100,
-        min_val: int = 1,
-        max_val: int = 1000,
-        linear: bool = False,
-) -> pd.DataFrame:
-    """
-    Benchmark the algorithm with random input data
-
-    :param algorithm: The Algorithm data class
-    :param repetitions: The number of repetitions to run for each sample
-    :param samples: The number of samples to run for each input size
-    :param min_val: The minimum value of the input data
-    :param max_val: The maximum value of the input data (must be greater than min_val)
-    :param linear: If True, use linear scaling, otherwise use exponential scaling
-
-    :return: A DataFrame containing the results of the benchmark
-             (size, time, average resolution between repetitions)
-    """
-    logging.info(f"Benchmarking algorithm {algorithm.name}")
-
-    # Create a DataFrame to store the results of execution times in nanoseconds
-    results = pd.DataFrame(
+def create_results_dataframe() -> pd.DataFrame:
+    """Create a DataFrame to store the results of the benchmark"""
+    return pd.DataFrame(
         {
             "size": pd.Series(dtype=int),
+            "min_val": pd.Series(dtype=int),
+            "max_val": pd.Series(dtype=int),
             "time": pd.Series(dtype=float),
             "resolution": pd.Series(dtype=int),
         },
     )
 
+def cpu_warmup(algorithm: Algorithm) -> None:
+    """Warm up the CPU clock by running the algorithm with random input data"""
+    for _ in range(5):
+        algorithm.function(generate_input_data(100, 0, 100), 100)
+
+
+def collect_results(
+        generator: Callable[[], np.ndarray],
+        algorithm: Algorithm,
+        repetitions: int = 5,
+) -> tuple[int, int]:
+    """Collect the results from the generator and return the median"""
+    results = []
+    resolutions = []
+
+    # collect old garbage before disabling the garbage collector
+    gc.collect()
+    gc.disable()
+    for _ in range(repetitions):
+        data = generator()
+        exec_time, res = algorithm.function(data, len(data))
+        results.append(exec_time)
+        resolutions.append(res)
+    # enable the garbage collector
+    gc.enable()
+
+    return median(results), mean(resolutions)
+
+
+def benchmark_algorithm_by_length(
+        algorithm: Algorithm,
+        repetitions: int = 5,
+        samples: int = 100,
+        min_val: int = 1,
+        max_val: int = 1000,
+        min_length: int = 100,
+        max_length: int = 100_000,
+        linear: bool = False,
+) -> pd.DataFrame:
+    """
+    Benchmark the algorithm with random input data by varying the length of the input data
+
+    :param algorithm: The algorithm data class
+    :param repetitions: The number of repetitions to run for each sample
+    :param samples: The number of samples to run for each input size
+    :param min_val: The minimum value of the input data
+    :param max_val: The maximum value of the input data (must be greater than min_val)
+    :param min_length: The minimum length of the input data
+    :param max_length: The maximum length of the input data
+    :param linear: If True, use linear scaling, otherwise use exponential scaling
+    :return: A DataFrame containing the results of the benchmark
+    """
+    logging.info(f"Benchmarking algorithm {algorithm.name} by length")
+
+    # Create a DataFrame to store the results of execution times in nanoseconds
+    results = create_results_dataframe()
+
     if linear:
-        data_length = 0
-        scaling_factor = int((max_val - min_val) / samples)
+        length = 0
+        scaling_factor = int((max_length - min_length) / samples)
         if scaling_factor <= 0:
             scaling_factor = 1
     else:
-        data_length = min_val
-        scaling_factor = exp(log(max_val / min_val) / samples)
+        length = min_val
+        scaling_factor = exp(log(max_length / min_length) / samples)
 
     # warm up the cpu clock
-    for _ in range(5):
-        algorithm.function(generate_input_data(100, 0, 100), 100)
+    cpu_warmup(algorithm)
 
     try:
         for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
             if linear:
-                data_length += scaling_factor
+                length += scaling_factor
             else:
-                data_length = int(min_val * (scaling_factor ** i))
+                length = int(min_val * (scaling_factor ** i))
 
-            gc.collect()
-            gc.disable()
-            execution_times: list[int] = []
-            resolutions: list[int] = []
-            for _ in range(repetitions):
-                data = generate_input_data(data_length, min_val, max_val)
-                exec_time, res = algorithm.function(data, data_length)
-                execution_times.append(exec_time)
-                resolutions.append(res)
-            gc.enable()
+            exec_time, resolution = collect_results(
+                generator=lambda: generate_input_data(length, min_val, max_val),
+                algorithm=algorithm,
+                repetitions=repetitions
+            )
 
             results.loc[i] = {
-                "size": data_length,
-                "time": median(execution_times),
-                "resolution": mean(resolutions)
+                "size": length,
+                "min_val": min_val,
+                "max_val": max_val,
+                "time": exec_time,
+                "resolution": resolution
             }
     except KeyboardInterrupt:
         logging.error("Benchmarking was interrupted")
         return results
+
+    return results
+
+
+def benchmark_algorithm_by_max(
+        algorithm: Algorithm,
+        repetitions: int = 5,
+        samples: int = 100,
+        length: int = 8000,
+        min_val: int = 10,
+        max_val: int = 1_000_000,
+        linear: bool = False,
+) -> pd.DataFrame:
+    """
+    Benchmark the algorithm with random input data by varying the maximum value of the input data
+
+    :param algorithm: The Algorithm data class
+    :param repetitions: The number of repetitions to run for each sample
+    :param samples: The number of samples to run for each input size
+    :param length: The length of the input data
+    :param min_val: The minimum value of the input data
+    :param max_val: The maximum value of the input data (must be greater than min_val)
+    :param linear: If True, use linear scaling, otherwise use exponential scaling
+
+    :return: A DataFrame containing the results of the benchmark
+    """
+    logging.info(f"Benchmarking algorithm {algorithm.name} by max value")
+
+    # Create a DataFrame to store the results of execution times in nanoseconds
+    results = create_results_dataframe()
+
+    if linear:
+        var_max = 0
+        scaling_factor = int((max_val - min_val) / samples)
+        # clamp value to a minimum of 1
+        if scaling_factor <= 0:
+            scaling_factor = 1
+    else:
+        var_max = min_val
+        scaling_factor = exp(log(max_val / min_val) / samples)
+
+    # warm up the cpu clock to avoid cold start
+    cpu_warmup(algorithm)
+
+    try:
+        for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+            if linear:
+                var_max += scaling_factor
+            else:
+                var_max = int(min_val * (scaling_factor ** i))
+
+            exec_time, resolution = collect_results(
+                generator=lambda: generate_input_data(length, min_val, var_max),
+                algorithm=algorithm,
+                repetitions=repetitions
+            )
+
+            results.loc[i] = {
+                "size": length,
+                "min_val": min_val,
+                "max_val": var_max,
+                "time": exec_time,
+                "resolution": resolution
+            }
+    except KeyboardInterrupt:
+        # allows to return the results if the benchmarking was interrupted
+        logging.warning("Benchmarking was interrupted")
 
     return results
 
@@ -240,18 +347,14 @@ def main(
         os_type = "win" if sys.platform == 'win32' else "lnx"
         filename = f"{algorithm.name.replace(' ', '_')}_{smp}_{run_type}_{repetitions}rep_{os_type}.csv"
 
-        try:
-            results = benchmark_algorithm(
-                algorithm=algorithm,
-                repetitions=repetitions,
-                samples=samples,
-                min_val=min_val,
-                max_val=max_val,
-                linear=linear
-            )
-        except KeyboardInterrupt:
-            logging.error("Benchmarking tool was interrupted")
-            return
+        results = benchmark_algorithm(
+            algorithm=algorithm,
+            repetitions=repetitions,
+            samples=samples,
+            min_val=min_val,
+            max_val=max_val,
+            linear=linear
+        )
 
         # Save the results to a CSV file
         results.to_csv(output / filename, index=False)

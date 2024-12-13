@@ -40,7 +40,6 @@ def plot_data(
         x=x_axis,
         y="time",
         data=data,
-        palette="colorblind",
         legend=False,
     )
     # Set the legend outside the plot
