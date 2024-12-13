@@ -345,9 +345,10 @@ def main(
     # Run the benchmark for each algorithm
     for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True):
         # Create the filename based on the parameters used
+        os_type = "windows" if sys.platform == 'win32' else "linux"
         run_type = "linear" if linear else "exponential"
         bench_type = "max" if by_max else "length"
-        filename = f"{algorithm.name}_{samples}_{repetitions}_{run_type}_{bench_type}.csv"
+        filename = f"{algorithm.name}_{samples}_{repetitions}_{run_type}_{bench_type}_{os_type}.csv"
 
         if by_max:
             results = benchmark_algorithm_by_max(
