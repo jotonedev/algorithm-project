@@ -7,14 +7,13 @@ import sys
 from dataclasses import dataclass
 from math import exp, log
 from pathlib import Path
-from statistics import median
+from statistics import median, mean
 
 import numpy as np
 import pandas as pd
 import psutil
 import seaborn as sns
 import tqdm
-from numpy.ma.extras import average
 
 
 @dataclass
@@ -146,11 +145,10 @@ def benchmark_algorithm(
     # Create a DataFrame to store the results of execution times in nanoseconds
     results = pd.DataFrame(
         {
-            "size": pd.Series(dtype="int"),
-            "time": pd.Series(dtype="float"),
-            "resolution": pd.Series(dtype="int"),
+            "size": pd.Series(dtype=int),
+            "time": pd.Series(dtype=float),
+            "resolution": pd.Series(dtype=int),
         },
-        index=range(samples),
     )
 
     if linear:
@@ -187,108 +185,13 @@ def benchmark_algorithm(
             results.loc[i] = {
                 "size": data_length,
                 "time": median(execution_times),
-                "resolution": average(resolutions)
+                "resolution": mean(resolutions)
             }
     except KeyboardInterrupt:
         logging.error("Benchmarking was interrupted")
         return results
 
     return results
-
-
-def plot_results(
-        data: pd.DataFrame,
-        output: Path,
-        linear: bool = False,
-        name: str = "Algorithm",
-        show_linear: bool = False,
-        show_quadratic: bool = False,
-        show_nlogn: bool = False,
-) -> None:
-    """
-    Plot the benchmark results
-
-    :param data: The benchmark results as a DataFrame
-    :param output: The output file path
-    :param linear: If True, use linear scaling, otherwise use exponential scaling for both axes
-    :param name: The name of the output plot file
-    :param show_linear: If True, show the linear function
-    :param show_quadratic: If True, show the quadratic function
-    :param show_nlogn: If True, show the n*log(n) function
-    """
-    # convert the time to milliseconds from nanoseconds
-    data["time"] = data["time"] / 1_000_000
-
-    # set the style
-    sns.color_palette("rocket")
-    sns.set_theme(style="whitegrid")
-
-    # prepare the plot
-    plot = sns.relplot(
-        data=data,
-        x="size",
-        y="time",
-        kind="scatter",
-        size=5,  # marker size
-        aspect=1.33,  # aspect ratio
-        legend=False,  # declare the legend later
-        label=name,
-    )
-    # set the labels
-    plot.set_xlabels("Input Size")
-    plot.set_ylabels("Execution Time (ms)")
-
-    # TODO: Refactor the function overlay
-    # add red line for quadratic function
-    quadratic_factor = average(data["time"] / (data["size"] ** 2)) * 0.60
-    if show_quadratic:
-        plot.ax.plot(
-            data["size"],
-            (data["size"] ** 2) * quadratic_factor,
-            color="red",
-            linestyle="--",
-            label="O(n^2)",
-            alpha=0.8,
-            linewidth=1.5
-        )
-
-    # add green line for linear function
-    linear_factor = average(data["time"] / data["size"]) * 0.40
-    if show_linear:
-        plot.ax.plot(
-            data["size"],
-            data["size"] * linear_factor,
-            color="green",
-            linestyle="--",
-            label="O(n)",
-            alpha=0.8,
-            linewidth=1.5
-        )
-
-    # add orange line for n*log(n) function
-    log_factor = average([linear_factor, quadratic_factor]) * 0.2
-    if show_nlogn:
-        y = np.multiply(data["size"], np.log(data["size"]))
-        plot.ax.plot(
-            data["size"],
-            y * log_factor,
-            color="orange",
-            linestyle="--",
-            label="O(n*log(n))",
-            alpha=0.8,
-            linewidth=1.5
-        )
-
-    # set scale
-    if linear:
-        plot.set(xscale="linear", yscale="linear")
-    else:
-        plot.set(xscale="log", yscale="log")
-
-    # add legend on the bottom left outside the plot
-    plot.ax.legend(loc='lower left', ncol=4, frameon=False, bbox_to_anchor=(0, -0.25), fancybox=True)
-
-    plot.savefig(output, format="svg", transparent=False)
 
 
 def main(
@@ -300,9 +203,6 @@ def main(
         max_val: int,
         verbose: bool,
         linear: bool = False,
-        show_linear: bool = False,
-        show_quadratic: bool = False,
-        show_nlogn: bool = False,
 ):
     """Run the benchmarking tool"""
     setup_logger(verbose)
@@ -355,16 +255,6 @@ def main(
 
         # Save the results to a CSV file
         results.to_csv(output / filename, index=False)
-        # Plot the results
-        plot_results(
-            results,
-            output / filename.replace(".csv", ".svg"),
-            linear,
-            name=algorithm.name,
-            show_linear=show_linear,
-            show_quadratic=show_quadratic,
-            show_nlogn=show_nlogn,
-        )
 
     logging.info("Benchmarking tool completed successfully")
 
@@ -423,24 +313,6 @@ if __name__ == '__main__':
         action="store_true",
         default=False
     )
-    parser.add_argument(
-        "--show-linear",
-        help="Show the linear function in the plot",
-        action="store_true",
-        default=False
-    )
-    parser.add_argument(
-        "--show-quadratic",
-        help="Show the quadratic function in the plot",
-        action="store_true",
-        default=False
-    )
-    parser.add_argument(
-        "--show-nlogn",
-        help="Show the n*log(n) function in the plot",
-        action="store_true",
-        default=False
-    )
 
     args = parser.parse_args()
 
@@ -453,7 +325,4 @@ if __name__ == '__main__':
         max_val=args.max,
         verbose=args.verbose,
         linear=args.linear,
-        show_linear=args.show_linear,
-        show_quadratic=args.show_quadratic,
-        show_nlogn=args.show_nlogn,
     )
