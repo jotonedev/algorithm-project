@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from math import exp, log
 from pathlib import Path
 from random import randint
-from statistics import median, mean
-from typing import Callable
+from statistics import median, mean, stdev
+from typing import Callable, Iterator
 
 import numpy as np
 import pandas as pd
@@ -62,6 +62,7 @@ def generate_input_data(
         data[randint(0, length - 1)] = max_val
     return data
 
+
 # noinspection DuplicatedCode
 def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
     """
@@ -76,7 +77,7 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
         # make sure the path is absolute
         dir_path = dir_path.resolve()
         # check if the directory exists
-        if not dir_path.exists() or not dir_path.is_dir() :
+        if not dir_path.exists() or not dir_path.is_dir():
             continue
 
         # check if the setup.py file exists (needed to compile the Cython extension)
@@ -135,8 +136,10 @@ def create_results_dataframe() -> pd.DataFrame:
             "max_val": pd.Series(dtype=int),
             "time": pd.Series(dtype=float),
             "resolution": pd.Series(dtype=int),
+            "stdev": pd.Series(dtype=float)
         },
     )
+
 
 def cpu_warmup(algorithm: Algorithm) -> None:
     """Warm up the CPU clock by running the algorithm with random input data"""
@@ -148,7 +151,7 @@ def collect_results(
         generator: Callable[[], np.ndarray],
         algorithm: Algorithm,
         repetitions: int = 5,
-) -> tuple[int, int]:
+) -> tuple[int, int, int]:
     """Collect the results from the generator and return the median"""
     results = []
     resolutions = []
@@ -164,15 +167,37 @@ def collect_results(
     # enable the garbage collector
     gc.enable()
 
-    return median(results), mean(resolutions)
+    return median(results), round(mean(resolutions), 3), round(stdev(results), 3)
 
 
+def sample_generator(
+        samples: int,
+        min_val: int,
+        max_val: int,
+        linear: bool = False,
+) -> Iterator[tuple[int, int]]:
+    """Generate samples for the benchmark"""
+    if linear:
+        scaling_factor = int((max_val - min_val) / samples)
+        if scaling_factor <= 0:
+            scaling_factor = 1
+        # generate samples linearly
+        for i in range(samples):
+            yield i, min_val + (i * scaling_factor)
+    else:
+        scaling_factor = exp(log(max_val / min_val) / samples)
+        # generate samples exponentially
+        for i in range(samples):
+            yield i, int(min_val * (scaling_factor ** i))
+
+
+# noinspection DuplicatedCode
 def benchmark_algorithm_by_length(
         algorithm: Algorithm,
         repetitions: int = 5,
         samples: int = 100,
         min_val: int = 1,
-        max_val: int = 1000,
+        max_val: int = 100_000,
         min_length: int = 100,
         max_length: int = 100_000,
         linear: bool = False,
@@ -195,38 +220,29 @@ def benchmark_algorithm_by_length(
     # Create a DataFrame to store the results of execution times in nanoseconds
     results = create_results_dataframe()
 
-    if linear:
-        length = 0
-        scaling_factor = int((max_length - min_length) / samples)
-        if scaling_factor <= 0:
-            scaling_factor = 1
-    else:
-        length = min_val
-        scaling_factor = exp(log(max_length / min_length) / samples)
+    # Generate the samples
+    generator = sample_generator(samples, min_length, max_length, linear)
 
     # warm up the cpu clock
     cpu_warmup(algorithm)
 
     try:
-        for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
-            if linear:
-                length += scaling_factor
-            else:
-                length = int(min_val * (scaling_factor ** i))
-
-            exec_time, resolution = collect_results(
+        for i, length in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+            exec_time, resolution, deviation = collect_results(
                 generator=lambda: generate_input_data(length, min_val, max_val),
                 algorithm=algorithm,
                 repetitions=repetitions
             )
-
+            # Append the result at the end of the DataFrame
             results.loc[i] = {
                 "size": length,
                 "min_val": min_val,
                 "max_val": max_val,
                 "time": exec_time,
-                "resolution": resolution
+                "resolution": resolution,
+                "stdev": deviation
             }
+
     except KeyboardInterrupt:
         logging.error("Benchmarking was interrupted")
         return results
@@ -234,11 +250,12 @@ def benchmark_algorithm_by_length(
     return results
 
 
+# noinspection DuplicatedCode
 def benchmark_algorithm_by_max(
         algorithm: Algorithm,
         repetitions: int = 5,
         samples: int = 100,
-        length: int = 8000,
+        length: int = 10_000,
         min_val: int = 10,
         max_val: int = 1_000_000,
         linear: bool = False,
@@ -261,27 +278,15 @@ def benchmark_algorithm_by_max(
     # Create a DataFrame to store the results of execution times in nanoseconds
     results = create_results_dataframe()
 
-    if linear:
-        var_max = 0
-        scaling_factor = int((max_val - min_val) / samples)
-        # clamp value to a minimum of 1
-        if scaling_factor <= 0:
-            scaling_factor = 1
-    else:
-        var_max = min_val
-        scaling_factor = exp(log(max_val / min_val) / samples)
+    # Generate the samples
+    generator = sample_generator(samples, min_val, max_val, linear)
 
-    # warm up the cpu clock to avoid cold start
+    # warm up the cpu clock to avoid a cold start
     cpu_warmup(algorithm)
 
     try:
-        for i in tqdm.tqdm(range(samples), desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
-            if linear:
-                var_max += scaling_factor
-            else:
-                var_max = int(min_val * (scaling_factor ** i))
-
-            exec_time, resolution = collect_results(
+        for i, var_max in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+            exec_time, resolution, deviation = collect_results(
                 generator=lambda: generate_input_data(length, min_val, var_max),
                 algorithm=algorithm,
                 repetitions=repetitions
@@ -292,10 +297,11 @@ def benchmark_algorithm_by_max(
                 "min_val": min_val,
                 "max_val": var_max,
                 "time": exec_time,
-                "resolution": resolution
+                "resolution": resolution,
+                "stdev": deviation
             }
     except KeyboardInterrupt:
-        # allows to return the results if the benchmarking was interrupted
+        # allows returning the results if the benchmarking was interrupted
         logging.warning("Benchmarking was interrupted")
 
     return results
@@ -306,10 +312,9 @@ def main(
         output: Path,
         repetitions: int,
         samples: int,
-        min_val: int,
-        max_val: int,
         verbose: bool,
         linear: bool = False,
+        by_max: bool = False,
 ):
     """Run the benchmarking tool"""
     setup_logger(verbose)
@@ -323,38 +328,41 @@ def main(
         # set the process to the highest priority if permission is granted
         try:
             process.nice(-20)
-            logging.info("Set process to -20 nice")
+            logging.info("Set process nice -20")
         except psutil.AccessDenied:
             logging.warning("Could not set the process to the highest priority")
             process.nice(1)
-            logging.info("Set process to 1 nice")
+            logging.info("Set process nice 1")
     # pin the process to the last core
     process.cpu_affinity([psutil.cpu_count(logical=False) - 1])
 
     # Create an output directory if it does not exist
     output.mkdir(parents=True, exist_ok=True)
 
-    logging.info("Starting the benchmarking tool")
-
     # Load the algorithms from the input directory
     algorithms: list[Algorithm] = load_algorithms(input_folders)
 
     # Run the benchmark for each algorithm
     for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True):
-        # Determine file name
-        smp = str(samples).replace("000", "k")
-        run_type = "linear" if linear else "log"
-        os_type = "win" if sys.platform == 'win32' else "lnx"
-        filename = f"{algorithm.name.replace(' ', '_')}_{smp}_{run_type}_{repetitions}rep_{os_type}.csv"
+        # Create the filename based on the parameters used
+        run_type = "linear" if linear else "exponential"
+        bench_type = "max" if by_max else "length"
+        filename = f"{algorithm.name}_{samples}_{repetitions}_{run_type}_{bench_type}.csv"
 
-        results = benchmark_algorithm(
-            algorithm=algorithm,
-            repetitions=repetitions,
-            samples=samples,
-            min_val=min_val,
-            max_val=max_val,
-            linear=linear
-        )
+        if by_max:
+            results = benchmark_algorithm_by_max(
+                algorithm=algorithm,
+                repetitions=repetitions,
+                samples=samples,
+                linear=linear
+            )
+        else:
+            results = benchmark_algorithm_by_length(
+                algorithm=algorithm,
+                repetitions=repetitions,
+                samples=samples,
+                linear=linear
+            )
 
         # Save the results to a CSV file
         results.to_csv(output / filename, index=False)
@@ -393,18 +401,6 @@ if __name__ == '__main__':
         default=5
     )
     parser.add_argument(
-        "--min",
-        help="Minimum size of the input data. Default to 1",
-        type=int,
-        default=1
-    )
-    parser.add_argument(
-        "--max",
-        help="Maximum size of the input data. Default to 10000",
-        type=int,
-        default=1_000
-    )
-    parser.add_argument(
         "-v", "--verbose",
         help="Increase output verbosity",
         action="store_true",
@@ -416,6 +412,12 @@ if __name__ == '__main__':
         action="store_true",
         default=False
     )
+    parser.add_argument(
+        "--by-max",
+        help="Benchmark by varying the maximum value of the input data",
+        action="store_true",
+        default=False
+    )
 
     args = parser.parse_args()
 
@@ -424,8 +426,7 @@ if __name__ == '__main__':
         output=args.output,
         samples=args.samples,
         repetitions=args.repetitions,
-        min_val=args.min,
-        max_val=args.max,
         verbose=args.verbose,
         linear=args.linear,
+        by_max=args.by_max
     )
