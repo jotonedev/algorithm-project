@@ -227,7 +227,7 @@ def benchmark_algorithm_by_length(
     cpu_warmup(algorithm)
 
     try:
-        for i, length in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+        for i, length in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True, total=samples):
             exec_time, resolution, deviation = collect_results(
                 generator=lambda: generate_input_data(length, min_val, max_val),
                 algorithm=algorithm,
@@ -285,7 +285,7 @@ def benchmark_algorithm_by_max(
     cpu_warmup(algorithm)
 
     try:
-        for i, var_max in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True):
+        for i, var_max in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True, total=samples):
             exec_time, resolution, deviation = collect_results(
                 generator=lambda: generate_input_data(length, min_val, var_max),
                 algorithm=algorithm,
@@ -343,7 +343,7 @@ def main(
     algorithms: list[Algorithm] = load_algorithms(input_folders)
 
     # Run the benchmark for each algorithm
-    for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True):
+    for algorithm in tqdm.tqdm(algorithms, desc="Benchmarking Algorithms", dynamic_ncols=True, total=len(algorithms)):
         # Create the filename based on the parameters used
         os_type = "windows" if sys.platform == 'win32' else "linux"
         run_type = "linear" if linear else "exponential"
