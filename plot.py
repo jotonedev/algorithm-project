@@ -75,6 +75,9 @@ def main(
     filepaths = find_filepaths(directory)
     # Load the data from each file
     for filepath in filepaths:
+        if filepath.is_dir():
+            continue
+
         # Extract the name and scale from the filename
         tags = filepath.stem.split("_")
         name: str = "_".join(tags[0:2])
