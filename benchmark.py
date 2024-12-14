@@ -205,7 +205,7 @@ def benchmark_algorithm_by_length(
         repetitions: int = 5,
         samples: int = 100,
         min_val: int = 1,
-        max_val: int = 100_000,
+        max_val: int = 100,
         min_length: int = 100,
         max_length: int = 100_000,
         linear: bool = False,
