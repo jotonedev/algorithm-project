@@ -1,5 +1,11 @@
 //#include <assert.h>
 
+static inline void swap(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
 void static partition_3way(int *a, int i, int j, int *k, int *l) {
     //assert(i < j);
 
@@ -8,17 +14,13 @@ void static partition_3way(int *a, int i, int j, int *k, int *l) {
 
     while (p3 < j) {
         if (a[p3] < pivot) {
-            int temp = a[p3];
-            a[p3] = a[p2];
-            a[p2] = a[p1];
-            a[p1] = temp;
+            swap(&a[p3], &a[p2]);
+            swap(&a[p2], &a[p1]);
             p1++;
             p2++;
             p3++;
         } else if (a[p3] == pivot) {
-            int temp = a[p3];
-            a[p3] = a[p2];
-            a[p2] = temp;
+            swap(&a[p3], &a[p2]);
             p2++;
             p3++;
         } else {
