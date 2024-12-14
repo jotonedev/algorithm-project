@@ -80,9 +80,9 @@ def main(
 
         # Extract the name and scale from the filename
         tags = filepath.stem.split("_")
-        name: str = "_".join(tags[0:2])
-        scale: str = "log" if tags[4] == "exponential" else "linear"
-        x_axis: str = "max_val" if tags[5] == "max" else "size"
+        name: str = "_".join(tags[-len(tags):-5])
+        scale: str = "log" if tags[-3] == "exponential" else "linear"
+        x_axis: str = "max_val" if tags[-2] == "max" else "size"
         data = load_data(filepath)
         # Convert time column from nanoseconds to milliseconds
         data["time"] = data["time"] / 1_000_000
