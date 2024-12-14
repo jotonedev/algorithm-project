@@ -135,10 +135,18 @@ def create_results_dataframe() -> pd.DataFrame:
             "min_val": pd.Series(dtype=int),
             "max_val": pd.Series(dtype=int),
             "time": pd.Series(dtype=float),
-            "resolution": pd.Series(dtype=int),
-            "stdev": pd.Series(dtype=float)
+            "resolution": pd.Series(dtype=float),
+            "stdev": pd.Series(dtype=float),
+            "mad": pd.Series(dtype=float),
         },
     )
+
+
+def median_abs_dev(data: np.ndarray | list[int]) -> float:
+    """Calculate the median absolute deviation of the data"""
+    if isinstance(data, list):
+        data = np.array(data)
+    return median(np.abs(data - median(data)))
 
 
 def cpu_warmup(algorithm: Algorithm) -> None:
@@ -151,7 +159,7 @@ def collect_results(
         generator: Callable[[], np.ndarray],
         algorithm: Algorithm,
         repetitions: int = 5,
-) -> tuple[int, int, int]:
+) -> tuple[int, float, float, float]:
     """Collect the results from the generator and return the median"""
     results = []
     resolutions = []
@@ -167,7 +175,7 @@ def collect_results(
     # enable the garbage collector
     gc.enable()
 
-    return median(results), round(mean(resolutions), 3), round(stdev(results), 3)
+    return median(results), round(mean(resolutions), 3), round(stdev(results), 3), round(median_abs_dev(results), 3)
 
 
 def sample_generator(
@@ -228,8 +236,8 @@ def benchmark_algorithm_by_length(
 
     try:
         for i, length in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True, total=samples):
-            exec_time, resolution, deviation = collect_results(
-                generator=lambda: generate_input_data(length, min_val, max_val),
+            exec_time, resolution, deviation, mad = collect_results(
+                generator=lambda: generate_input_data(length, min_val, max_val, ensure_max_presence=True),
                 algorithm=algorithm,
                 repetitions=repetitions
             )
@@ -240,7 +248,8 @@ def benchmark_algorithm_by_length(
                 "max_val": max_val,
                 "time": exec_time,
                 "resolution": resolution,
-                "stdev": deviation
+                "stdev": deviation,
+                "mad": mad
             }
 
     except KeyboardInterrupt:
@@ -286,8 +295,8 @@ def benchmark_algorithm_by_max(
 
     try:
         for i, var_max in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True, total=samples):
-            exec_time, resolution, deviation = collect_results(
-                generator=lambda: generate_input_data(length, min_val, var_max),
+            exec_time, resolution, deviation, mad = collect_results(
+                generator=lambda: generate_input_data(length, min_val, var_max, ensure_max_presence=True),
                 algorithm=algorithm,
                 repetitions=repetitions
             )
@@ -298,7 +307,8 @@ def benchmark_algorithm_by_max(
                 "max_val": var_max,
                 "time": exec_time,
                 "resolution": resolution,
-                "stdev": deviation
+                "stdev": deviation,
+                "mad": mad
             }
     except KeyboardInterrupt:
         # allows returning the results if the benchmarking was interrupted

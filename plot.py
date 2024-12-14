@@ -41,6 +41,8 @@ def plot_data(
         y="time",
         data=data,
         legend=False,
+        label=name,
+        markers=True,
     )
     # Set the legend outside the plot
     plot.ax.legend(
@@ -56,7 +58,7 @@ def plot_data(
     # Change the axis labels
     if x_axis == "size":
         plot.set(xlabel="Length of Array")
-    elif x_axis == "max_value":
+    elif x_axis == "max_val":
         plot.set(xlabel="Maximum Value in Array")
     else:
         raise ValueError(f"Unknown x_axis: {x_axis}")
@@ -68,28 +70,34 @@ def plot_data(
 def main(
         directory: Path,
         out_dir: Path,
-        x_axis: str,
-        scale: str,
 ) -> None:
     # Find all CSV files in the directory
     filepaths = find_filepaths(directory)
     # Load the data from each file
     for filepath in filepaths:
-        name: str = "_".join(filepath.stem.split("_")[0:1])
+        # Extract the name and scale from the filename
+        tags = filepath.stem.split("_")
+        name: str = "_".join(tags[0:2])
+        scale: str = "log" if tags[4] == "exponential" else "linear"
+        x_axis: str = "max_val" if tags[5] == "max" else "size"
         data = load_data(filepath)
         # Convert time column from nanoseconds to milliseconds
         data["time"] = data["time"] / 1_000_000
         # Plot the data
         out_file = out_dir / f"{filepath.stem}.svg"
-        plot_data(data, out_file, x_axis=x_axis, scale=scale, name=name)
+        plot_data(
+            data,
+            out_file,
+            x_axis=x_axis,
+            scale=scale,
+            name=name
+        )
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Plot benchmark data from CSV files")
-    parser.add_argument("directory", type=Path, help="Directory containing CSV files")
-    parser.add_argument("out_dir", type=Path, help="Output directory for plots")
-    parser.add_argument("--x_axis", type=str, default="size", help="X-axis for the plot")
-    parser.add_argument("--scale", type=str, default="linear", help="Scale for the plot")
+    parser.add_argument("-i", "--input", type=Path, help="Directory containing CSV files", default=Path(".results/"))
+    parser.add_argument("-o", "--output", type=Path, help="Output directory for plots", default=Path(".results/"))
     args = parser.parse_args()
 
-    main(args.directory, args.out_dir, args.x_axis, args.scale)
+    main(args.input, args.output)
