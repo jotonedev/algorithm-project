@@ -1,5 +1,5 @@
-
 from time import perf_counter_ns
+
 
 cdef extern from "sort.h":
     void quick_sort(int *a, int i, int j)
@@ -21,7 +21,7 @@ cdef unsigned long long quick_sort_benchmark(int* a, int n):
     quick_sort(a, 0, n)
     end_ns = perf_counter_ns()
 
-    if verify(b, n) == 0:
+    if verify(a, n) == 0:
         raise ValueError("Array is not sorted")
 
     return end_ns - start_ns
@@ -36,5 +36,5 @@ cdef unsigned long long get_resolution():
     return end_ns - start_ns
 
 
-def py_quick_sort(int[:] a, int i, int j):
-    quick_sort(&a[0], i, j) 
+def py_quick_sort(int[:] a, int n) -> tuple[int, int]:
+    return quick_sort_benchmark(&a[0], n), get_resolution()

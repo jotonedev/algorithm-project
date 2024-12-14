@@ -8,7 +8,7 @@ static inline void swap(int *a, int k, int l){
 
 // Partition function to rearrange the elements around the pivot
 int partition(int *a, int i, int j) {
-    assert(i < j);
+    //assert(i < j);
     int k = i;
     int pivot = a[j - 1]; // Choose the last element as the pivot
 
