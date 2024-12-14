@@ -1,5 +1,6 @@
 //#include <assert.h>
 
+// Swap function to exchange elements at indices k and l
 static inline void swap(int *a, int k, int l){
     int temp = a[k];
     a[k] = a[l];
@@ -9,13 +10,12 @@ static inline void swap(int *a, int k, int l){
 // Partition function to rearrange the elements around the pivot
 int partition(int *a, int i, int j) {
     //assert(i < j);
-    int k = i;
+    int k = i;            // index of the pivot's final position after the partition function completes         
     int pivot = a[j - 1]; // Choose the last element as the pivot
 
-    for (int l = i; l < j; l++) {
+    for (int l = i; l < j; l++) {// Exclude pivot from comparisons
         if (a[l] <= pivot) {
-            // Swap a[k] and a[l]
-            swap(a, k, l);
+            swap(a, k, l);// Place smaller elements on the left
             k++;
         }
     }
