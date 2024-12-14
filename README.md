@@ -10,7 +10,7 @@ Implementation, time complexity analysis, and benchmarking of the following algo
 ## Project Structure
 
 - [Quick Sort](/quick_sort)
-- [Quick 3 Way Sort](/quick_3_way_sort)
+- [Quick 3 Way Sort](/quick_3way_sort)
 - [Counting Sort](/counting_sort)
 - [Tim Sort](/tim_sort)
 - [Project report](/docs)

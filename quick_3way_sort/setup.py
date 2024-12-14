@@ -3,7 +3,7 @@ from Cython.Build import cythonize
 
 ext = Extension(
     "quick3Way",
-    sources=["quick_3_way_sort.pyx", "quick_3_way_sort.c"],
+    sources=["quick_3way_sort.pyx", "sort.c"],
     include_dirs=["."]
 )
 

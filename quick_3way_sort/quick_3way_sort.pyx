@@ -1,5 +1,8 @@
+from time import perf_counter_ns
+
+
 cdef extern from "sort.h":
-    void quickSort3Way(int *a, int i, int j)
+    void quick_3way_sort(int *a, int i, int j)
 
 cdef int verify(int *a, int n):
     cdef int i
@@ -8,17 +11,17 @@ cdef int verify(int *a, int n):
             return 0
     return 1
 
-cdef unsigned long long quick3Way_sort_benchmark(int* a, int i, int j):
+cdef unsigned long long quick_3way_sort_benchmark(int* a, int n):
     # declare array b of the same size as a
     cdef:
         unsigned long long start_ns = 0
         unsigned long long end_ns = 0
 
     start_ns = perf_counter_ns()
-    quickSort3Way(a, i, j)
+    quick_3way_sort(a, 0, n)
     end_ns = perf_counter_ns()
 
-    if verify(b, n) == 0:
+    if verify(a, n) == 0:
         raise ValueError("Array is not sorted")
 
     return end_ns - start_ns
@@ -32,6 +35,6 @@ cdef unsigned long long get_resolution():
     end_ns = perf_counter_ns()
     return end_ns - start_ns
 
-def py_quick3Way_sort(int[:] a, int i, int j):
-    quickSort3Way(&a[0], i, j)
+def py_quick_3way_sort(int[:] a, int n) -> tuple[int, int]:
+    return quick_3way_sort_benchmark(&a[0], n), get_resolution()
 
