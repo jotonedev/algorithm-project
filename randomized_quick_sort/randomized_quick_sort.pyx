@@ -36,5 +36,5 @@ cdef unsigned long long get_resolution():
     return end_ns - start_ns
 
 
-def py_quick_sort(int[:] a, int n) -> tuple[int, int]:
-    return quick_sort_benchmark(&a[0], n), get_resolution()
+def py_randomized_quick_sort(int[:] a, int n) -> tuple[int, int]:
+    return randomized_quick_sort_benchmark(&a[0], n), get_resolution()

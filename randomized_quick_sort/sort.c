@@ -1,5 +1,3 @@
-#include <time.h>
-#include <stdlib.h>
 
 static inline void swap(int *a, int k, int l){
     int temp = a[k];

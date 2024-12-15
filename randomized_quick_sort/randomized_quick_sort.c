@@ -9,13 +9,13 @@
         "include_dirs": [
             "."
         ],
-        "name": "quick_sort",
+        "name": "randomized_quick_sort",
         "sources": [
-            "quick_sort.pyx",
+            "randomized_quick_sort.pyx",
             "sort.c"
         ]
     },
-    "module_name": "quick_sort"
+    "module_name": "randomized_quick_sort"
 }
 END: Cython Metadata */
 
@@ -1235,8 +1235,8 @@ static CYTHON_INLINE float __PYX_NAN() {
   #endif
 #endif
 
-#define __PYX_HAVE__quick_sort
-#define __PYX_HAVE_API__quick_sort
+#define __PYX_HAVE__randomized_quick_sort
+#define __PYX_HAVE_API__randomized_quick_sort
 /* Early includes */
 #include "sort.h"
 #include "pythread.h"
@@ -1490,7 +1490,7 @@ static const char *__pyx_filename;
 /* #### Code section: filename_table ### */
 
 static const char *__pyx_f[] = {
-  "quick_sort.pyx",
+  "randomized_quick_sort.pyx",
   "<stringsource>",
 };
 /* #### Code section: utility_code_proto_before_types ### */
@@ -2722,7 +2722,7 @@ static PyObject *__pyx_memoryviewslice_convert_item_to_object(struct __pyx_memor
 static PyObject *__pyx_memoryviewslice_assign_item_from_object(struct __pyx_memoryviewslice_obj *__pyx_v_self, char *__pyx_v_itemp, PyObject *__pyx_v_value); /* proto*/
 static PyObject *__pyx_memoryviewslice__get_base(struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto*/
 
-/* Module declarations from "quick_sort" */
+/* Module declarations from "randomized_quick_sort" */
 static PyObject *__pyx_collections_abc_Sequence = 0;
 static PyObject *generic = 0;
 static PyObject *strided = 0;
@@ -2731,9 +2731,9 @@ static PyObject *contiguous = 0;
 static PyObject *indirect_contiguous = 0;
 static int __pyx_memoryview_thread_locks_used;
 static PyThread_type_lock __pyx_memoryview_thread_locks[8];
-static int __pyx_f_10quick_sort_verify(int *, int); /*proto*/
-static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *, int); /*proto*/
-static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void); /*proto*/
+static int __pyx_f_21randomized_quick_sort_verify(int *, int); /*proto*/
+static unsigned PY_LONG_LONG __pyx_f_21randomized_quick_sort_randomized_quick_sort_benchmark(int *, int); /*proto*/
+static unsigned PY_LONG_LONG __pyx_f_21randomized_quick_sort_get_resolution(void); /*proto*/
 static int __pyx_array_allocate_buffer(struct __pyx_array_obj *); /*proto*/
 static struct __pyx_array_obj *__pyx_array_new(PyObject *, Py_ssize_t, char *, char *, char *); /*proto*/
 static PyObject *__pyx_memoryview_new(PyObject *, int, int, __Pyx_TypeInfo *); /*proto*/
@@ -2771,11 +2771,11 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *, 
 /* #### Code section: typeinfo ### */
 static __Pyx_TypeInfo __Pyx_TypeInfo_int = { "int", NULL, sizeof(int), { 0 }, 0, __PYX_IS_UNSIGNED(int) ? 'U' : 'I', __PYX_IS_UNSIGNED(int), 0 };
 /* #### Code section: before_global_var ### */
-#define __Pyx_MODULE_NAME "quick_sort"
-extern int __pyx_module_is_main_quick_sort;
-int __pyx_module_is_main_quick_sort = 0;
+#define __Pyx_MODULE_NAME "randomized_quick_sort"
+extern int __pyx_module_is_main_randomized_quick_sort;
+int __pyx_module_is_main_randomized_quick_sort = 0;
 
-/* Implementation of "quick_sort" */
+/* Implementation of "randomized_quick_sort" */
 /* #### Code section: global_var ### */
 static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_ValueError;
@@ -2858,7 +2858,6 @@ static const char __pyx_k_IndexError[] = "IndexError";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
 static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
-static const char __pyx_k_quick_sort[] = "quick_sort";
 static const char __pyx_k_MemoryError[] = "MemoryError";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_collections[] = "collections";
@@ -2868,11 +2867,9 @@ static const char __pyx_k_pyx_checksum[] = "__pyx_checksum";
 static const char __pyx_k_stringsource[] = "<stringsource>";
 static const char __pyx_k_version_info[] = "version_info";
 static const char __pyx_k_class_getitem[] = "__class_getitem__";
-static const char __pyx_k_py_quick_sort[] = "py_quick_sort";
 static const char __pyx_k_reduce_cython[] = "__reduce_cython__";
 static const char __pyx_k_tuple_int_int[] = "tuple[int, int]";
 static const char __pyx_k_AssertionError[] = "AssertionError";
-static const char __pyx_k_quick_sort_pyx[] = "quick_sort.pyx";
 static const char __pyx_k_View_MemoryView[] = "View.MemoryView";
 static const char __pyx_k_allocate_buffer[] = "allocate_buffer";
 static const char __pyx_k_collections_abc[] = "collections.abc";
@@ -2888,11 +2885,14 @@ static const char __pyx_k_Array_is_not_sorted[] = "Array is not sorted";
 static const char __pyx_k_strided_and_indirect[] = "<strided and indirect>";
 static const char __pyx_k_Invalid_shape_in_axis[] = "Invalid shape in axis ";
 static const char __pyx_k_contiguous_and_direct[] = "<contiguous and direct>";
+static const char __pyx_k_randomized_quick_sort[] = "randomized_quick_sort";
 static const char __pyx_k_Cannot_index_with_type[] = "Cannot index with type '";
 static const char __pyx_k_MemoryView_of_r_object[] = "<MemoryView of %r object>";
 static const char __pyx_k_MemoryView_of_r_at_0x_x[] = "<MemoryView of %r at 0x%x>";
 static const char __pyx_k_contiguous_and_indirect[] = "<contiguous and indirect>";
+static const char __pyx_k_py_randomized_quick_sort[] = "py_randomized_quick_sort";
 static const char __pyx_k_Dimension_d_is_not_direct[] = "Dimension %d is not direct";
+static const char __pyx_k_randomized_quick_sort_pyx[] = "randomized_quick_sort.pyx";
 static const char __pyx_k_Index_out_of_bounds_axis_d[] = "Index out of bounds (axis %d)";
 static const char __pyx_k_Step_may_not_be_zero_axis_d[] = "Step may not be zero (axis %d)";
 static const char __pyx_k_itemsize_0_for_cython_array[] = "itemsize <= 0 for cython.array";
@@ -2955,7 +2955,7 @@ static void __pyx_memoryviewslice___pyx_pf_15View_dot_MemoryView_16_memoryviewsl
 static PyObject *__pyx_pf___pyx_memoryviewslice___reduce_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf___pyx_memoryviewslice_2__setstate_cython__(CYTHON_UNUSED struct __pyx_memoryviewslice_obj *__pyx_v_self, CYTHON_UNUSED PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_15View_dot_MemoryView___pyx_unpickle_Enum(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
-static PyObject *__pyx_pf_10quick_sort_py_quick_sort(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a, int __pyx_v_n); /* proto */
+static PyObject *__pyx_pf_21randomized_quick_sort_py_randomized_quick_sort(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a, int __pyx_v_n); /* proto */
 static PyObject *__pyx_tp_new_array(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_Enum(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_memoryview(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
@@ -3086,7 +3086,7 @@ typedef struct {
   PyObject *__pyx_n_s_pack;
   PyObject *__pyx_n_s_perf_counter_ns;
   PyObject *__pyx_n_s_pickle;
-  PyObject *__pyx_n_s_py_quick_sort;
+  PyObject *__pyx_n_s_py_randomized_quick_sort;
   PyObject *__pyx_n_s_pyx_PickleError;
   PyObject *__pyx_n_s_pyx_checksum;
   PyObject *__pyx_n_s_pyx_result;
@@ -3094,8 +3094,8 @@ typedef struct {
   PyObject *__pyx_n_s_pyx_type;
   PyObject *__pyx_n_s_pyx_unpickle_Enum;
   PyObject *__pyx_n_s_pyx_vtable;
-  PyObject *__pyx_n_s_quick_sort;
-  PyObject *__pyx_kp_s_quick_sort_pyx;
+  PyObject *__pyx_n_s_randomized_quick_sort;
+  PyObject *__pyx_kp_s_randomized_quick_sort_pyx;
   PyObject *__pyx_n_s_range;
   PyObject *__pyx_n_s_reduce;
   PyObject *__pyx_n_s_reduce_cython;
@@ -3287,7 +3287,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_pack);
   Py_CLEAR(clear_module_state->__pyx_n_s_perf_counter_ns);
   Py_CLEAR(clear_module_state->__pyx_n_s_pickle);
-  Py_CLEAR(clear_module_state->__pyx_n_s_py_quick_sort);
+  Py_CLEAR(clear_module_state->__pyx_n_s_py_randomized_quick_sort);
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_PickleError);
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_checksum);
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_result);
@@ -3295,8 +3295,8 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_type);
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_unpickle_Enum);
   Py_CLEAR(clear_module_state->__pyx_n_s_pyx_vtable);
-  Py_CLEAR(clear_module_state->__pyx_n_s_quick_sort);
-  Py_CLEAR(clear_module_state->__pyx_kp_s_quick_sort_pyx);
+  Py_CLEAR(clear_module_state->__pyx_n_s_randomized_quick_sort);
+  Py_CLEAR(clear_module_state->__pyx_kp_s_randomized_quick_sort_pyx);
   Py_CLEAR(clear_module_state->__pyx_n_s_range);
   Py_CLEAR(clear_module_state->__pyx_n_s_reduce);
   Py_CLEAR(clear_module_state->__pyx_n_s_reduce_cython);
@@ -3466,7 +3466,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_pack);
   Py_VISIT(traverse_module_state->__pyx_n_s_perf_counter_ns);
   Py_VISIT(traverse_module_state->__pyx_n_s_pickle);
-  Py_VISIT(traverse_module_state->__pyx_n_s_py_quick_sort);
+  Py_VISIT(traverse_module_state->__pyx_n_s_py_randomized_quick_sort);
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_PickleError);
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_checksum);
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_result);
@@ -3474,8 +3474,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_type);
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_unpickle_Enum);
   Py_VISIT(traverse_module_state->__pyx_n_s_pyx_vtable);
-  Py_VISIT(traverse_module_state->__pyx_n_s_quick_sort);
-  Py_VISIT(traverse_module_state->__pyx_kp_s_quick_sort_pyx);
+  Py_VISIT(traverse_module_state->__pyx_n_s_randomized_quick_sort);
+  Py_VISIT(traverse_module_state->__pyx_kp_s_randomized_quick_sort_pyx);
   Py_VISIT(traverse_module_state->__pyx_n_s_range);
   Py_VISIT(traverse_module_state->__pyx_n_s_reduce);
   Py_VISIT(traverse_module_state->__pyx_n_s_reduce_cython);
@@ -3655,7 +3655,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_pack __pyx_mstate_global->__pyx_n_s_pack
 #define __pyx_n_s_perf_counter_ns __pyx_mstate_global->__pyx_n_s_perf_counter_ns
 #define __pyx_n_s_pickle __pyx_mstate_global->__pyx_n_s_pickle
-#define __pyx_n_s_py_quick_sort __pyx_mstate_global->__pyx_n_s_py_quick_sort
+#define __pyx_n_s_py_randomized_quick_sort __pyx_mstate_global->__pyx_n_s_py_randomized_quick_sort
 #define __pyx_n_s_pyx_PickleError __pyx_mstate_global->__pyx_n_s_pyx_PickleError
 #define __pyx_n_s_pyx_checksum __pyx_mstate_global->__pyx_n_s_pyx_checksum
 #define __pyx_n_s_pyx_result __pyx_mstate_global->__pyx_n_s_pyx_result
@@ -3663,8 +3663,8 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_pyx_type __pyx_mstate_global->__pyx_n_s_pyx_type
 #define __pyx_n_s_pyx_unpickle_Enum __pyx_mstate_global->__pyx_n_s_pyx_unpickle_Enum
 #define __pyx_n_s_pyx_vtable __pyx_mstate_global->__pyx_n_s_pyx_vtable
-#define __pyx_n_s_quick_sort __pyx_mstate_global->__pyx_n_s_quick_sort
-#define __pyx_kp_s_quick_sort_pyx __pyx_mstate_global->__pyx_kp_s_quick_sort_pyx
+#define __pyx_n_s_randomized_quick_sort __pyx_mstate_global->__pyx_n_s_randomized_quick_sort
+#define __pyx_kp_s_randomized_quick_sort_pyx __pyx_mstate_global->__pyx_kp_s_randomized_quick_sort_pyx
 #define __pyx_n_s_range __pyx_mstate_global->__pyx_n_s_range
 #define __pyx_n_s_reduce __pyx_mstate_global->__pyx_n_s_reduce
 #define __pyx_n_s_reduce_cython __pyx_mstate_global->__pyx_n_s_reduce_cython
@@ -17347,15 +17347,15 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "quick_sort.pyx":7
- *     void quick_sort(int *a, int i, int j)
+/* "randomized_quick_sort.pyx":7
+ *     void randomized_quick_sort(int *a, int i, int j)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
  *     cdef int i
  *     for i in range(1, n):
  */
 
-static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
+static int __pyx_f_21randomized_quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   int __pyx_v_i;
   int __pyx_r;
   int __pyx_t_1;
@@ -17363,7 +17363,7 @@ static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   int __pyx_t_3;
   int __pyx_t_4;
 
-  /* "quick_sort.pyx":9
+  /* "randomized_quick_sort.pyx":9
  * cdef int verify(int *a, int n):
  *     cdef int i
  *     for i in range(1, n):             # <<<<<<<<<<<<<<
@@ -17375,7 +17375,7 @@ static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   for (__pyx_t_3 = 1; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "quick_sort.pyx":10
+    /* "randomized_quick_sort.pyx":10
  *     cdef int i
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:             # <<<<<<<<<<<<<<
@@ -17385,7 +17385,7 @@ static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
     __pyx_t_4 = ((__pyx_v_a[__pyx_v_i]) < (__pyx_v_a[(__pyx_v_i - 1)]));
     if (__pyx_t_4) {
 
-      /* "quick_sort.pyx":11
+      /* "randomized_quick_sort.pyx":11
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:
  *             return 0             # <<<<<<<<<<<<<<
@@ -17395,7 +17395,7 @@ static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "quick_sort.pyx":10
+      /* "randomized_quick_sort.pyx":10
  *     cdef int i
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:             # <<<<<<<<<<<<<<
@@ -17405,18 +17405,18 @@ static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
     }
   }
 
-  /* "quick_sort.pyx":12
+  /* "randomized_quick_sort.pyx":12
  *         if a[i] < a[i - 1]:
  *             return 0
  *     return 1             # <<<<<<<<<<<<<<
  * 
- * cdef unsigned long long quick_sort_benchmark(int* a, int n):
+ * cdef unsigned long long randomized_quick_sort_benchmark(int* a, int n):
  */
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "quick_sort.pyx":7
- *     void quick_sort(int *a, int i, int j)
+  /* "randomized_quick_sort.pyx":7
+ *     void randomized_quick_sort(int *a, int i, int j)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -17428,15 +17428,15 @@ static int __pyx_f_10quick_sort_verify(int *__pyx_v_a, int __pyx_v_n) {
   return __pyx_r;
 }
 
-/* "quick_sort.pyx":14
+/* "randomized_quick_sort.pyx":14
  *     return 1
  * 
- * cdef unsigned long long quick_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
+ * cdef unsigned long long randomized_quick_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
  *     # declare array b of the same size as a
  *     cdef:
  */
 
-static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__pyx_v_a, int __pyx_v_n) {
+static unsigned PY_LONG_LONG __pyx_f_21randomized_quick_sort_randomized_quick_sort_benchmark(int *__pyx_v_a, int __pyx_v_n) {
   unsigned PY_LONG_LONG __pyx_v_start_ns;
   unsigned PY_LONG_LONG __pyx_v_end_ns;
   unsigned PY_LONG_LONG __pyx_r;
@@ -17451,9 +17451,9 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("quick_sort_benchmark", 1);
+  __Pyx_RefNannySetupContext("randomized_quick_sort_benchmark", 1);
 
-  /* "quick_sort.pyx":17
+  /* "randomized_quick_sort.pyx":17
  *     # declare array b of the same size as a
  *     cdef:
  *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
@@ -17462,7 +17462,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
  */
   __pyx_v_start_ns = 0;
 
-  /* "quick_sort.pyx":18
+  /* "randomized_quick_sort.pyx":18
  *     cdef:
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
@@ -17471,11 +17471,11 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
  */
   __pyx_v_end_ns = 0;
 
-  /* "quick_sort.pyx":20
+  /* "randomized_quick_sort.pyx":20
  *         unsigned long long end_ns = 0
  * 
  *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
- *     quick_sort(a, 0, n)
+ *     randomized_quick_sort(a, 0, n)
  *     end_ns = perf_counter_ns()
  */
   __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 20, __pyx_L1_error)
@@ -17506,18 +17506,18 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_start_ns = __pyx_t_5;
 
-  /* "quick_sort.pyx":21
+  /* "randomized_quick_sort.pyx":21
  * 
  *     start_ns = perf_counter_ns()
- *     quick_sort(a, 0, n)             # <<<<<<<<<<<<<<
+ *     randomized_quick_sort(a, 0, n)             # <<<<<<<<<<<<<<
  *     end_ns = perf_counter_ns()
  * 
  */
-  quick_sort(__pyx_v_a, 0, __pyx_v_n);
+  randomized_quick_sort(__pyx_v_a, 0, __pyx_v_n);
 
-  /* "quick_sort.pyx":22
+  /* "randomized_quick_sort.pyx":22
  *     start_ns = perf_counter_ns()
- *     quick_sort(a, 0, n)
+ *     randomized_quick_sort(a, 0, n)
  *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  * 
  *     if verify(a, n) == 0:
@@ -17550,18 +17550,18 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_end_ns = __pyx_t_5;
 
-  /* "quick_sort.pyx":24
+  /* "randomized_quick_sort.pyx":24
  *     end_ns = perf_counter_ns()
  * 
  *     if verify(a, n) == 0:             # <<<<<<<<<<<<<<
  *         raise ValueError("Array is not sorted")
  * 
  */
-  __pyx_t_6 = __pyx_f_10quick_sort_verify(__pyx_v_a, __pyx_v_n); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L1_error)
+  __pyx_t_6 = __pyx_f_21randomized_quick_sort_verify(__pyx_v_a, __pyx_v_n); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 24, __pyx_L1_error)
   __pyx_t_7 = (__pyx_t_6 == 0);
   if (unlikely(__pyx_t_7)) {
 
-    /* "quick_sort.pyx":25
+    /* "randomized_quick_sort.pyx":25
  * 
  *     if verify(a, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
@@ -17574,7 +17574,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __PYX_ERR(0, 25, __pyx_L1_error)
 
-    /* "quick_sort.pyx":24
+    /* "randomized_quick_sort.pyx":24
  *     end_ns = perf_counter_ns()
  * 
  *     if verify(a, n) == 0:             # <<<<<<<<<<<<<<
@@ -17583,7 +17583,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
  */
   }
 
-  /* "quick_sort.pyx":27
+  /* "randomized_quick_sort.pyx":27
  *         raise ValueError("Array is not sorted")
  * 
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
@@ -17593,10 +17593,10 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
   __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
   goto __pyx_L0;
 
-  /* "quick_sort.pyx":14
+  /* "randomized_quick_sort.pyx":14
  *     return 1
  * 
- * cdef unsigned long long quick_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
+ * cdef unsigned long long randomized_quick_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
  *     # declare array b of the same size as a
  *     cdef:
  */
@@ -17606,14 +17606,14 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("quick_sort.quick_sort_benchmark", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("randomized_quick_sort.randomized_quick_sort_benchmark", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "quick_sort.pyx":30
+/* "randomized_quick_sort.pyx":30
  * 
  * # leave this function as is
  * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
@@ -17621,7 +17621,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_quick_sort_benchmark(int *__py
  *         unsigned long long start_ns = 0
  */
 
-static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
+static unsigned PY_LONG_LONG __pyx_f_21randomized_quick_sort_get_resolution(void) {
   unsigned PY_LONG_LONG __pyx_v_start_ns;
   unsigned PY_LONG_LONG __pyx_v_end_ns;
   unsigned PY_LONG_LONG __pyx_r;
@@ -17636,7 +17636,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_resolution", 1);
 
-  /* "quick_sort.pyx":32
+  /* "randomized_quick_sort.pyx":32
  * cdef unsigned long long get_resolution():
  *     cdef:
  *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
@@ -17645,7 +17645,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
  */
   __pyx_v_start_ns = 0;
 
-  /* "quick_sort.pyx":33
+  /* "randomized_quick_sort.pyx":33
  *     cdef:
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
@@ -17654,7 +17654,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
  */
   __pyx_v_end_ns = 0;
 
-  /* "quick_sort.pyx":34
+  /* "randomized_quick_sort.pyx":34
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0
  *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
@@ -17689,7 +17689,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_start_ns = __pyx_t_5;
 
-  /* "quick_sort.pyx":35
+  /* "randomized_quick_sort.pyx":35
  *         unsigned long long end_ns = 0
  *     start_ns = perf_counter_ns()
  *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
@@ -17724,7 +17724,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_end_ns = __pyx_t_5;
 
-  /* "quick_sort.pyx":36
+  /* "randomized_quick_sort.pyx":36
  *     start_ns = perf_counter_ns()
  *     end_ns = perf_counter_ns()
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
@@ -17734,7 +17734,7 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
   __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
   goto __pyx_L0;
 
-  /* "quick_sort.pyx":30
+  /* "randomized_quick_sort.pyx":30
  * 
  * # leave this function as is
  * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
@@ -17747,30 +17747,30 @@ static unsigned PY_LONG_LONG __pyx_f_10quick_sort_get_resolution(void) {
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_AddTraceback("quick_sort.get_resolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("randomized_quick_sort.get_resolution", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "quick_sort.pyx":39
+/* "randomized_quick_sort.pyx":39
  * 
  * 
- * def py_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
- *     return quick_sort_benchmark(&a[0], n), get_resolution()
+ * def py_randomized_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return randomized_quick_sort_benchmark(&a[0], n), get_resolution()
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_10quick_sort_1py_quick_sort(PyObject *__pyx_self, 
+static PyObject *__pyx_pw_21randomized_quick_sort_1py_randomized_quick_sort(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
 PyObject *__pyx_args, PyObject *__pyx_kwds
 #endif
 ); /*proto*/
-static PyMethodDef __pyx_mdef_10quick_sort_1py_quick_sort = {"py_quick_sort", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_10quick_sort_1py_quick_sort, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
-static PyObject *__pyx_pw_10quick_sort_1py_quick_sort(PyObject *__pyx_self, 
+static PyMethodDef __pyx_mdef_21randomized_quick_sort_1py_randomized_quick_sort = {"py_randomized_quick_sort", (PyCFunction)(void*)(__Pyx_PyCFunction_FastCallWithKeywords)__pyx_pw_21randomized_quick_sort_1py_randomized_quick_sort, __Pyx_METH_FASTCALL|METH_KEYWORDS, 0};
+static PyObject *__pyx_pw_21randomized_quick_sort_1py_randomized_quick_sort(PyObject *__pyx_self, 
 #if CYTHON_METH_FASTCALL
 PyObject *const *__pyx_args, Py_ssize_t __pyx_nargs, PyObject *__pyx_kwds
 #else
@@ -17789,7 +17789,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   int __pyx_clineno = 0;
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("py_quick_sort (wrapper)", 0);
+  __Pyx_RefNannySetupContext("py_randomized_quick_sort (wrapper)", 0);
   #if !CYTHON_METH_FASTCALL
   #if CYTHON_ASSUME_SAFE_MACROS
   __pyx_nargs = PyTuple_GET_SIZE(__pyx_args);
@@ -17827,12 +17827,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
         }
         else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 39, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("py_quick_sort", 1, 2, 2, 1); __PYX_ERR(0, 39, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("py_randomized_quick_sort", 1, 2, 2, 1); __PYX_ERR(0, 39, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_quick_sort") < 0)) __PYX_ERR(0, 39, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_randomized_quick_sort") < 0)) __PYX_ERR(0, 39, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -17845,7 +17845,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("py_quick_sort", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 39, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("py_randomized_quick_sort", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 39, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17856,11 +17856,11 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
     }
   }
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_a, 1);
-  __Pyx_AddTraceback("quick_sort.py_quick_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("randomized_quick_sort.py_randomized_quick_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  __pyx_r = __pyx_pf_10quick_sort_py_quick_sort(__pyx_self, __pyx_v_a, __pyx_v_n);
+  __pyx_r = __pyx_pf_21randomized_quick_sort_py_randomized_quick_sort(__pyx_self, __pyx_v_a, __pyx_v_n);
 
   /* function exit code */
   __PYX_XCLEAR_MEMVIEW(&__pyx_v_a, 1);
@@ -17874,7 +17874,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_10quick_sort_py_quick_sort(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a, int __pyx_v_n) {
+static PyObject *__pyx_pf_21randomized_quick_sort_py_randomized_quick_sort(CYTHON_UNUSED PyObject *__pyx_self, __Pyx_memviewslice __pyx_v_a, int __pyx_v_n) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   Py_ssize_t __pyx_t_1;
@@ -17885,19 +17885,19 @@ static PyObject *__pyx_pf_10quick_sort_py_quick_sort(CYTHON_UNUSED PyObject *__p
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
-  __Pyx_RefNannySetupContext("py_quick_sort", 1);
+  __Pyx_RefNannySetupContext("py_randomized_quick_sort", 1);
 
-  /* "quick_sort.pyx":40
+  /* "randomized_quick_sort.pyx":40
  * 
- * def py_quick_sort(int[:] a, int n) -> tuple[int, int]:
- *     return quick_sort_benchmark(&a[0], n), get_resolution()             # <<<<<<<<<<<<<<
+ * def py_randomized_quick_sort(int[:] a, int n) -> tuple[int, int]:
+ *     return randomized_quick_sort_benchmark(&a[0], n), get_resolution()             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = 0;
-  __pyx_t_2 = __pyx_f_10quick_sort_quick_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_21randomized_quick_sort_randomized_quick_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
   __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __pyx_f_10quick_sort_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_21randomized_quick_sort_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 40, __pyx_L1_error)
   __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 40, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 40, __pyx_L1_error)
@@ -17912,11 +17912,11 @@ static PyObject *__pyx_pf_10quick_sort_py_quick_sort(CYTHON_UNUSED PyObject *__p
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "quick_sort.pyx":39
+  /* "randomized_quick_sort.pyx":39
  * 
  * 
- * def py_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
- *     return quick_sort_benchmark(&a[0], n), get_resolution()
+ * def py_randomized_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return randomized_quick_sort_benchmark(&a[0], n), get_resolution()
  */
 
   /* function exit code */
@@ -17924,7 +17924,7 @@ static PyObject *__pyx_pf_10quick_sort_py_quick_sort(CYTHON_UNUSED PyObject *__p
   __Pyx_XDECREF(__pyx_t_3);
   __Pyx_XDECREF(__pyx_t_4);
   __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_AddTraceback("quick_sort.py_quick_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_AddTraceback("randomized_quick_sort.py_randomized_quick_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
   __Pyx_XGIVEREF(__pyx_r);
@@ -18069,7 +18069,7 @@ static PyType_Slot __pyx_type___pyx_array_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_array_spec = {
-  "quick_sort.array",
+  "randomized_quick_sort.array",
   sizeof(struct __pyx_array_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_SEQUENCE,
@@ -18115,7 +18115,7 @@ static PyBufferProcs __pyx_tp_as_buffer_array = {
 
 static PyTypeObject __pyx_type___pyx_array = {
   PyVarObject_HEAD_INIT(0, 0)
-  "quick_sort.""array", /*tp_name*/
+  "randomized_quick_sort.""array", /*tp_name*/
   sizeof(struct __pyx_array_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_array, /*tp_dealloc*/
@@ -18278,7 +18278,7 @@ static PyType_Slot __pyx_type___pyx_MemviewEnum_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
-  "quick_sort.Enum",
+  "randomized_quick_sort.Enum",
   sizeof(struct __pyx_MemviewEnum_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -18288,7 +18288,7 @@ static PyType_Spec __pyx_type___pyx_MemviewEnum_spec = {
 
 static PyTypeObject __pyx_type___pyx_MemviewEnum = {
   PyVarObject_HEAD_INIT(0, 0)
-  "quick_sort.""Enum", /*tp_name*/
+  "randomized_quick_sort.""Enum", /*tp_name*/
   sizeof(struct __pyx_MemviewEnum_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_Enum, /*tp_dealloc*/
@@ -18588,7 +18588,7 @@ static PyType_Slot __pyx_type___pyx_memoryview_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryview_spec = {
-  "quick_sort.memoryview",
+  "randomized_quick_sort.memoryview",
   sizeof(struct __pyx_memoryview_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC,
@@ -18634,7 +18634,7 @@ static PyBufferProcs __pyx_tp_as_buffer_memoryview = {
 
 static PyTypeObject __pyx_type___pyx_memoryview = {
   PyVarObject_HEAD_INIT(0, 0)
-  "quick_sort.""memoryview", /*tp_name*/
+  "randomized_quick_sort.""memoryview", /*tp_name*/
   sizeof(struct __pyx_memoryview_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc_memoryview, /*tp_dealloc*/
@@ -18789,7 +18789,7 @@ static PyType_Slot __pyx_type___pyx_memoryviewslice_slots[] = {
   {0, 0},
 };
 static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
-  "quick_sort._memoryviewslice",
+  "randomized_quick_sort._memoryviewslice",
   sizeof(struct __pyx_memoryviewslice_obj),
   0,
   Py_TPFLAGS_DEFAULT|Py_TPFLAGS_HAVE_VERSION_TAG|Py_TPFLAGS_CHECKTYPES|Py_TPFLAGS_HAVE_NEWBUFFER|Py_TPFLAGS_BASETYPE|Py_TPFLAGS_HAVE_GC|Py_TPFLAGS_SEQUENCE,
@@ -18799,7 +18799,7 @@ static PyType_Spec __pyx_type___pyx_memoryviewslice_spec = {
 
 static PyTypeObject __pyx_type___pyx_memoryviewslice = {
   PyVarObject_HEAD_INIT(0, 0)
-  "quick_sort.""_memoryviewslice", /*tp_name*/
+  "randomized_quick_sort.""_memoryviewslice", /*tp_name*/
   sizeof(struct __pyx_memoryviewslice_obj), /*tp_basicsize*/
   0, /*tp_itemsize*/
   __pyx_tp_dealloc__memoryviewslice, /*tp_dealloc*/
@@ -18995,7 +18995,7 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_pack, __pyx_k_pack, sizeof(__pyx_k_pack), 0, 0, 1, 1},
     {&__pyx_n_s_perf_counter_ns, __pyx_k_perf_counter_ns, sizeof(__pyx_k_perf_counter_ns), 0, 0, 1, 1},
     {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
-    {&__pyx_n_s_py_quick_sort, __pyx_k_py_quick_sort, sizeof(__pyx_k_py_quick_sort), 0, 0, 1, 1},
+    {&__pyx_n_s_py_randomized_quick_sort, __pyx_k_py_randomized_quick_sort, sizeof(__pyx_k_py_randomized_quick_sort), 0, 0, 1, 1},
     {&__pyx_n_s_pyx_PickleError, __pyx_k_pyx_PickleError, sizeof(__pyx_k_pyx_PickleError), 0, 0, 1, 1},
     {&__pyx_n_s_pyx_checksum, __pyx_k_pyx_checksum, sizeof(__pyx_k_pyx_checksum), 0, 0, 1, 1},
     {&__pyx_n_s_pyx_result, __pyx_k_pyx_result, sizeof(__pyx_k_pyx_result), 0, 0, 1, 1},
@@ -19003,8 +19003,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
     {&__pyx_n_s_pyx_type, __pyx_k_pyx_type, sizeof(__pyx_k_pyx_type), 0, 0, 1, 1},
     {&__pyx_n_s_pyx_unpickle_Enum, __pyx_k_pyx_unpickle_Enum, sizeof(__pyx_k_pyx_unpickle_Enum), 0, 0, 1, 1},
     {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
-    {&__pyx_n_s_quick_sort, __pyx_k_quick_sort, sizeof(__pyx_k_quick_sort), 0, 0, 1, 1},
-    {&__pyx_kp_s_quick_sort_pyx, __pyx_k_quick_sort_pyx, sizeof(__pyx_k_quick_sort_pyx), 0, 0, 1, 0},
+    {&__pyx_n_s_randomized_quick_sort, __pyx_k_randomized_quick_sort, sizeof(__pyx_k_randomized_quick_sort), 0, 0, 1, 1},
+    {&__pyx_kp_s_randomized_quick_sort_pyx, __pyx_k_randomized_quick_sort_pyx, sizeof(__pyx_k_randomized_quick_sort_pyx), 0, 0, 1, 0},
     {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
     {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
     {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
@@ -19095,7 +19095,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "quick_sort.pyx":25
+  /* "randomized_quick_sort.pyx":25
  * 
  *     if verify(a, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
@@ -19207,16 +19207,16 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__19);
   __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "quick_sort.pyx":39
+  /* "randomized_quick_sort.pyx":39
  * 
  * 
- * def py_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
- *     return quick_sort_benchmark(&a[0], n), get_resolution()
+ * def py_randomized_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return randomized_quick_sort_benchmark(&a[0], n), get_resolution()
  */
   __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_a, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_quick_sort_pyx, __pyx_n_s_py_quick_sort, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_randomized_quick_sort_pyx, __pyx_n_s_py_randomized_quick_sort, 39, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -19474,10 +19474,10 @@ static int __Pyx_modinit_function_import_code(void) {
 #if PY_MAJOR_VERSION >= 3
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 static PyObject* __pyx_pymod_create(PyObject *spec, PyModuleDef *def); /*proto*/
-static int __pyx_pymod_exec_quick_sort(PyObject* module); /*proto*/
+static int __pyx_pymod_exec_randomized_quick_sort(PyObject* module); /*proto*/
 static PyModuleDef_Slot __pyx_moduledef_slots[] = {
   {Py_mod_create, (void*)__pyx_pymod_create},
-  {Py_mod_exec, (void*)__pyx_pymod_exec_quick_sort},
+  {Py_mod_exec, (void*)__pyx_pymod_exec_randomized_quick_sort},
   {0, NULL}
 };
 #endif
@@ -19490,7 +19490,7 @@ namespace {
   #endif
   {
       PyModuleDef_HEAD_INIT,
-      "quick_sort",
+      "randomized_quick_sort",
       0, /* m_doc */
     #if CYTHON_PEP489_MULTI_PHASE_INIT
       0, /* m_size */
@@ -19538,11 +19538,11 @@ namespace {
 
 
 #if PY_MAJOR_VERSION < 3
-__Pyx_PyMODINIT_FUNC initquick_sort(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC initquick_sort(void)
+__Pyx_PyMODINIT_FUNC initrandomized_quick_sort(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC initrandomized_quick_sort(void)
 #else
-__Pyx_PyMODINIT_FUNC PyInit_quick_sort(void) CYTHON_SMALL_CODE; /*proto*/
-__Pyx_PyMODINIT_FUNC PyInit_quick_sort(void)
+__Pyx_PyMODINIT_FUNC PyInit_randomized_quick_sort(void) CYTHON_SMALL_CODE; /*proto*/
+__Pyx_PyMODINIT_FUNC PyInit_randomized_quick_sort(void)
 #if CYTHON_PEP489_MULTI_PHASE_INIT
 {
   return PyModuleDef_Init(&__pyx_moduledef);
@@ -19623,7 +19623,7 @@ bad:
 }
 
 
-static CYTHON_SMALL_CODE int __pyx_pymod_exec_quick_sort(PyObject *__pyx_pyinit_module)
+static CYTHON_SMALL_CODE int __pyx_pymod_exec_randomized_quick_sort(PyObject *__pyx_pyinit_module)
 #endif
 #endif
 {
@@ -19646,7 +19646,7 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_quick_sort(PyObject *__pyx_pyinit_
   #if CYTHON_PEP489_MULTI_PHASE_INIT
   if (__pyx_m) {
     if (__pyx_m == __pyx_pyinit_module) return 0;
-    PyErr_SetString(PyExc_RuntimeError, "Module 'quick_sort' has already been imported. Re-initialisation is not supported.");
+    PyErr_SetString(PyExc_RuntimeError, "Module 'randomized_quick_sort' has already been imported. Re-initialisation is not supported.");
     return -1;
   }
   #elif PY_MAJOR_VERSION >= 3
@@ -19658,13 +19658,13 @@ static CYTHON_SMALL_CODE int __pyx_pymod_exec_quick_sort(PyObject *__pyx_pyinit_
   Py_INCREF(__pyx_m);
   #else
   #if PY_MAJOR_VERSION < 3
-  __pyx_m = Py_InitModule4("quick_sort", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
+  __pyx_m = Py_InitModule4("randomized_quick_sort", __pyx_methods, 0, 0, PYTHON_API_VERSION); Py_XINCREF(__pyx_m);
   if (unlikely(!__pyx_m)) __PYX_ERR(0, 1, __pyx_L1_error)
   #elif CYTHON_USE_MODULE_STATE
   __pyx_t_1 = PyModule_Create(&__pyx_moduledef); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1, __pyx_L1_error)
   {
     int add_module_result = PyState_AddModule(__pyx_t_1, &__pyx_moduledef);
-    __pyx_t_1 = 0; /* transfer ownership from __pyx_t_1 to "quick_sort" pseudovariable */
+    __pyx_t_1 = 0; /* transfer ownership from __pyx_t_1 to "randomized_quick_sort" pseudovariable */
     if (unlikely((add_module_result < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
     pystate_addmodule_run = 1;
   }
@@ -19688,7 +19688,7 @@ if (!__Pyx_RefNanny) {
       Py_FatalError("failed to import 'refnanny' module");
 }
 #endif
-  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_quick_sort(void)", 0);
+  __Pyx_RefNannySetupContext("__Pyx_PyMODINIT_FUNC PyInit_randomized_quick_sort(void)", 0);
   if (__Pyx_check_binary_version(__PYX_LIMITED_VERSION_HEX, __Pyx_get_runtime_version(), CYTHON_COMPILING_IN_LIMITED_API) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #ifdef __Pxy_PyFrame_Initialize_Offsets
   __Pxy_PyFrame_Initialize_Offsets();
@@ -19726,14 +19726,14 @@ if (!__Pyx_RefNanny) {
   #if PY_MAJOR_VERSION < 3 && (__PYX_DEFAULT_STRING_ENCODING_IS_ASCII || __PYX_DEFAULT_STRING_ENCODING_IS_DEFAULT)
   if (__Pyx_init_sys_getdefaultencoding_params() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
-  if (__pyx_module_is_main_quick_sort) {
+  if (__pyx_module_is_main_randomized_quick_sort) {
     if (PyObject_SetAttr(__pyx_m, __pyx_n_s_name_2, __pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   }
   #if PY_MAJOR_VERSION >= 3
   {
     PyObject *modules = PyImport_GetModuleDict(); if (unlikely(!modules)) __PYX_ERR(0, 1, __pyx_L1_error)
-    if (!PyDict_GetItemString(modules, "quick_sort")) {
-      if (unlikely((PyDict_SetItemString(modules, "quick_sort", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
+    if (!PyDict_GetItemString(modules, "randomized_quick_sort")) {
+      if (unlikely((PyDict_SetItemString(modules, "randomized_quick_sort", __pyx_m) < 0))) __PYX_ERR(0, 1, __pyx_L1_error)
     }
   }
   #endif
@@ -20267,7 +20267,7 @@ if (!__Pyx_RefNanny) {
   if (PyDict_SetItem(__pyx_d, __pyx_n_s_pyx_unpickle_Enum, __pyx_t_7) < 0) __PYX_ERR(1, 1, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "quick_sort.pyx":1
+  /* "randomized_quick_sort.pyx":1
  * from time import perf_counter_ns             # <<<<<<<<<<<<<<
  * 
  * 
@@ -20286,23 +20286,23 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "quick_sort.pyx":39
+  /* "randomized_quick_sort.pyx":39
  * 
  * 
- * def py_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
- *     return quick_sort_benchmark(&a[0], n), get_resolution()
+ * def py_randomized_quick_sort(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
+ *     return randomized_quick_sort_benchmark(&a[0], n), get_resolution()
  */
   __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
   if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_return, __pyx_kp_s_tuple_int_int) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_10quick_sort_1py_quick_sort, 0, __pyx_n_s_py_quick_sort, NULL, __pyx_n_s_quick_sort, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 39, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_21randomized_quick_sort_1py_randomized_quick_sort, 0, __pyx_n_s_py_randomized_quick_sort, NULL, __pyx_n_s_randomized_quick_sort, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_7, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_quick_sort, __pyx_t_7) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_randomized_quick_sort, __pyx_t_7) < 0) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "quick_sort.pyx":1
+  /* "randomized_quick_sort.pyx":1
  * from time import perf_counter_ns             # <<<<<<<<<<<<<<
  * 
  * 
@@ -20321,7 +20321,7 @@ if (!__Pyx_RefNanny) {
   __Pyx_XDECREF(__pyx_t_7);
   if (__pyx_m) {
     if (__pyx_d && stringtab_initialized) {
-      __Pyx_AddTraceback("init quick_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
+      __Pyx_AddTraceback("init randomized_quick_sort", __pyx_clineno, __pyx_lineno, __pyx_filename);
     }
     #if !CYTHON_USE_MODULE_STATE
     Py_CLEAR(__pyx_m);
@@ -20335,7 +20335,7 @@ if (!__Pyx_RefNanny) {
     }
     #endif
   } else if (!PyErr_Occurred()) {
-    PyErr_SetString(PyExc_ImportError, "init quick_sort");
+    PyErr_SetString(PyExc_ImportError, "init randomized_quick_sort");
   }
   __pyx_L0:;
   __Pyx_RefNannyFinishContext();
