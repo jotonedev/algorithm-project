@@ -95,6 +95,18 @@ Meaning of the filename parts:
 - `<windows | linux>`: The operating system used to run the benchmark
 - `<csv | svg>`: The file format of the file, csv for the raw data and svg for the plot
 
+### How data is stored in the CSV files
+
+The CSV files have the following columns:
+
+- `size`: The size of the input array
+- `min_value`: The minimum value in the input array (presence not guaranteed, it used only to give the minimum range for the random input generation)
+- `max_value`: The maximum value in the input array (presence guaranteed)
+- `time`: The time taken to run the algorithm in nanoseconds, the median between all repetitions
+- `resolution`: The minimum measurable time in nanoseconds for the method used to measure the time
+- `stdev`: The standard deviation of the time taken to run the algorithm
+- `mad`: The median absolute deviation of the time taken to run the algorithm
+
 ## FAQ
 
 ### What is Cython
