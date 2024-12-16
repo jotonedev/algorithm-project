@@ -34,7 +34,7 @@ int randomized_partition(int *a, int i, int j) {
 void randomized_quick_sort(int *a, int i, int j) {
     if (i < j) {
         int q = randomized_partition(a, i, j);
-        randomized_quick_sort(a, i, q - 1);
+        randomized_quick_sort(a, i, q);
         randomized_quick_sort(a, q + 1, j);
     }
 }
