@@ -1,3 +1,4 @@
+#include <stdlib.h>
 
 static inline void swap(int *a, int k, int l){
     int temp = a[k];
@@ -6,7 +7,7 @@ static inline void swap(int *a, int k, int l){
 }
 
 // Partition function to rearrange the elements around the pivot
-int partition(int *a, int i, int j) {
+static int partition(int *a, int i, int j) {
     //assert(i < j);
     int k = i;            // index of the pivot's final position after the partition function completes         
     int pivot = a[j - 1]; // Choose the last element as the pivot
@@ -20,7 +21,7 @@ int partition(int *a, int i, int j) {
     return k - 1; // Return the pivot's final position
 }
 
-int randomQ(int i, int j) {
+static inline int randomQ(int i, int j) {
     return i + rand() % (j - i + 1); // Generate a random number between i and j
 }
 
