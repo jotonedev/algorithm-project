@@ -5,7 +5,7 @@ Implementation, time complexity analysis, and benchmarking of the following algo
 - [x] Quick Sort
 - [x] Quick 3 Way Sort
 - [x] Counting Sort
-- [ ] Quick Sort with random pivot
+- [x] Quick Sort with random pivot
 - [ ] Tim Sort
 
 ## Project Structure
@@ -34,19 +34,21 @@ python benchmark.py -i <input_folder>
 ### Arguments for benchmark.py
 
 ```bash
-usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r REPETITIONS] [-v] [--linear] [--by-max]
+usage: Sorting Algorithms Benchmark [-h] -i INPUT [-o OUTPUT] [-s SAMPLES] [-r REPETITIONS] [-v] [--linear] [--by-max] [--max-val MAX_VAL] [--max-length MAX_LENGTH]
 
 Benchmarking tool for the project
 
 options:
-  -h, --help            Show this help message and exit
-  -i INPUT, --input INPUT                     Input directory for algorithm inputs
-  -o OUTPUT, --output OUTPUT                  Output directory for benchmark results
-  -s SAMPLES, --samples SAMPLES               Number of samples to get
-  -r REPETITIONS, --repetitions REPETITIONS   Number of repetitions for each input length to run
+  -h, --help            show this help message and exit
+  -i, --input INPUT     Input directory for algorithm inputs
+  -o, --output OUTPUT   Output directory for benchmark results
+  -s, --samples SAMPLES Number of samples to get
+  -r, --repetitions REPETITIONS Number of repetitions for each input length to run
   -v, --verbose         Increase output verbosity
   --linear              Use linear scaling instead of exponential
   --by-max              Benchmark by varying the maximum value of the input data
+  --max-val MAX_VAL     Maximum value of the input data
+  --max-length MAX_LENGTH Maximum length of the input data
 ```
 
 ### Arguments for plot.py
