@@ -15,7 +15,6 @@ import numpy as np
 import pandas as pd
 import psutil
 import tqdm
-from numpy.ma.core import max_val
 
 
 @dataclass
