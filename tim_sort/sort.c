@@ -1,112 +1,110 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#define RUN 32
+// Define a threshold for switching to insertion sort.
+// This value can be tuned for performance.
+#define THRESHOLD 64
 
-// This function sorts array from left index to right index which is of size atmost RUN
-void insertionSort(int arr[], int left, int right){
-    int i, j, temp;
-    for(i = left + 1; i <= right; i++){
-        temp = arr[i];
-        j = i - 1;
-        while(j >= left && arr[j] > temp){
+// Function to perform insertion sort on a subarray.
+// Insertion sort is efficient for small or nearly sorted arrays.
+void insertion_sort(int arr[], int left, int right) {
+    for (int i = left + 1; i <= right; i++) {
+        int temp = arr[i];
+        int j = i - 1;
+        // Shift elements greater than temp to the right.
+        while (j >= left && arr[j] > temp) {
             arr[j + 1] = arr[j];
             j--;
         }
+        // Insert temp in its correct position.
         arr[j + 1] = temp;
     }
 }
 
-// Merge function merges the sorted runs
-void merge(int arr[], int l, int m, int r) {
-    int len1 = m - l + 1;
-    int len2 = r - m;
-    int *left = (int*)malloc(len1 * sizeof(int));
-    int *right = (int*)malloc(len2 * sizeof(int));
-    
-    int i, j, k;
-    for (i = 0; i < len1; i++){    
-        left[i] = arr[l + i];
+// Function to merge two sorted subarrays.
+// This is a standard merge operation used in merge sort.
+void merge(int arr[], int left, int mid, int right, int* temp_arr) {
+    int len1 = mid - left + 1;
+    int len2 = right - mid;
+
+    // Copy the left and right subarrays into temporary arrays.
+    for (int i = 0; i < len1; i++) {
+        temp_arr[i] = arr[left + i];
     }
-    for (i = 0; i < len2; i++){
-        right[i] = arr[m + 1 + i];
+    for (int i = 0; i < len2; i++) {
+        temp_arr[len1 + i] = arr[mid + 1 + i];
     }
 
-    i = 0;
-    j = 0;
-    k = l;
-    
-    // After comparing, we merge those two arrays into the larger sub-array
+    int i = 0;      // Index for the left subarray.
+    int j = 0;      // Index for the right subarray.
+    int k = left;   // Index for the merged array.
+
+    // Merge the two subarrays back into the original array.
     while (i < len1 && j < len2) {
-        if (left[i] <= right[j]) {
-            arr[k] = left[i];
+        if (temp_arr[i] <= temp_arr[len1 + j]) {
+            arr[k] = temp_arr[i];
             i++;
         } else {
-            arr[k] = right[j];
+            arr[k] = temp_arr[len1 + j];
             j++;
         }
         k++;
     }
-    
-    // Copy remaining elements of left, if any
+
+    // Copy any remaining elements from the left subarray.
     while (i < len1) {
-        arr[k] = left[i];
+        arr[k] = temp_arr[i];
         k++;
         i++;
     }
-    
-    // Copy remaining elements of right, if any
+
+    // Copy any remaining elements from the right subarray.
     while (j < len2) {
-        arr[k] = right[j];
+        arr[k] = temp_arr[len1 + j];
         k++;
         j++;
     }
-
-    // Free dynamically allocated memory
-    free(left);
-    free(right);
 }
 
-// Iterative Timsort function to sort the array[0...n-1] (similar to merge sort)
-void timSort(int arr[], int n) {
-
-    // Sort individual subarrays of size RUN
-    int i;
-    for (i = 0; i < n; i += RUN){
-        insertionSort(arr, i, (i + RUN - 1 < n - 1) ? (i + RUN - 1) : (n - 1));
+// Function to calculate the minimum run length.
+// We aim for runs of a size that is a power of 2 (or close to it)
+// and also greater than or equal to the THRESHOLD.
+int calculate_minrun(int n) {
+    int r = 0;  // Becomes 1 if any 1 bits are shifted off.
+    while (n >= THRESHOLD) {
+        r |= (n & 1);
+        n >>= 1;
     }
-    // Start merging from size RUN (or 32)
-    for (int size = RUN; size < n; size = 2 * size) {
-        for (int left = 0; left < n; left += 2 * size) {
-            int mid = left + size - 1;
-            int right = (left + 2 * size - 1 < n - 1) ? (left + 2 * size - 1) : (n - 1);
+    return n + r;
+}
 
-            if (mid < right){
-                merge(arr, left, mid, right);
+// Function to perform TimSort.
+// This function takes the array, its length, and a temporary array for merging.
+void tim_sort(int arr[], int n, int* temp_arr) {
+    // Calculate the minimum run length.
+    int minrun = calculate_minrun(n);
+
+    // Sort individual subarrays of size minrun using insertion sort.
+    for (int start = 0; start < n; start += minrun) {
+        int end = (start + minrun - 1 < n - 1) ? start + minrun - 1 : n - 1;
+        insertion_sort(arr, start, end);
+    }
+
+    // Start merging from size minrun.
+    // Merge subarrays to form size 2 * minrun, then 4 * minrun, and so on.
+    for (int size = minrun; size < n; size = 2 * size) {
+        // Pick starting point of the left subarray.
+        for (int left = 0; left < n; left += 2 * size) {
+            // Find the ending point of the left subarray.
+            int mid = (left + size - 1 < n-1) ? left + size - 1 : n-1;
+            int right = (left + 2 * size - 1 < n - 1) ? left + 2 * size - 1 : n - 1;
+
+            // Merge the subarrays arr[left...mid] and arr[mid+1...right]
+            // using the temporary array.
+            if(mid < right){
+                merge(arr, left, mid, right, temp_arr);
             }
         }
     }
-}
-
-// Utility function to print the Array
-void printArray(int arr[], int n) {
-    for (int i = 0; i < n; i++){
-        printf("%d  ", arr[i]);
-    }
-    printf("\n");
-}
-
-// Driver program to test the above function
-int main() {
-    int arr[] = { -2, 7, 15, -14, 0, 15, 0, 7, -7, -4, -13, 5, 8, -14, 12 };
-    int n = sizeof(arr) / sizeof(arr[0]);
-    printf("Given Array is\n");
-    printArray(arr, n);
-
-    // Function Call
-    timSort(arr, n);
-
-    printf("After Sorting Array is\n");
-    printArray(arr, n);
-    return 0;
 }
