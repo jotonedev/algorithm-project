@@ -165,18 +165,36 @@ def collect_results(
     results = []
     resolutions = []
 
-    # collect old garbage before disabling the garbage collector
-    gc.collect()
+    i = 0
+    # disable the garbage collector to avoid interference with the benchmark
     gc.disable()
-    for _ in range(repetitions):
+    while True:
+        # check if the number of repetitions has been reached
+        if i == repetitions:
+            break
+        # check if the garbage collector is disabled
+        if gc.isenabled():
+            print("Garbage collector is enabled")
+            break
+        # run manually the garbage collector
+        gc.collect()
+        # generate the input data
         data = generator()
+        # run the algorithm
         exec_time, res = algorithm.function(data, len(data))
+        # check if the measured time is greater than the minimum measurable time
         results.append(exec_time)
         resolutions.append(res)
+        # increment the loop counter
+        i += 1
     # enable the garbage collector
     gc.enable()
 
-    return median(results), round(mean(resolutions), 3), round(stdev(results), 3), round(median_abs_dev(results), 3)
+    mean_val = round(mean(resolutions), 3)
+    stdev_val = round(stdev(resolutions), 3)
+    mad_val = round(median_abs_dev(resolutions), 3)
+
+    return median(results), mean_val, stdev_val, mad_val
 
 
 def sample_generator(
@@ -250,7 +268,7 @@ def benchmark_algorithm_by_length(
                 "time": exec_time,
                 "resolution": resolution,
                 "stdev": deviation,
-                "mad": mad
+                "mad": mad,
             }
 
     except KeyboardInterrupt:
@@ -309,7 +327,7 @@ def benchmark_algorithm_by_max(
                 "time": exec_time,
                 "resolution": resolution,
                 "stdev": deviation,
-                "mad": mad
+                "mad": mad,
             }
     except KeyboardInterrupt:
         # allows returning the results if the benchmarking was interrupted
