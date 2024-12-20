@@ -176,7 +176,7 @@ def collect_results(
         if gc.isenabled():
             print("Garbage collector is enabled")
             break
-        # run manually the garbage collector
+        # manually run the garbage collector
         gc.collect()
         # generate the input data
         data = generator()
@@ -190,11 +190,11 @@ def collect_results(
     # enable the garbage collector
     gc.enable()
 
-    mean_val = round(mean(resolutions), 3)
-    stdev_val = round(stdev(resolutions), 3)
-    mad_val = round(median_abs_dev(resolutions), 3)
+    mean_res = round(mean(resolutions), 3)
+    stdev_val = round(stdev(results), 3)
+    mad_val = round(median_abs_dev(results), 3)
 
-    return median(results), mean_val, stdev_val, mad_val
+    return median(results), mean_res, stdev_val, mad_val
 
 
 def sample_generator(
