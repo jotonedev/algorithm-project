@@ -1,29 +1,38 @@
 #ifndef TIM_SORT_H
 #define TIM_SORT_H
 
-// Threshold for switching to insertion sort (tuned value).
+#include <stdbool.h>
+
+// Define a threshold for switching to insertion sort.
 #define THRESHOLD 64
 
-// Minimum number of elements to consider for galloping mode.
-#define MIN_GALLOP 7
-
-// Initial minimum run length (tuned value).
+// Define a minimum size for merging.
 #define MIN_MERGE 32
 
-// Structure to represent a run in the stack.
+// Define the maximum number of pending runs on the stack.
+// This needs to be large enough to handle worst-case scenarios but small enough to fit in cache.
+#define MAX_PENDING_RUNS 85
+
+// Structure to represent a run in the array.
 typedef struct {
     int start;  // Start index of the run.
     int length; // Length of the run.
 } Run;
 
+// Structure to manage the stack of pending runs.
+typedef struct {
+    Run stack[MAX_PENDING_RUNS];
+    int num_runs;  // Number of runs currently on the stack.
+} RunStack;
+
 void insertion_sort(int arr[], int left, int right);
-int gallop_left(int key, int arr[], int start, int length, int hint);
-int gallop_right(int key, int arr[], int start, int length, int hint);
-void merge(int arr[], int left, int mid, int right, int* temp_arr, int* min_gallop);
+void merge(int arr[], int left, int mid, int right, int* temp_arr);
 int calculate_minrun(int n);
-int find_run_length(int arr[], int start, int n);
-void merge_collapse(int arr[], Run stack[], int* stack_size, int* temp_arr, int* min_gallop) ;
-void merge_force_collapse(int arr[], Run stack[], int* stack_size, int* temp_arr);
-void tim_sort(int arr[], int n, int* temp_arr, Run* stack);
+void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack);
+int count_run(int arr[], int start, int n);
+void extend_run_and_sort(int arr[], int start, int* end, int n, int minrun);
+void push_run(RunStack* stack, int start, int length);
+void merge_collapse(int arr[], RunStack* stack, int* temp_arr);
+void merge_runs(int arr[], RunStack* stack, int a, int b, int* temp_arr);
 
 #endif

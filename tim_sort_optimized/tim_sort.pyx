@@ -3,10 +3,15 @@ from libc.stdlib cimport malloc, free
 
 
 cdef extern from "sort.h":
-    ctypedef struct Run:
+    struct Run:
         int start
         int length
-    void tim_sort(int *a, int n, int* temp_arr, Run* runs)
+
+    struct RunStack:
+        Run* stack
+        int nums_runs
+
+    void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack)
 
 cdef int verify(int *a, int n):
     cdef int i
@@ -22,18 +27,20 @@ cdef unsigned long long tim_sort_benchmark(int* a, int n):
         unsigned long long start_ns = 0
         unsigned long long end_ns = 0
 
-        int *temp = <int *> malloc(n * sizeof(int))
-        Run *runs = <Run *> malloc(n * sizeof(Run))
+        int *temp_arr = <int *>malloc(n * sizeof(int))
+        RunStack *runs = <RunStack *>malloc(sizeof(RunStack))
 
+    # run the benchmark
     start_ns = perf_counter_ns()
-    tim_sort(a, n, temp, runs)
+    tim_sort(a, n, temp_arr, runs)
     end_ns = perf_counter_ns()
 
     if verify(a, n) == 0:
         raise ValueError("Array is not sorted")
 
-    free(<void *> temp)
-    free(<void *> runs)
+    # free the memory allocated for the merge state
+    free(<void *>temp_arr)
+    free(<void *>runs)
 
     return end_ns - start_ns
 

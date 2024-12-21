@@ -17359,8 +17359,8 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
   return __pyx_r;
 }
 
-/* "tim_sort.pyx":11
- *     void tim_sort(int *a, int n, int* temp_arr, Run* runs)
+/* "tim_sort.pyx":16
+ *     void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -17375,7 +17375,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
   int __pyx_t_3;
   int __pyx_t_4;
 
-  /* "tim_sort.pyx":13
+  /* "tim_sort.pyx":18
  * cdef int verify(int *a, int n):
  *     cdef int i
  *     for i in range(1, n):             # <<<<<<<<<<<<<<
@@ -17387,7 +17387,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
   for (__pyx_t_3 = 1; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "tim_sort.pyx":14
+    /* "tim_sort.pyx":19
  *     cdef int i
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:             # <<<<<<<<<<<<<<
@@ -17397,7 +17397,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
     __pyx_t_4 = ((__pyx_v_a[__pyx_v_i]) < (__pyx_v_a[(__pyx_v_i - 1)]));
     if (__pyx_t_4) {
 
-      /* "tim_sort.pyx":15
+      /* "tim_sort.pyx":20
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:
  *             return 0             # <<<<<<<<<<<<<<
@@ -17407,7 +17407,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
       __pyx_r = 0;
       goto __pyx_L0;
 
-      /* "tim_sort.pyx":14
+      /* "tim_sort.pyx":19
  *     cdef int i
  *     for i in range(1, n):
  *         if a[i] < a[i - 1]:             # <<<<<<<<<<<<<<
@@ -17417,7 +17417,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
     }
   }
 
-  /* "tim_sort.pyx":16
+  /* "tim_sort.pyx":21
  *         if a[i] < a[i - 1]:
  *             return 0
  *     return 1             # <<<<<<<<<<<<<<
@@ -17427,8 +17427,8 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "tim_sort.pyx":11
- *     void tim_sort(int *a, int n, int* temp_arr, Run* runs)
+  /* "tim_sort.pyx":16
+ *     void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -17440,7 +17440,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
   return __pyx_r;
 }
 
-/* "tim_sort.pyx":19
+/* "tim_sort.pyx":24
  * 
  * # noinspection DuplicatedCode
  * cdef unsigned long long tim_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
@@ -17451,8 +17451,8 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
 static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int *__pyx_v_a, int __pyx_v_n) {
   unsigned PY_LONG_LONG __pyx_v_start_ns;
   unsigned PY_LONG_LONG __pyx_v_end_ns;
-  int *__pyx_v_temp;
-  Run *__pyx_v_runs;
+  int *__pyx_v_temp_arr;
+  struct RunStack *__pyx_v_runs;
   unsigned PY_LONG_LONG __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17467,7 +17467,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("tim_sort_benchmark", 1);
 
-  /* "tim_sort.pyx":22
+  /* "tim_sort.pyx":27
  *     # declare array b of the same size as a
  *     cdef:
  *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
@@ -17476,41 +17476,41 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
  */
   __pyx_v_start_ns = 0;
 
-  /* "tim_sort.pyx":23
+  /* "tim_sort.pyx":28
  *     cdef:
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
  * 
- *         int *temp = <int *> malloc(n * sizeof(int))
+ *         int *temp_arr = <int *>malloc(n * sizeof(int))
  */
   __pyx_v_end_ns = 0;
 
-  /* "tim_sort.pyx":25
+  /* "tim_sort.pyx":30
  *         unsigned long long end_ns = 0
  * 
- *         int *temp = <int *> malloc(n * sizeof(int))             # <<<<<<<<<<<<<<
- *         Run *runs = <Run *> malloc(n * sizeof(Run))
+ *         int *temp_arr = <int *>malloc(n * sizeof(int))             # <<<<<<<<<<<<<<
+ *         RunStack *runs = <RunStack *>malloc(sizeof(RunStack))
  * 
  */
-  __pyx_v_temp = ((int *)malloc((__pyx_v_n * (sizeof(int)))));
+  __pyx_v_temp_arr = ((int *)malloc((__pyx_v_n * (sizeof(int)))));
 
-  /* "tim_sort.pyx":26
+  /* "tim_sort.pyx":31
  * 
- *         int *temp = <int *> malloc(n * sizeof(int))
- *         Run *runs = <Run *> malloc(n * sizeof(Run))             # <<<<<<<<<<<<<<
+ *         int *temp_arr = <int *>malloc(n * sizeof(int))
+ *         RunStack *runs = <RunStack *>malloc(sizeof(RunStack))             # <<<<<<<<<<<<<<
  * 
- *     start_ns = perf_counter_ns()
+ *     # run the benchmark
  */
-  __pyx_v_runs = ((Run *)malloc((__pyx_v_n * (sizeof(Run)))));
+  __pyx_v_runs = ((struct RunStack *)malloc((sizeof(struct RunStack))));
 
-  /* "tim_sort.pyx":28
- *         Run *runs = <Run *> malloc(n * sizeof(Run))
+  /* "tim_sort.pyx":34
  * 
+ *     # run the benchmark
  *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
- *     tim_sort(a, n, temp, runs)
+ *     tim_sort(a, n, temp_arr, runs)
  *     end_ns = perf_counter_ns()
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 28, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17530,31 +17530,31 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 28, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 28, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_start_ns = __pyx_t_5;
 
-  /* "tim_sort.pyx":29
- * 
+  /* "tim_sort.pyx":35
+ *     # run the benchmark
  *     start_ns = perf_counter_ns()
- *     tim_sort(a, n, temp, runs)             # <<<<<<<<<<<<<<
+ *     tim_sort(a, n, temp_arr, runs)             # <<<<<<<<<<<<<<
  *     end_ns = perf_counter_ns()
  * 
  */
-  tim_sort(__pyx_v_a, __pyx_v_n, __pyx_v_temp, __pyx_v_runs);
+  tim_sort(__pyx_v_a, __pyx_v_n, __pyx_v_temp_arr, __pyx_v_runs);
 
-  /* "tim_sort.pyx":30
+  /* "tim_sort.pyx":36
  *     start_ns = perf_counter_ns()
- *     tim_sort(a, n, temp, runs)
+ *     tim_sort(a, n, temp_arr, runs)
  *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  * 
  *     if verify(a, n) == 0:
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17574,39 +17574,39 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 36, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 36, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_end_ns = __pyx_t_5;
 
-  /* "tim_sort.pyx":32
+  /* "tim_sort.pyx":38
  *     end_ns = perf_counter_ns()
  * 
  *     if verify(a, n) == 0:             # <<<<<<<<<<<<<<
  *         raise ValueError("Array is not sorted")
  * 
  */
-  __pyx_t_6 = __pyx_f_18tim_sort_optimized_verify(__pyx_v_a, __pyx_v_n); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 32, __pyx_L1_error)
+  __pyx_t_6 = __pyx_f_18tim_sort_optimized_verify(__pyx_v_a, __pyx_v_n); if (unlikely(__pyx_t_6 == ((int)-1) && PyErr_Occurred())) __PYX_ERR(0, 38, __pyx_L1_error)
   __pyx_t_7 = (__pyx_t_6 == 0);
   if (unlikely(__pyx_t_7)) {
 
-    /* "tim_sort.pyx":33
+    /* "tim_sort.pyx":39
  * 
  *     if verify(a, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
  * 
- *     free(<void *> temp)
+ *     # free the memory allocated for the merge state
  */
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 39, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_Raise(__pyx_t_1, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __PYX_ERR(0, 33, __pyx_L1_error)
+    __PYX_ERR(0, 39, __pyx_L1_error)
 
-    /* "tim_sort.pyx":32
+    /* "tim_sort.pyx":38
  *     end_ns = perf_counter_ns()
  * 
  *     if verify(a, n) == 0:             # <<<<<<<<<<<<<<
@@ -17615,26 +17615,26 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
  */
   }
 
-  /* "tim_sort.pyx":35
- *         raise ValueError("Array is not sorted")
+  /* "tim_sort.pyx":42
  * 
- *     free(<void *> temp)             # <<<<<<<<<<<<<<
- *     free(<void *> runs)
+ *     # free the memory allocated for the merge state
+ *     free(<void *>temp_arr)             # <<<<<<<<<<<<<<
+ *     free(<void *>runs)
  * 
  */
-  free(((void *)__pyx_v_temp));
+  free(((void *)__pyx_v_temp_arr));
 
-  /* "tim_sort.pyx":36
- * 
- *     free(<void *> temp)
- *     free(<void *> runs)             # <<<<<<<<<<<<<<
+  /* "tim_sort.pyx":43
+ *     # free the memory allocated for the merge state
+ *     free(<void *>temp_arr)
+ *     free(<void *>runs)             # <<<<<<<<<<<<<<
  * 
  *     return end_ns - start_ns
  */
   free(((void *)__pyx_v_runs));
 
-  /* "tim_sort.pyx":38
- *     free(<void *> runs)
+  /* "tim_sort.pyx":45
+ *     free(<void *>runs)
  * 
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
  * 
@@ -17643,7 +17643,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
   __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
   goto __pyx_L0;
 
-  /* "tim_sort.pyx":19
+  /* "tim_sort.pyx":24
  * 
  * # noinspection DuplicatedCode
  * cdef unsigned long long tim_sort_benchmark(int* a, int n):             # <<<<<<<<<<<<<<
@@ -17663,7 +17663,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
   return __pyx_r;
 }
 
-/* "tim_sort.pyx":41
+/* "tim_sort.pyx":48
  * 
  * # leave this function as is
  * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
@@ -17686,7 +17686,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_resolution", 1);
 
-  /* "tim_sort.pyx":43
+  /* "tim_sort.pyx":50
  * cdef unsigned long long get_resolution():
  *     cdef:
  *         unsigned long long start_ns = 0             # <<<<<<<<<<<<<<
@@ -17695,7 +17695,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
  */
   __pyx_v_start_ns = 0;
 
-  /* "tim_sort.pyx":44
+  /* "tim_sort.pyx":51
  *     cdef:
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0             # <<<<<<<<<<<<<<
@@ -17704,14 +17704,14 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
  */
   __pyx_v_end_ns = 0;
 
-  /* "tim_sort.pyx":45
+  /* "tim_sort.pyx":52
  *         unsigned long long start_ns = 0
  *         unsigned long long end_ns = 0
  *     start_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  *     end_ns = perf_counter_ns()
  *     return end_ns - start_ns
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 45, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17731,22 +17731,22 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 45, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 52, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 45, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_start_ns = __pyx_t_5;
 
-  /* "tim_sort.pyx":46
+  /* "tim_sort.pyx":53
  *         unsigned long long end_ns = 0
  *     start_ns = perf_counter_ns()
  *     end_ns = perf_counter_ns()             # <<<<<<<<<<<<<<
  *     return end_ns - start_ns
  * 
  */
-  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 46, __pyx_L1_error)
+  __Pyx_GetModuleGlobalName(__pyx_t_2, __pyx_n_s_perf_counter_ns); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __pyx_t_3 = NULL;
   __pyx_t_4 = 0;
@@ -17766,15 +17766,15 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
     PyObject *__pyx_callargs[2] = {__pyx_t_3, NULL};
     __pyx_t_1 = __Pyx_PyObject_FastCall(__pyx_t_2, __pyx_callargs+1-__pyx_t_4, 0+__pyx_t_4);
     __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 46, __pyx_L1_error)
+    if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 53, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   }
-  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 46, __pyx_L1_error)
+  __pyx_t_5 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_5 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v_end_ns = __pyx_t_5;
 
-  /* "tim_sort.pyx":47
+  /* "tim_sort.pyx":54
  *     start_ns = perf_counter_ns()
  *     end_ns = perf_counter_ns()
  *     return end_ns - start_ns             # <<<<<<<<<<<<<<
@@ -17784,7 +17784,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
   __pyx_r = (__pyx_v_end_ns - __pyx_v_start_ns);
   goto __pyx_L0;
 
-  /* "tim_sort.pyx":41
+  /* "tim_sort.pyx":48
  * 
  * # leave this function as is
  * cdef unsigned long long get_resolution():             # <<<<<<<<<<<<<<
@@ -17804,7 +17804,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_get_resolution(void) {
   return __pyx_r;
 }
 
-/* "tim_sort.pyx":49
+/* "tim_sort.pyx":56
  *     return end_ns - start_ns
  * 
  * def py_tim_sort_optimized(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -17868,7 +17868,7 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[0]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L3_error)
         else goto __pyx_L5_argtuple_error;
         CYTHON_FALLTHROUGH;
         case  1:
@@ -17876,14 +17876,14 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
           (void)__Pyx_Arg_NewRef_FASTCALL(values[1]);
           kw_args--;
         }
-        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L3_error)
+        else if (unlikely(PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L3_error)
         else {
-          __Pyx_RaiseArgtupleInvalid("py_tim_sort_optimized", 1, 2, 2, 1); __PYX_ERR(0, 49, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("py_tim_sort_optimized", 1, 2, 2, 1); __PYX_ERR(0, 56, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
         const Py_ssize_t kwd_pos_args = __pyx_nargs;
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_tim_sort_optimized") < 0)) __PYX_ERR(0, 49, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_kwvalues, __pyx_pyargnames, 0, values + 0, kwd_pos_args, "py_tim_sort_optimized") < 0)) __PYX_ERR(0, 56, __pyx_L3_error)
       }
     } else if (unlikely(__pyx_nargs != 2)) {
       goto __pyx_L5_argtuple_error;
@@ -17891,12 +17891,12 @@ PyObject *__pyx_args, PyObject *__pyx_kwds
       values[0] = __Pyx_Arg_FASTCALL(__pyx_args, 0);
       values[1] = __Pyx_Arg_FASTCALL(__pyx_args, 1);
     }
-    __pyx_v_a = __Pyx_PyObject_to_MemoryviewSlice_ds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_a.memview)) __PYX_ERR(0, 49, __pyx_L3_error)
-    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 49, __pyx_L3_error)
+    __pyx_v_a = __Pyx_PyObject_to_MemoryviewSlice_ds_int(values[0], PyBUF_WRITABLE); if (unlikely(!__pyx_v_a.memview)) __PYX_ERR(0, 56, __pyx_L3_error)
+    __pyx_v_n = __Pyx_PyInt_As_int(values[1]); if (unlikely((__pyx_v_n == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L3_error)
   }
   goto __pyx_L6_skip;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("py_tim_sort_optimized", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 49, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("py_tim_sort_optimized", 1, 2, 2, __pyx_nargs); __PYX_ERR(0, 56, __pyx_L3_error)
   __pyx_L6_skip:;
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L3_error:;
@@ -17938,7 +17938,7 @@ static PyObject *__pyx_pf_18tim_sort_optimized_py_tim_sort_optimized(CYTHON_UNUS
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("py_tim_sort_optimized", 1);
 
-  /* "tim_sort.pyx":50
+  /* "tim_sort.pyx":57
  * 
  * def py_tim_sort_optimized(int[:] a, int n) -> tuple[int, int]:
  *     return tim_sort_benchmark(&a[0], n), get_resolution()             # <<<<<<<<<<<<<<
@@ -17946,25 +17946,25 @@ static PyObject *__pyx_pf_18tim_sort_optimized_py_tim_sort_optimized(CYTHON_UNUS
  */
   __Pyx_XDECREF(__pyx_r);
   __pyx_t_1 = 0;
-  __pyx_t_2 = __pyx_f_18tim_sort_optimized_tim_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
-  __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_18tim_sort_optimized_tim_sort_benchmark((&(*((int *) ( /* dim=0 */ (__pyx_v_a.data + __pyx_t_1 * __pyx_v_a.strides[0]) )))), __pyx_v_n); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __pyx_f_18tim_sort_optimized_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 50, __pyx_L1_error)
-  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_2 = __pyx_f_18tim_sort_optimized_get_resolution(); if (unlikely(__pyx_t_2 == ((unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 57, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 50, __pyx_L1_error)
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 57, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_3);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 50, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3)) __PYX_ERR(0, 57, __pyx_L1_error);
   __Pyx_GIVEREF(__pyx_t_4);
-  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 50, __pyx_L1_error);
+  if (__Pyx_PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4)) __PYX_ERR(0, 57, __pyx_L1_error);
   __pyx_t_3 = 0;
   __pyx_t_4 = 0;
   __pyx_r = ((PyObject*)__pyx_t_5);
   __pyx_t_5 = 0;
   goto __pyx_L0;
 
-  /* "tim_sort.pyx":49
+  /* "tim_sort.pyx":56
  *     return end_ns - start_ns
  * 
  * def py_tim_sort_optimized(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
@@ -19092,8 +19092,8 @@ static int __Pyx_CreateStringTabAndInitStrings(void) {
 }
 /* #### Code section: cached_builtins ### */
 static CYTHON_SMALL_CODE int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 13, __pyx_L1_error)
-  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 18, __pyx_L1_error)
+  __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(0, 39, __pyx_L1_error)
   __pyx_builtin___import__ = __Pyx_GetBuiltinName(__pyx_n_s_import); if (!__pyx_builtin___import__) __PYX_ERR(1, 100, __pyx_L1_error)
   __pyx_builtin_MemoryError = __Pyx_GetBuiltinName(__pyx_n_s_MemoryError); if (!__pyx_builtin_MemoryError) __PYX_ERR(1, 156, __pyx_L1_error)
   __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(1, 159, __pyx_L1_error)
@@ -19148,14 +19148,14 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__8);
   __Pyx_GIVEREF(__pyx_tuple__8);
 
-  /* "tim_sort.pyx":33
+  /* "tim_sort.pyx":39
  * 
  *     if verify(a, n) == 0:
  *         raise ValueError("Array is not sorted")             # <<<<<<<<<<<<<<
  * 
- *     free(<void *> temp)
+ *     # free the memory allocated for the merge state
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Array_is_not_sorted); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Array_is_not_sorted); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(0, 39, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__9);
   __Pyx_GIVEREF(__pyx_tuple__9);
 
@@ -19260,17 +19260,17 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   __Pyx_GIVEREF(__pyx_tuple__19);
   __pyx_codeobj__20 = (PyObject*)__Pyx_PyCode_New(3, 0, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__19, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_stringsource, __pyx_n_s_pyx_unpickle_Enum, 1, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__20)) __PYX_ERR(1, 1, __pyx_L1_error)
 
-  /* "tim_sort.pyx":49
+  /* "tim_sort.pyx":56
  *     return end_ns - start_ns
  * 
  * def py_tim_sort_optimized(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *     return tim_sort_benchmark(&a[0], n), get_resolution()
  * 
  */
-  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_a, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_tuple__21 = PyTuple_Pack(2, __pyx_n_s_a, __pyx_n_s_n); if (unlikely(!__pyx_tuple__21)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__21);
   __Pyx_GIVEREF(__pyx_tuple__21);
-  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_tim_sort_pyx, __pyx_n_s_py_tim_sort_optimized, 49, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_codeobj__22 = (PyObject*)__Pyx_PyCode_New(2, 0, 0, 2, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__21, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_tim_sort_pyx, __pyx_n_s_py_tim_sort_optimized, 56, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__22)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -20340,21 +20340,21 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-  /* "tim_sort.pyx":49
+  /* "tim_sort.pyx":56
  *     return end_ns - start_ns
  * 
  * def py_tim_sort_optimized(int[:] a, int n) -> tuple[int, int]:             # <<<<<<<<<<<<<<
  *     return tim_sort_benchmark(&a[0], n), get_resolution()
  * 
  */
-  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 49, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_4);
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_return, __pyx_kp_s_tuple_int_int) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
-  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_18tim_sort_optimized_1py_tim_sort_optimized, 0, __pyx_n_s_py_tim_sort_optimized, NULL, __pyx_n_s_tim_sort_optimized, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 49, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_return, __pyx_kp_s_tuple_int_int) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_CyFunction_New(&__pyx_mdef_18tim_sort_optimized_1py_tim_sort_optimized, 0, __pyx_n_s_py_tim_sort_optimized, NULL, __pyx_n_s_tim_sort_optimized, __pyx_d, ((PyObject *)__pyx_codeobj__22)); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_CyFunction_SetAnnotationsDict(__pyx_t_7, __pyx_t_4);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_tim_sort_optimized, __pyx_t_7) < 0) __PYX_ERR(0, 49, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_py_tim_sort_optimized, __pyx_t_7) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
   /* "tim_sort.pyx":1

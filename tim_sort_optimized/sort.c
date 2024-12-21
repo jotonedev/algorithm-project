@@ -1,167 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
+#include <stdbool.h>  // For bool type
+#include <string.h>  // For memcpy
 
 #include "sort.h"
 
-
 // Function to perform insertion sort on a subarray.
-// Insertion sort is efficient for small or nearly sorted arrays.
 void insertion_sort(int arr[], int left, int right) {
     for (int i = left + 1; i <= right; i++) {
         int temp = arr[i];
         int j = i - 1;
-        // Shift elements greater than temp to the right.
         while (j >= left && arr[j] > temp) {
             arr[j + 1] = arr[j];
             j--;
         }
-        // Insert temp in its correct position.
         arr[j + 1] = temp;
     }
 }
 
-// Function to perform a galloping search to the left.
-// This function helps to find the position where an element from the right
-// subarray should be inserted into the left subarray during merging,
-// when galloping mode is active.
-// Returns the index in the left subarray.
-int gallop_left(int key, int arr[], int start, int length, int hint) {
-    int ofs = 1;
-    int last_ofs = 0;
-
-    if (key > arr[start + hint]) { // key could be after hint
-        int max_ofs = length - hint;
-        while (ofs < max_ofs && key > arr[start + hint + ofs]) {
-            last_ofs = ofs;
-            ofs = (ofs << 1) + 1;
-            if (ofs <= 0) {
-                ofs = max_ofs; // Overflow
-            }
-        }
-        if (ofs > max_ofs) {
-            ofs = max_ofs;
-        }
-        // Now we know that key belongs somewhere between start + hint + last_ofs and start + hint + ofs
-        last_ofs += hint;
-        ofs += hint;
-    } else { // key must be before hint
-        int max_ofs = hint + 1;
-        while (ofs < max_ofs && key <= arr[start + hint - ofs]) {
-            last_ofs = ofs;
-            ofs = (ofs << 1) + 1;
-            if (ofs <= 0) {
-                ofs = max_ofs; // Overflow
-            }
-        }
-        if (ofs > max_ofs) {
-            ofs = max_ofs;
-        }
-        // Now we know that key belongs somewhere between start + hint - ofs and start + hint - last_ofs
-        int tmp = last_ofs;
-        last_ofs = hint - ofs;
-        ofs = hint - tmp;
-    }
-
-    // Now do a binary search to find the exact location
-    last_ofs++;
-    while (last_ofs < ofs) {
-        int m = last_ofs + ((ofs - last_ofs) >> 1);
-        if (key > arr[start + m]) {
-            last_ofs = m + 1;
-        } else {
-            ofs = m;
-        }
-    }
-    return ofs; // Index in arr
-}
-
-// Function to perform a galloping search to the right.
-// Similar to gallop_left, but finds the position where an element from the
-// left subarray should be inserted into the right subarray.
-// Returns the index in the right subarray.
-int gallop_right(int key, int arr[], int start, int length, int hint) {
-    int ofs = 1;
-    int last_ofs = 0;
-
-    if (key < arr[start + hint]) { // key could be before hint
-        int max_ofs = hint + 1;
-        while (ofs < max_ofs && key < arr[start + hint - ofs]) {
-            last_ofs = ofs;
-            ofs = (ofs << 1) + 1;
-            if (ofs <= 0) {
-                ofs = max_ofs;
-            }
-        }
-        if (ofs > max_ofs) {
-            ofs = max_ofs;
-        }
-        int tmp = last_ofs;
-        last_ofs = hint - ofs;
-        ofs = hint - tmp;
-    } else { // key must be after hint
-        int max_ofs = length - hint;
-        while (ofs < max_ofs && key >= arr[start + hint + ofs]) {
-            last_ofs = ofs;
-            ofs = (ofs << 1) + 1;
-            if (ofs <= 0) {
-                ofs = max_ofs;
-            }
-        }
-        if (ofs > max_ofs) {
-            ofs = max_ofs;
-        }
-        last_ofs += hint;
-        ofs += hint;
-    }
-
-    last_ofs++;
-    while (last_ofs < ofs) {
-        int m = last_ofs + ((ofs - last_ofs) >> 1);
-        if (key < arr[start + m]) {
-            ofs = m;
-        } else {
-            last_ofs = m + 1;
-        }
-    }
-    return ofs;
-}
-
-// Function to merge two sorted subarrays using galloping mode when appropriate.
-void merge(int arr[], int left, int mid, int right, int* temp_arr, int* min_gallop) {
+// Function to merge two sorted subarrays.
+void merge(int arr[], int left, int mid, int right, int* temp_arr) {
     int len1 = mid - left + 1;
     int len2 = right - mid;
 
-    // Copy the left and right subarrays into temporary arrays.
-    memcpy(temp_arr, arr + left, len1 * sizeof(int));
+    memcpy(temp_arr, &arr[left], len1 * sizeof(int));
+    memcpy(temp_arr + len1, &arr[mid + 1], len2 * sizeof(int));
 
-    int* left_arr = temp_arr;
-    int* right_arr = arr + mid + 1;
+    int i = 0;
+    int j = 0;
+    int k = left;
 
-    int i = 0;      // Index for the left subarray.
-    int j = 0;      // Index for the right subarray.
-    int k = left;   // Index for the merged subarray in 'arr'.
-
-    int gallop = *min_gallop;
-
-    // Merge the two subarrays back into the original array 'arr'.
     while (i < len1 && j < len2) {
-        if (left_arr[i] <= right_arr[j]) {
-            arr[k++] = left_arr[i++];
+        if (temp_arr[i] <= temp_arr[len1 + j]) {
+            arr[k] = temp_arr[i];
+            i++;
         } else {
-            arr[k++] = right_arr[j++];
+            arr[k] = temp_arr[len1 + j];
+            j++;
         }
+        k++;
     }
 
-    // Copy any remaining elements from the left subarray.
     if (i < len1) {
-        memcpy(arr + k, left_arr + i, (len1 - i) * sizeof(int));
+        memcpy(&arr[k], &temp_arr[i], (len1 - i) * sizeof(int));
     }
 
-    // Copy any remaining elements from the right subarray.
     if (j < len2) {
-        memcpy(arr + k, right_arr + j, (len2 - j) * sizeof(int));
+        memcpy(&arr[k], &temp_arr[len1 + j], (len2 - j) * sizeof(int));
     }
 }
 
@@ -175,95 +60,122 @@ int calculate_minrun(int n) {
     return n + r;
 }
 
-// Function to find the length of a natural run.
-int find_run_length(int arr[], int start, int n) {
+// Counts the length of a naturally occurring run in the array starting at 'start'.
+// A run is a sequence of elements that are either non-decreasing or strictly decreasing.
+int count_run(int arr[], int start, int n) {
     if (start == n - 1) {
-        return 1;
+        return 1; // Single element is a run.
     }
 
-    int end = start + 1;
-    if (arr[end] >= arr[start]) {
-        while (end < n && arr[end] >= arr[end - 1]) {
-            end++;
+    int curr = start;
+    // Determine if the run is increasing or decreasing based on the first two elements.
+    if (arr[curr] <= arr[curr + 1]) {
+        // Increasing run.
+        while (curr < n - 1 && arr[curr] <= arr[curr + 1]) {
+            curr++;
         }
     } else {
-        while (end < n && arr[end] < arr[end - 1]) {
-            end++;
+        // Decreasing run.
+        while (curr < n - 1 && arr[curr] > arr[curr + 1]) {
+            curr++;
         }
-        for (int i = start, j = end - 1; i < j; i++, j--) {
-            int temp = arr[i];
-            arr[i] = arr[j];
-            arr[j] = temp;
+        // Reverse the decreasing run to make it increasing.
+        int left = start;
+        int right = curr;
+        while (left < right) {
+            int temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
         }
     }
-    return end - start;
+    // Return the length of the run.
+    return curr - start + 1;
 }
 
-// Function to merge runs on the stack to maintain invariants.
-void merge_collapse(int arr[], Run stack[], int* stack_size, int* temp_arr, int* min_gallop) {
-    while (*stack_size > 1) {
-        int n = *stack_size - 2;
-        if ((n > 0 && stack[n - 1].length <= stack[n].length + stack[n + 1].length) ||
-            (n > 1 && stack[n - 2].length <= stack[n - 1].length + stack[n].length)) {
-            if (stack[n - 1].length < stack[n + 1].length) {
+// Extends a short run to the minimum length (minrun) using insertion sort if necessary
+// and sorts the extended run.
+void extend_run_and_sort(int arr[], int start, int* end, int n, int minrun) {
+    int run_length = count_run(arr, start, n);
+    *end = start + run_length - 1;
+
+    // If the run is shorter than minrun, extend it to minrun.
+    if (run_length < minrun) {
+        int new_end = (start + minrun - 1 < n - 1) ? start + minrun - 1 : n - 1;
+        insertion_sort(arr, start, new_end);
+        *end = new_end;
+    }
+}
+
+// Pushes a run onto the stack.
+void push_run(RunStack* stack, int start, int length) {
+    stack->stack[stack->num_runs].start = start;
+    stack->stack[stack->num_runs].length = length;
+    stack->num_runs++;
+}
+
+// Merges runs on the stack to maintain the stacking invariants.
+void merge_collapse(int arr[], RunStack* stack, int* temp_arr) {
+    while (stack->num_runs > 1) {
+        int n = stack->num_runs - 2;
+        if (n > 0 && stack->stack[n - 1].length <= stack->stack[n].length + stack->stack[n + 1].length) {
+            if (stack->stack[n - 1].length < stack->stack[n + 1].length) {
                 n--;
             }
-            merge(arr, stack[n].start, stack[n].start + stack[n].length - 1,
-                  stack[n + 1].start + stack[n + 1].length - 1, temp_arr, min_gallop);
-            stack[n].length += stack[n + 1].length;
-            stack[n + 1] = stack[n + 2];
-            (*stack_size)--;
+            merge_runs(arr, stack, n, n + 1, temp_arr);
+        } else if (stack->stack[n].length <= stack->stack[n + 1].length) {
+            merge_runs(arr, stack, n, n + 1, temp_arr);
         } else {
-            break; // Invariants are satisfied
+            break;
         }
     }
 }
 
-// Function to merge all remaining runs on the stack.
-void merge_force_collapse(int arr[], Run stack[], int* stack_size, int* temp_arr) {
-    int min_gallop = MIN_GALLOP;
-    while (*stack_size > 1) {
-        int n = *stack_size - 2;
-        if (n > 0 && stack[n - 1].length < stack[n + 1].length) {
-            n--;
-        }
-        merge(arr, stack[n].start, stack[n].start + stack[n].length - 1,
-              stack[n + 1].start + stack[n + 1].length - 1, temp_arr, &min_gallop);
-        stack[n].length += stack[n + 1].length;
-        (*stack_size)--;
+// Merges two runs on the stack at indices a and b.
+void merge_runs(int arr[], RunStack* stack, int a, int b, int* temp_arr) {
+    int start1 = stack->stack[a].start;
+    int length1 = stack->stack[a].length;
+    int start2 = stack->stack[b].start;
+    int length2 = stack->stack[b].length;
+
+    merge(arr, start1, start1 + length1 - 1, start2 + length2 - 1, temp_arr);
+
+    stack->stack[a].length += length2;
+    for (int i = b; i < stack->num_runs - 1; i++) {
+        stack->stack[i] = stack->stack[i + 1];
     }
+    stack->num_runs--;
 }
 
-// Function to perform TimSort.
-void tim_sort(int arr[], int n, int* temp_arr, Run* stack) {
-    if (n < 2) {
-        return; // Nothing to sort
+// Internal TimSort function that sorts the array using the provided temporary array and run stack.
+void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack) {
+    if (n < MIN_MERGE) {
+        // For very small arrays, use insertion sort directly.
+        insertion_sort(arr, 0, n - 1);
+        return;
     }
-
+    // Calculate the minimum run length.
     int minrun = calculate_minrun(n);
-    int stack_size = 0;
-    int min_gallop = MIN_GALLOP;
 
+    run_stack->num_runs = 0;
     int start = 0;
+    // Divide the array into runs and sort them.
     while (start < n) {
-        int run_length = find_run_length(arr, start, n);
-        int end = (start + run_length - 1 < n - 1) ? start + run_length - 1 : n - 1;
-
-        if (run_length < minrun) {
-            end = (start + minrun - 1 < n - 1) ? start + minrun - 1 : n - 1;
-            run_length = end - start + 1;
-        }
-
-        insertion_sort(arr, start, end);
-
-        stack[stack_size].start = start;
-        stack[stack_size].length = run_length;
-        stack_size++;
-
-        merge_collapse(arr, stack, &stack_size, temp_arr, &min_gallop);
+        int end;
+        extend_run_and_sort(arr, start, &end, n, minrun);
+        // Push the run onto the stack.
+        push_run(run_stack, start, end - start + 1);
+        // Merge runs to maintain the stacking invariants.
+        merge_collapse(arr, run_stack, temp_arr);
 
         start = end + 1;
     }
 
-    merge_force_collapse(arr, stack, &stack_size, temp_arr);
+    // Merge any remaining runs on the stack.
+    while (run_stack->num_runs > 1) {
+        int n = run_stack->num_runs - 2;
+        if (n >= 0)
+            merge_runs(arr, run_stack, n, n + 1, temp_arr);
+    }
 }
