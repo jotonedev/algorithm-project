@@ -2,13 +2,13 @@ from setuptools import setup, Extension
 from Cython.Build import cythonize
 
 ext = Extension(
-    "randomized_quick_sort",
+    "quick_sort_random_pivot",
     sources=["randomized_quick_sort.pyx", "sort.c"],
     include_dirs=["."]
 )
 
 setup(
-    name="randomized_quick_sort",
+    name="quick_sort_random_pivot",
     ext_modules=cythonize(ext, compiler_directives={
         'language_level': 3,
         'boundscheck': False,

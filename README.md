@@ -13,7 +13,7 @@ Implementation, time complexity analysis, and benchmarking of the following algo
 - [Quick Sort](/quick_sort)
 - [Quick 3 Way Sort](/quick_3way_sort)
 - [Counting Sort](/counting_sort)
-- [Quick Sort with random pivot](/randomized_quick_sort)
+- [Quick Sort with random pivot](/quick_sort_random_pivot)
 - [Tim Sort](/tim_sort)
 - [Project report](/docs)
 
