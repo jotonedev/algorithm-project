@@ -17360,7 +17360,7 @@ static PyObject *__pyx_unpickle_Enum__set_state(struct __pyx_MemviewEnum_obj *__
 }
 
 /* "tim_sort.pyx":16
- *     void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack)
+ *     void tim_sort(int arr[], int n, int* temp_arr, RunStack_t* run_stack)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -17428,7 +17428,7 @@ static int __pyx_f_18tim_sort_optimized_verify(int *__pyx_v_a, int __pyx_v_n) {
   goto __pyx_L0;
 
   /* "tim_sort.pyx":16
- *     void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack)
+ *     void tim_sort(int arr[], int n, int* temp_arr, RunStack_t* run_stack)
  * 
  * cdef int verify(int *a, int n):             # <<<<<<<<<<<<<<
  *     cdef int i
@@ -17452,7 +17452,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
   unsigned PY_LONG_LONG __pyx_v_start_ns;
   unsigned PY_LONG_LONG __pyx_v_end_ns;
   int *__pyx_v_temp_arr;
-  struct RunStack *__pyx_v_runs;
+  struct RunStack_t *__pyx_v_runs;
   unsigned PY_LONG_LONG __pyx_r;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
@@ -17489,7 +17489,7 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
  *         unsigned long long end_ns = 0
  * 
  *         int *temp_arr = <int *>malloc(n * sizeof(int))             # <<<<<<<<<<<<<<
- *         RunStack *runs = <RunStack *>malloc(sizeof(RunStack))
+ *         RunStack_t *runs = <RunStack_t *>malloc(sizeof(RunStack_t))
  * 
  */
   __pyx_v_temp_arr = ((int *)malloc((__pyx_v_n * (sizeof(int)))));
@@ -17497,11 +17497,11 @@ static unsigned PY_LONG_LONG __pyx_f_18tim_sort_optimized_tim_sort_benchmark(int
   /* "tim_sort.pyx":31
  * 
  *         int *temp_arr = <int *>malloc(n * sizeof(int))
- *         RunStack *runs = <RunStack *>malloc(sizeof(RunStack))             # <<<<<<<<<<<<<<
+ *         RunStack_t *runs = <RunStack_t *>malloc(sizeof(RunStack_t))             # <<<<<<<<<<<<<<
  * 
  *     # run the benchmark
  */
-  __pyx_v_runs = ((struct RunStack *)malloc((sizeof(struct RunStack))));
+  __pyx_v_runs = ((struct RunStack_t *)malloc((sizeof(struct RunStack_t))));
 
   /* "tim_sort.pyx":34
  * 

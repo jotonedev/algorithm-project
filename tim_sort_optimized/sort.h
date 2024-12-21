@@ -14,16 +14,18 @@
 #define MAX_PENDING_RUNS 85
 
 // Structure to represent a run in the array.
-typedef struct {
+struct Run_t {
     int start;  // Start index of the run.
     int length; // Length of the run.
-} Run;
+};
+typedef struct Run_t Run;
 
 // Structure to manage the stack of pending runs.
-typedef struct {
+struct RunStack_t {
     Run stack[MAX_PENDING_RUNS];
     int num_runs;  // Number of runs currently on the stack.
-} RunStack;
+};
+typedef struct RunStack_t RunStack;
 
 void insertion_sort(int arr[], int left, int right);
 void merge(int arr[], int left, int mid, int right, int* temp_arr);

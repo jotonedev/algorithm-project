@@ -3,15 +3,15 @@ from libc.stdlib cimport malloc, free
 
 
 cdef extern from "sort.h":
-    struct Run:
+    struct Run_t:
         int start
         int length
 
-    struct RunStack:
-        Run* stack
+    struct RunStack_t:
+        Run_t* stack
         int nums_runs
 
-    void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack)
+    void tim_sort(int arr[], int n, int* temp_arr, RunStack_t* run_stack)
 
 cdef int verify(int *a, int n):
     cdef int i
@@ -28,7 +28,7 @@ cdef unsigned long long tim_sort_benchmark(int* a, int n):
         unsigned long long end_ns = 0
 
         int *temp_arr = <int *>malloc(n * sizeof(int))
-        RunStack *runs = <RunStack *>malloc(sizeof(RunStack))
+        RunStack_t *runs = <RunStack_t *>malloc(sizeof(RunStack_t))
 
     # run the benchmark
     start_ns = perf_counter_ns()
