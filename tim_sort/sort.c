@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-// Define a threshold for switching to insertion sort.
-// This value can be tuned for performance.
-#define THRESHOLD 64
+#include "sort.h"
 
 // Function to perform insertion sort on a subarray.
 // Insertion sort is efficient for small or nearly sorted arrays.

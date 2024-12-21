@@ -112,12 +112,15 @@ def load_algorithms(input_dirs: list[Path]) -> list[Algorithm]:
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
 
+            # get module name
+            module_name = module.__name__.split('.')[-1]
+
             # Get all attributes from the module
             for attr in dir(module):
                 # find the sorting function by checking the attribute name
                 if attr.startswith('py_'):
                     algorithms.append(Algorithm(
-                        name=attr.replace('py_', ''),
+                        name=module_name,
                         function=getattr(module, attr),
                         path=dir_path
                     ))
