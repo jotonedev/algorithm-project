@@ -1,12 +1,13 @@
 #ifndef TIM_SORT_H
 #define TIM_SORT_H
 
-// Define a threshold for switching to insertion sort.
-// For very small subarrays, insertion sort is more efficient than merge sort.
+// Threshold for switching to insertion sort (tuned value).
 #define THRESHOLD 64
 
-// Define a structure to represent a run in the stack.
-// A "run" is a sorted subsequence within the array.
+// Initial minimum run length (tuned value).
+#define MIN_MERGE 32
+
+// Structure to represent a run in the stack.
 typedef struct {
     int start;  // Start index of the run.
     int length; // Length of the run.
