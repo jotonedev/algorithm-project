@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h> // For memcpy
 
 #include "sort.h"
 
@@ -26,13 +27,9 @@ void merge(int arr[], int left, int mid, int right, int* temp_arr) {
     int len1 = mid - left + 1;
     int len2 = right - mid;
 
-    // Copy the left and right subarrays into temporary arrays.
-    for (int i = 0; i < len1; i++) {
-        temp_arr[i] = arr[left + i];
-    }
-    for (int i = 0; i < len2; i++) {
-        temp_arr[len1 + i] = arr[mid + 1 + i];
-    }
+    // Copy the left and right subarrays into temporary arrays using memcpy.
+    memcpy(temp_arr, &arr[left], len1 * sizeof(int));
+    memcpy(temp_arr + len1, &arr[mid + 1], len2 * sizeof(int));
 
     int i = 0;      // Index for the left subarray.
     int j = 0;      // Index for the right subarray.
@@ -51,17 +48,14 @@ void merge(int arr[], int left, int mid, int right, int* temp_arr) {
     }
 
     // Copy any remaining elements from the left subarray.
-    while (i < len1) {
-        arr[k] = temp_arr[i];
-        k++;
-        i++;
+    if (i < len1) {
+        memcpy(&arr[k], &temp_arr[i], (len1 - i) * sizeof(int));
+        k += (len1 - i);
     }
 
     // Copy any remaining elements from the right subarray.
-    while (j < len2) {
-        arr[k] = temp_arr[len1 + j];
-        k++;
-        j++;
+    if (j < len2) {
+        memcpy(&arr[k], &temp_arr[len1 + j], (len2 - j) * sizeof(int));
     }
 }
 
@@ -100,7 +94,7 @@ void tim_sort(int arr[], int n, int* temp_arr) {
 
             // Merge the subarrays arr[left...mid] and arr[mid+1...right]
             // using the temporary array.
-            if(mid < right){
+            if (mid < right) {
                 merge(arr, left, mid, right, temp_arr);
             }
         }
