@@ -368,7 +368,12 @@ def main(
     # check if it is windows
     process = psutil.Process()
     if sys.platform == 'win32':
-        process.nice(psutil.HIGH_PRIORITY_CLASS)
+        try:
+            process.nice(psutil.REALTIME_PRIORITY_CLASS)
+            logging.info("Set process to real-time priority")
+        except psutil.AccessDenied:
+            process.nice(psutil.HIGH_PRIORITY_CLASS)
+            logging.info("Set process to high priority")
     elif sys.platform == 'linux':
         # set the process to the highest priority if permission is granted
         try:
