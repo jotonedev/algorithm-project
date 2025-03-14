@@ -6,6 +6,7 @@
 #endif
 
 int find_max(int n, int data[]);
+int find_min(int n, int data[]);
 void counting_sort(int n, int data[], int out[], int count[], int k);
 long long execute(int n, int data[]);
 

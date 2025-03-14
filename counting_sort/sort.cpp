@@ -12,8 +12,6 @@
 
 #include "utils.h"
 
-#define BENCHMARK_MODE
-
 
 int find_max(int n, int data[]) {
     int max = data[0];
@@ -28,27 +26,64 @@ int find_max(int n, int data[]) {
 }
 
 
-void counting_sort(int n, int k, int data[], int out[], int count[]) {
-    k = find_max(n, data);
+int find_min(int n, int data[]) {
+    int min = data[0];
 
-    for (int j = 0; j < n; j++) {
-        count[data[j]]++;
+    for (int i = 1; i < n; i++) {
+        if (data[i] < min) {
+            min = data[i];
+        }
     }
 
-    for (int i = 1; i <= k; i++) {
+    return min;
+}
+
+
+void counting_sort(int n, int k, int data[], int out[], int count[]) {
+    // Find the minimum and maximum elements of the array
+    int min_val = data[0];
+    int max_val = data[0];
+
+    for (int i = 1; i < n; i++) {
+        if (data[i] < min_val) {
+            min_val = data[i];
+        }
+        if (data[i] > max_val) {
+            max_val = data[i];
+        }
+    }
+
+    // Calculate the range of values
+    int range = max_val - min_val + 1;
+
+    // Clear the count array (assuming count array is at least of size range)
+    for (int i = 0; i < range; i++) {
+        count[i] = 0;
+    }
+
+    // Count occurrences of each element
+    for (int i = 0; i < n; i++) {
+        count[data[i] - min_val]++;
+    }
+
+    // Calculate cumulative count
+    for (int i = 1; i < range; i++) {
         count[i] += count[i - 1];
     }
 
-    for (int j = n - 1; j >= 0; j--) {
-        out[count[data[j]] - 1] = data[j];
-        count[data[j]]--;
+    // Build the output array
+    for (int i = n - 1; i >= 0; i--) {
+        out[count[data[i] - min_val] - 1] = data[i];
+        count[data[i] - min_val]--;
     }
 }
 
 
 long long execute(int n, int data[]) {
     // Pre allocate the memory to avoid the overhead of malloc
-    int k = find_max(n, data);
+    int max = find_max(n, data);
+    int min = find_min(n, data);
+    int k = max - min;
 
     int *out = new int[n];
     int *count = new int[k + 1];
@@ -56,6 +91,10 @@ long long execute(int n, int data[]) {
     // Initialize the count array
     for (int i = 0; i <= k; i++) {
         count[i] = 0;
+    }
+    // Initialize the output array
+    for (int i = 0; i < n; i++) {
+        out[i] = 0;
     }
 
     // Initialize the clock to measure the execution time
@@ -91,9 +130,14 @@ long long execute(int n, int data[]) {
 int main(int argc, char *argv[]) {
     // Read array from stdin without length given separated by space
     std::vector<int> data;
-    int value;
-    while (std::cin >> value) {
-        data.push_back(value);
+    std::string line;
+
+    // Read the array from standard input
+    std::getline(std::cin, line);
+    std::istringstream iss(line);
+    int num;
+    while (iss >> num) {
+        data.push_back(num);
     }
 
     // Convert the vector to an array
