@@ -9,6 +9,8 @@
 #include <iomanip>
 #include <iostream>
 
+#include "utils.h"
+
 // Function to generate an array of random integers
 int* generate_input_data(int n, int min, int max) {
     std::random_device rd;
@@ -38,7 +40,7 @@ void check_result(int n, int data[]) {
 long long get_resolution() {
     const auto start = std::chrono::steady_clock::now();
     const auto end = std::chrono::steady_clock::now();
-    const auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    const auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
     return elapsed.count();
 }
 
@@ -79,7 +81,7 @@ std::string generate_filename(const std::string& test_type, bool linear_scaling)
     auto time_t_now = std::chrono::system_clock::to_time_t(now);
     
     std::stringstream ss;
-    ss << "sort_" 
+    ss << "counting_sort_"
        << test_type << "_"
        << (linear_scaling ? "linear" : "exponential") << "_"
        << std::put_time(std::localtime(&time_t_now), "%Y%m%d_%H%M%S")
@@ -115,6 +117,8 @@ void write_results_to_csv(const std::string& filename, const std::vector<Run>& r
         for (int r = 0; r < NUM_RUNS; r++) {
             file << "," << run.time[r];
         }
+
+        file << std::endl;
     }
     
     file.close();
