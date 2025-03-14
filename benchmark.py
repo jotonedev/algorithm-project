@@ -164,18 +164,36 @@ def collect_results(
     results = []
     resolutions = []
 
-    # collect old garbage before disabling the garbage collector
-    gc.collect()
+    i = 0
+    # disable the garbage collector to avoid interference with the benchmark
     gc.disable()
-    for _ in range(repetitions):
+    while True:
+        # check if the number of repetitions has been reached
+        if i == repetitions:
+            break
+        # check if the garbage collector is disabled
+        if gc.isenabled():
+            print("Garbage collector is enabled")
+            break
+        # manually run the garbage collector
+        gc.collect()
+        # generate the input data
         data = generator()
+        # run the algorithm
         exec_time, res = algorithm.function(data, len(data))
+        # check if the measured time is greater than the minimum measurable time
         results.append(exec_time)
         resolutions.append(res)
+        # increment the loop counter
+        i += 1
     # enable the garbage collector
     gc.enable()
 
-    return median(results), round(mean(resolutions), 3), round(stdev(results), 3), round(median_abs_dev(results), 3)
+    mean_res = round(mean(resolutions), 3)
+    stdev_val = round(stdev(results), 3)
+    mad_val = round(median_abs_dev(results), 3)
+
+    return median(results), mean_res, stdev_val, mad_val
 
 
 def sample_generator(
@@ -249,7 +267,7 @@ def benchmark_algorithm_by_length(
                 "time": exec_time,
                 "resolution": resolution,
                 "stdev": deviation,
-                "mad": mad
+                "mad": mad,
             }
 
     except KeyboardInterrupt:
@@ -264,7 +282,7 @@ def benchmark_algorithm_by_max(
         algorithm: Algorithm,
         repetitions: int = 5,
         samples: int = 100,
-        length: int = 10_000,
+        max_length: int = 10_000,
         min_val: int = 10,
         max_val: int = 1_000_000,
         linear: bool = False,
@@ -275,7 +293,7 @@ def benchmark_algorithm_by_max(
     :param algorithm: The Algorithm data class
     :param repetitions: The number of repetitions to run for each sample
     :param samples: The number of samples to run for each input size
-    :param length: The length of the input data
+    :param max_length: The length of the input data
     :param min_val: The minimum value of the input data
     :param max_val: The maximum value of the input data (must be greater than min_val)
     :param linear: If True, use linear scaling, otherwise use exponential scaling
@@ -296,19 +314,19 @@ def benchmark_algorithm_by_max(
     try:
         for i, var_max in tqdm.tqdm(generator, desc=f"Benchmarking {algorithm.name}", dynamic_ncols=True, total=samples):
             exec_time, resolution, deviation, mad = collect_results(
-                generator=lambda: generate_input_data(length, min_val, var_max, ensure_max_presence=True),
+                generator=lambda: generate_input_data(max_length, min_val, var_max, ensure_max_presence=True),
                 algorithm=algorithm,
                 repetitions=repetitions
             )
 
             results.loc[i] = {
-                "size": length,
+                "size": max_length,
                 "min_val": min_val,
                 "max_val": var_max,
                 "time": exec_time,
                 "resolution": resolution,
                 "stdev": deviation,
-                "mad": mad
+                "mad": mad,
             }
     except KeyboardInterrupt:
         # allows returning the results if the benchmarking was interrupted
@@ -325,9 +343,23 @@ def main(
         verbose: bool,
         linear: bool = False,
         by_max: bool = False,
+        max_val: int | None = None,
+        max_length: int | None = None,
 ):
     """Run the benchmarking tool"""
     setup_logger(verbose)
+
+    # set arguments for the benchmarking functions
+    kwargs = {
+        "repetitions": repetitions,
+        "samples": samples,
+        "linear": linear,
+    }
+    # add the optional arguments if they are not None
+    if max_val is not None:
+        kwargs['max_val'] = max_val
+    if max_length is not None:
+        kwargs['max_length'] = max_length
 
     # Increase process priority to avoid interruptions
     # check if it is windows
@@ -361,19 +393,9 @@ def main(
         filename = f"{algorithm.name}_{samples}_{repetitions}_{run_type}_{bench_type}_{os_type}.csv"
 
         if by_max:
-            results = benchmark_algorithm_by_max(
-                algorithm=algorithm,
-                repetitions=repetitions,
-                samples=samples,
-                linear=linear
-            )
+            results = benchmark_algorithm_by_max(algorithm=algorithm, **kwargs)
         else:
-            results = benchmark_algorithm_by_length(
-                algorithm=algorithm,
-                repetitions=repetitions,
-                samples=samples,
-                linear=linear
-            )
+            results = benchmark_algorithm_by_length(algorithm=algorithm, **kwargs)
 
         # Save the results to a CSV file
         results.to_csv(output / filename, index=False)
@@ -429,6 +451,18 @@ if __name__ == '__main__':
         action="store_true",
         default=False
     )
+    parser.add_argument(
+        "--max-val",
+        help="Maximum value of the input data",
+        type=int,
+        default=None
+    )
+    parser.add_argument(
+        "--max-length",
+        help="Maximum length of the input data",
+        type=int,
+        default=None
+    )
 
     args = parser.parse_args()
 
@@ -439,5 +473,7 @@ if __name__ == '__main__':
         repetitions=args.repetitions,
         verbose=args.verbose,
         linear=args.linear,
-        by_max=args.by_max
+        by_max=args.by_max,
+        max_val=args.max_val,
+        max_length=args.max_length
     )
