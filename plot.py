@@ -5,7 +5,13 @@ import seaborn as sns
 
 from pathlib import Path
 
-
+"""Goal	Graph Type
+Growth over input size	Line Graph
+Compare algorithms	Multi-Line Graph
+Distribution of times	Histogram
+Logarithmic trends	Log Scale Line Graph
+Show raw data points	Scatter Plot
+Compare discrete metrics	Bar Chart"""
 def load_data(filepath: Path) -> pd.DataFrame:
     """Load data from a CSV file into a pandas Dataframe"""
     df = pd.read_csv(

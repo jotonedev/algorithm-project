@@ -1,8 +1,8 @@
 from time import perf_counter_ns
 
-
 cdef extern from "sort.h":
     void timSort(int *a, int n)
+
 
 cdef int verify(int *a, int n):
     cdef int i
@@ -11,7 +11,7 @@ cdef int verify(int *a, int n):
             return 0
     return 1
 
-cdef unsigned long long tim_sort_benchmark(int* a, int n):
+cdef unsigned long long tim_sort_benchmark(int *a, int n):
     # declare array b of the same size as a
     cdef:
         unsigned long long start_ns = 0
