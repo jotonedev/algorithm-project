@@ -135,7 +135,8 @@ void write_results_to_csv(const std::string &filename, const std::vector<Run> &r
 
 // Function to set CPU affinity
 #if defined(__linux__)
-#include <sched.h>  // sched_setaffinity
+#include <sched.h>  // sched_setaffinity+
+#include <unistd.h>
 #elif defined(_WIN32)
 #include <windows.h>
 #elif defined(__APPLE__)
@@ -155,10 +156,8 @@ void set_cpu_affinity() {
     }
 
     // Increase the priority of the process to the maximum
-    struct sched_param param;
-    param.sched_priority = sched_get_priority_max(SCHED_FIFO);
-    if (sched_setscheduler(0, SCHED_FIFO, &param) == -1) {
-        std::cerr << "Failed to set scheduler" << std::endl;
+    if (setpriority(PRIO_PROCESS, 0, -20) == -1) {
+        std::cerr << "Failed to set priority" << std::endl;
     }
 #elif defined(_WIN32)
     // Set CPU affinity to the first core

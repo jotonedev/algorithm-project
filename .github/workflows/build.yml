@@ -48,23 +48,49 @@ jobs:
 
       - name: Run executables counting_sort
         continue-on-error: true
-        run: chmod +x ./counting_sort && ./counting_sort || true
+        run: |
+          chmod +x ./counting_sort 
+          ./counting_sort  length linear
+          ./counting_sort  length exponential
+          ./counting_sort  max linear
+          ./counting_sort  max exponential
 
       - name: Run executables quick_sort
         continue-on-error: true
-        run: chmod +x ./quick_sort && ./quick_sort || true
+        run: |
+          chmod +x ./quick_sort
+          ./quick_sort length linear
+          ./quick_sort length exponential
+          ./quick_sort max linear
+          ./quick_sort max exponential
 
       - name: Run executables quick_3way_sort
         continue-on-error: true
         run: chmod +x ./quick_3way_sort && ./quick_3way_sort || true
+        run: |
+          chmod +x ../quick_3way_sort
+          ./quick_3way_sort length linear
+          ./quick_3way_sort length exponential
+          ./quick_3way_sort max linear
+          ./quick_3way_sort max exponential
 
       - name: Run executables quick_sort_random_pivot
         continue-on-error: true
-        run: chmod +x ./quick_sort_random_pivot && ./quick_sort_random_pivot || true
+        run: |
+          chmod +x ../quick_sort_random_pivot
+          ./quick_sort_random_pivot length linear
+          ./quick_sort_random_pivot length exponential
+          ./quick_sort_random_pivot max linear
+          ./quick_sort_random_pivot max exponential
 
       - name: Run executables tim_sort
         continue-on-error: true
-        run: chmod +x ./tim_sort && ./tim_sort || true
+        run: |
+          chmod +x ./tim_sort
+          ./tim_sort length linear
+          ./tim_sort length exponential
+          ./tim_sort max linear
+          ./tim_sort max exponential
 
       - name: Upload CSV artifacts
         uses: actions/upload-artifact@v4
