@@ -197,3 +197,10 @@ cython_debug/
 .idea/
 .vscode/
 *win.svg
+
+*.csv
+.clang-format
+
+cmake-build-debug/
+
+cmake-build-debug-event-trace/
