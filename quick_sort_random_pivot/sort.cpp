@@ -15,7 +15,7 @@
 
 
 // Partition function to rearrange the elements around the pivot
-static int partition(int *a, int i, int j) {
+int partition(int *a, int i, int j) {
     int k = i; // index of the pivot's final position after the partition function completes
     int pivot = a[j - 1]; // Choose the last element as the pivot
 
@@ -29,7 +29,7 @@ static int partition(int *a, int i, int j) {
 }
 
 // Generate a random number between i and j
-static int random_between(int i, int j) {
+int random_between(int i, int j) {
     return i + rand() % (j - i + 1); // Generate a random number between i and j
 }
 

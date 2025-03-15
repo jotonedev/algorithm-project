@@ -23,7 +23,7 @@ int partition(int *a, int i, int j);
  * @param j The upper bound of the random number.
  * @return int The random number generated.
  */
-static int random_between(int i, int j);
+int random_between(int i, int j);
 
 /**
  * @brief Randomized partition function

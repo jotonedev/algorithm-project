@@ -146,7 +146,7 @@ int main(int argc, char *argv[]) {
         output_file = argv[3];
     } else {
         // Generate a filename based on test parameters and timestamp
-        output_file = generate_filename(test_length ? "length" : "max", linear_scaling);
+        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "quick_3way_sort");
     }
 
     int min_val = 100;
