@@ -42,23 +42,11 @@ int find_min(int n, int data[]) {
 void counting_sort(int n, int k, int data[], int out[], int count[]) {
     // Find the minimum and maximum elements of the array
     int min_val = data[0];
-    int max_val = data[0];
 
     for (int i = 1; i < n; i++) {
         if (data[i] < min_val) {
             min_val = data[i];
         }
-        if (data[i] > max_val) {
-            max_val = data[i];
-        }
-    }
-
-    // Calculate the range of values
-    int range = max_val - min_val + 1;
-
-    // Clear the count array (assuming count array is at least of size range)
-    for (int i = 0; i < range; i++) {
-        count[i] = 0;
     }
 
     // Count occurrences of each element
@@ -67,7 +55,7 @@ void counting_sort(int n, int k, int data[], int out[], int count[]) {
     }
 
     // Calculate cumulative count
-    for (int i = 1; i < range; i++) {
+    for (int i = 1; i < k; i++) {
         count[i] += count[i - 1];
     }
 
@@ -83,13 +71,13 @@ long long execute(int n, int data[]) {
     // Pre allocate the memory to avoid the overhead of malloc
     int max = find_max(n, data);
     int min = find_min(n, data);
-    int k = max - min;
+    int k = max - min + 1;
 
     int *out = new int[n];
-    int *count = new int[k + 1];
+    int *count = new int[k];
 
     // Initialize the count array
-    for (int i = 0; i <= k; i++) {
+    for (int i = 0; i < k; i++) {
         count[i] = 0;
     }
     // Initialize the output array
