@@ -155,10 +155,15 @@ void set_cpu_affinity() {
         std::cerr << "Failed to set CPU affinity" << std::endl;
     }
 
-    // Increase the priority of the process to the maximum
-    if (setpriority(PRIO_PROCESS, 0, -20) == -1) {
-        std::cerr << "Failed to set priority" << std::endl;
+    // Set nice value to -20 to increase the priority of the process to the maximum
+    if (nice(-20) == -1) {
+        std::cerr << "Failed to set nice value to -20" << std::endl;
+        // Try to set the priority class to the maximum allower to a non-root user
+        if (nice(1) == -1) {
+            std::cerr << "Failed to set nice value to 1" << std::endl;
+        }
     }
+
 #elif defined(_WIN32)
     // Set CPU affinity to the first core
     DWORD_PTR mask = 1;

@@ -67,7 +67,7 @@ jobs:
       - name: Run executables quick_3way_sort
         continue-on-error: true
         run: |
-          chmod +x ../quick_3way_sort
+          chmod +x ./quick_3way_sort
           ./quick_3way_sort length linear
           ./quick_3way_sort length exponential
           ./quick_3way_sort max linear
@@ -76,7 +76,7 @@ jobs:
       - name: Run executables quick_sort_random_pivot
         continue-on-error: true
         run: |
-          chmod +x ../quick_sort_random_pivot
+          chmod +x ./quick_sort_random_pivot
           ./quick_sort_random_pivot length linear
           ./quick_sort_random_pivot length exponential
           ./quick_sort_random_pivot max linear
