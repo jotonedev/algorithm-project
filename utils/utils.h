@@ -82,4 +82,9 @@ std::string generate_filename(const std::string &test_type, const bool linear_sc
 void write_results_to_csv(const std::string &filename, const std::vector<Run> &runs);
 
 
+/**
+ * @brief Set CPU affinity to the first core and increase the priority of the process to the maximum
+ */
+void set_cpu_affinity();
+
 #endif

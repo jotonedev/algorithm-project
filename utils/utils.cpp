@@ -132,3 +132,50 @@ void write_results_to_csv(const std::string &filename, const std::vector<Run> &r
 
     file.close();
 }
+
+// Function to set CPU affinity
+#if defined(__linux__)
+#include <sched.h>  // sched_setaffinity
+#elif defined(_WIN32)
+#include <windows.h>
+#elif defined(__APPLE__)
+#include <sys/types.h>
+#include <sys/sysctl.h>
+#endif
+// Set CPU affinity to the first core
+// and increase the priority of the process to the maximum
+void set_cpu_affinity() {
+#if defined(__linux__)
+    // Set CPU affinity to the first core
+    cpu_set_t mask;
+    CPU_ZERO(&mask);
+    CPU_SET(0, &mask);
+    if (sched_setaffinity(0, sizeof(mask), &mask) == -1) {
+        std::cerr << "Failed to set CPU affinity" << std::endl;
+    }
+
+    // Increase the priority of the process to the maximum
+    struct sched_param param;
+    param.sched_priority = sched_get_priority_max(SCHED_FIFO);
+    if (sched_setscheduler(0, SCHED_FIFO, &param) == -1) {
+        std::cerr << "Failed to set scheduler" << std::endl;
+    }
+#elif defined(_WIN32)
+    // Set CPU affinity to the first core
+    DWORD_PTR mask = 1;
+    if (!SetProcessAffinityMask(GetCurrentProcess(), mask)) {
+        std::cerr << "Failed to set CPU affinity" << std::endl;
+    }
+
+    // Increase the priority of the process to the maximum
+    if (!SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS)) {
+        std::cerr << "Failed to set priority class" << std::endl;
+    }
+#elif defined(__APPLE__)
+    // Increase the priority of the process to the maximum
+    if (setpriority(PRIO_PROCESS, 0, -20) == -1) {
+        std::cerr << "Failed to set priority" << std::endl;
+    }
+#endif
+}
+

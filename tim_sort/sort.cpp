@@ -265,6 +265,8 @@ int main(int argc, char *argv[]) {
 #ifdef BENCHMARK_MODE
 
 int main(int argc, char *argv[]) {
+    set_cpu_affinity();
+    
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " [length|max] [linear|exponential] [output_file]" << std::endl;
         return 1;
