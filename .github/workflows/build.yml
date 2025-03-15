@@ -6,7 +6,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-24.04, ubuntu-24.04-arm ]
+        os: [ ubuntu-24.04, macos-latest ]
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -19,11 +19,11 @@ jobs:
       - name: Configure and build
         run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-          cmake.exe --build build --target quick_sort_random_pivot
-          cmake.exe --build build --target quick_sort
-          cmake.exe --build build --target quick_3way_sort
-          cmake.exe --build build --target counting_sort
-          cmake.exe --build build --target tim_sort
+          cmake --build build --target quick_sort_random_pivot
+          cmake --build build --target quick_sort
+          cmake --build build --target quick_3way_sort
+          cmake --build build --target counting_sort
+          cmake --build build --target tim_sort
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -37,7 +37,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        os: [ ubuntu-24.04, ubuntu-24.04-arm ]
+        os: [ ubuntu-24.04, macos-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
