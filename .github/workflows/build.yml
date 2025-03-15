@@ -48,26 +48,26 @@ jobs:
 
       - name: Run executables counting_sort
         continue-on-error: true
-        run: ./bin/counting_sort || true
+        run: ./counting_sort || true
 
       - name: Run executables quick_sort
         continue-on-error: true
-        run: ./bin/quick_sort || true
+        run: ./quick_sort || true
 
       - name: Run executables quick_3way_sort
         continue-on-error: true
-        run: ./bin/quick_3way_sort || true
+        run: ./quick_3way_sort || true
 
       - name: Run executables quick_sort_random_pivot
         continue-on-error: true
-        run: ./bin/quick_sort_random_pivot || true
+        run: ./quick_sort_random_pivot || true
 
       - name: Run executables tim_sort
         continue-on-error: true
-        run: ./bin/tim_sort || true
+        run: ./tim_sort || true
 
       - name: Upload CSV artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: benchmark-csv-${{ matrix.os }}
           path: '**/*.csv'
@@ -82,8 +82,8 @@ jobs:
 
       - name: Compress artifacts
         run: |
-          tar -czf artifacts-ubuntu-24.04.tar.gz build-artifacts-ubuntu-24.04/bin/*
-          tar -czf artifacts-ubuntu-24.04-arm.tar.gz build-artifacts-ubuntu-24.04-arm/bin/*
+          tar -czf artifacts-ubuntu-24.04.tar.gz build-artifacts-ubuntu-24.04/*
+          tar -czf artifacts-ubuntu-24.04-arm.tar.gz build-artifacts-ubuntu-24.04-arm/*
 
       - name: Create GitHub release
         if: ${{ github.event_name == 'push' }}
