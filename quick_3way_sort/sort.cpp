@@ -10,17 +10,9 @@
 #include <string>
 #include <vector>
 
+#include "sort.h"
 #include "utils.h"
 
-
-
-
-// Swap function to exchange elements at indices k and l
-static void swap(int *a, int k, int l){
-    int temp = a[k];
-    a[k] = a[l];
-    a[l] = temp;
-}
 
 // Partition function
 void static partition_3way(int *a, int i, int j, int *k, int *l) {
@@ -29,21 +21,21 @@ void static partition_3way(int *a, int i, int j, int *k, int *l) {
     // - Elements equal to the pivot
     // - Elements greater than the pivot
 
-    int pivot = a[j - 1];       // Choose the last element as the pivot
+    int pivot = a[j - 1]; // Choose the last element as the pivot
     int p1 = i, p2 = i, p3 = i;
 
     while (p3 < j) {
         if (a[p3] < pivot) { // Case 1: Current element is less than the pivot
-            swap(a, p3, p2);// Move current element to the <= pivot region
-            swap(a, p2, p1);// Move boundary for < pivot
+            swap(a, p3, p2); // Move current element to the <= pivot region
+            swap(a, p2, p1); // Move boundary for < pivot
             p1++;
             p2++;
             p3++;
-        } else if (a[p3] == pivot) {  // Case 2: Current element is equal to the pivot
-            swap(a, p3, p2);// Move current element to the <= pivot region
+        } else if (a[p3] == pivot) { // Case 2: Current element is equal to the pivot
+            swap(a, p3, p2); // Move current element to the <= pivot region
             p2++;
             p3++;
-        } else {  // Case 3: Current element is greater than the pivot
+        } else { // Case 3: Current element is greater than the pivot
             p3++; // Simply move to the next element
         }
     }
@@ -53,8 +45,8 @@ void static partition_3way(int *a, int i, int j, int *k, int *l) {
     // - Elements in range [p1, p2) are == pivot
     // - Elements in range [p2, j) are > pivot
 
-    *k = p1;// Set `k` to the start of the == pivot region
-    *l = p2;// Set `l` to the end of the == pivot region
+    *k = p1; // Set `k` to the start of the == pivot region
+    *l = p2; // Set `l` to the end of the == pivot region
 }
 
 // Recursive 3-way QuickSort function
@@ -65,11 +57,11 @@ void quick_3way_sort(int *a, int i, int j) {
     }
 
     int k, l;
-     // Partition the array into three parts 
+    // Partition the array into three parts
     partition_3way(a, i, j, &k, &l);
 
-    quick_3way_sort(a, i, k);// Recursively sort the < pivot region
-    quick_3way_sort(a, l, j);// Recursively sort the > pivot region
+    quick_3way_sort(a, i, k); // Recursively sort the < pivot region
+    quick_3way_sort(a, l, j); // Recursively sort the > pivot region
 }
 
 
@@ -131,8 +123,6 @@ int main(int argc, char *argv[]) {
 
 
 #ifdef BENCHMARK_MODE
-
-#include "utils.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {

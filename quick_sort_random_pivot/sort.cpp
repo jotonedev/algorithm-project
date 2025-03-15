@@ -10,38 +10,33 @@
 #include <string>
 #include <vector>
 
+#include "sort.h"
 #include "utils.h"
 
 
-// Swap function to exchange elements at indices k and l
-static void swap(int *a, int k, int l){
-    int temp = a[k];
-    a[k] = a[l];
-    a[l] = temp;
-}
-
 // Partition function to rearrange the elements around the pivot
 static int partition(int *a, int i, int j) {
-    //assert(i < j);
-    int k = i;            // index of the pivot's final position after the partition function completes         
+    int k = i; // index of the pivot's final position after the partition function completes
     int pivot = a[j - 1]; // Choose the last element as the pivot
 
-    for (int l = i; l < j; l++) {// Exclude pivot from comparisons
+    for (int l = i; l < j; l++) { // Exclude pivot from comparisons
         if (a[l] <= pivot) {
-            swap(a, k, l);// Place smaller elements on the left
+            swap(a, k, l); // Place smaller elements on the left
             k++;
         }
     }
     return k - 1; // Return the pivot's final position
 }
 
+// Generate a random number between i and j
 static int random_between(int i, int j) {
     return i + rand() % (j - i + 1); // Generate a random number between i and j
 }
 
+// Randomized partition function to rearrange the elements around the pivot
 int randomized_partition(int *a, int i, int j) {
     int x = random_between(i, j - 1); // Select a random index between i and j-1
-    swap(a, j - 1, x);         // Swap it with the last element
+    swap(a, j - 1, x); // Swap it with the last element
     return partition(a, i, j); // Perform partitioning
 }
 
@@ -137,7 +132,7 @@ int main(int argc, char *argv[]) {
         output_file = argv[3];
     } else {
         // Generate a filename based on test parameters and timestamp
-        output_file = generate_filename(test_length ? "length" : "max", linear_scaling);
+        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "quick_sort_random_pivot");
     }
 
     int min_val = 100;

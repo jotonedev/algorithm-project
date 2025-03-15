@@ -9,11 +9,10 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "sort.h"
 #include "utils.h"
-
-#include <cstring>
 
 
 // Function to perform insertion sort on a subarray.
@@ -30,7 +29,7 @@ void insertion_sort(int arr[], int left, int right) {
 }
 
 // Function to merge two sorted subarrays.
-void merge(int arr[], int left, int mid, int right, int* temp_arr) {
+void merge(int arr[], int left, int mid, int right, int *temp_arr) {
     int len1 = mid - left + 1;
     int len2 = right - mid;
 
@@ -107,7 +106,7 @@ int count_run(int arr[], int start, int n) {
 
 // Extends a short run to the minimum length (minrun) using insertion sort if necessary
 // and sorts the extended run.
-void extend_run_and_sort(int arr[], int start, int* end, int n, int min_run) {
+void extend_run_and_sort(int arr[], int start, int *end, int n, int min_run) {
     int run_length = count_run(arr, start, n);
     *end = start + run_length - 1;
 
@@ -120,14 +119,14 @@ void extend_run_and_sort(int arr[], int start, int* end, int n, int min_run) {
 }
 
 // Pushes a run onto the stack.
-void push_run(RunStack* stack, int start, int length) {
+void push_run(RunStack *stack, int start, int length) {
     stack->stack[stack->num_runs].start = start;
     stack->stack[stack->num_runs].length = length;
     stack->num_runs++;
 }
 
 // Merges runs on the stack to maintain the stacking invariants.
-void merge_collapse(int arr[], RunStack* stack, int* temp_arr) {
+void merge_collapse(int arr[], RunStack *stack, int *temp_arr) {
     while (stack->num_runs > 1) {
         int n = stack->num_runs - 2;
         if (n > 0 && stack->stack[n - 1].length <= stack->stack[n].length + stack->stack[n + 1].length) {
@@ -144,7 +143,7 @@ void merge_collapse(int arr[], RunStack* stack, int* temp_arr) {
 }
 
 // Merges two runs on the stack at indices a and b.
-void merge_runs(int arr[], RunStack* stack, int a, int b, int* temp_arr) {
+void merge_runs(int arr[], RunStack *stack, int a, int b, int *temp_arr) {
     int start1 = stack->stack[a].start;
     int length1 = stack->stack[a].length;
     int start2 = stack->stack[b].start;
@@ -159,8 +158,8 @@ void merge_runs(int arr[], RunStack* stack, int a, int b, int* temp_arr) {
     stack->num_runs--;
 }
 
-// Internal TimSort function that sorts the array using the provided temporary array and run stack.
-void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack) {
+// TimSort function that sorts the array using the provided temporary array and run stack.
+void tim_sort(int arr[], int n, int *temp_arr, RunStack *run_stack) {
     if (n < MIN_MERGE) {
         // For very small arrays, use insertion sort directly.
         insertion_sort(arr, 0, n - 1);
@@ -195,8 +194,8 @@ void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack) {
 
 long long execute(int n, int data[]) {
     // Pre allocate the memory to avoid the overhead of malloc
-    int* temp_arr = new int[n];
-    RunStack* run_stack = new RunStack;
+    int *temp_arr = new int[n];
+    RunStack *run_stack = new RunStack;
 
     for (int i = 0; i < n; i++) {
         temp_arr[i] = 0;
@@ -219,12 +218,12 @@ long long execute(int n, int data[]) {
     }
     std::cout << std::endl;
 #else
-    check_result(n, out);
+    check_result(n, data);
 #endif
 
     // Free the allocated memory
     delete[] temp_arr;
-    delete[] run_stack;
+    delete run_stack;
 
     // Compute the elapsed time in nanoseconds
     return elapsed.count();
@@ -264,8 +263,6 @@ int main(int argc, char *argv[]) {
 
 
 #ifdef BENCHMARK_MODE
-
-#include "utils.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {

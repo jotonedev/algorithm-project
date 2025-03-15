@@ -200,3 +200,7 @@ cython_debug/
 
 *.csv
 .clang-format
+
+cmake-build-debug/
+
+cmake-build-debug-event-trace/

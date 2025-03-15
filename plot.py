@@ -10,7 +10,7 @@ def load_data(filepath: Path) -> pd.DataFrame:
     """Load data from a CSV file into a pandas Dataframe"""
     df = pd.read_csv(
         filepath,
-        dtype = {
+        dtype={
             "size": int,
             "min_value": int,
             "max_value": int,
@@ -20,9 +20,11 @@ def load_data(filepath: Path) -> pd.DataFrame:
     )
     return df
 
+
 def find_filepaths(directory: Path) -> list[Path]:
     """Find all CSV files in a directory"""
     return list(directory.glob("*.csv"))
+
 
 def plot_data(
         data: pd.DataFrame,

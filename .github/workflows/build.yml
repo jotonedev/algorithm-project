@@ -1,0 +1,107 @@
+name: Build-and-Release
+
+
+on:
+  push:
+  workflow_dispatch:
+
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-24.04, ubuntu-24.04-arm ]
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up CMake
+        uses: jwlawson/actions-setup-cmake@v2
+
+      - name: Configure and build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake.exe --build build --target quick_sort_random_pivot
+          cmake.exe --build build --target quick_sort
+          cmake.exe --build build --target quick_3way_sort
+          cmake.exe --build build --target counting_sort
+          cmake.exe --build build --target tim_sort
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path:
+            quick_sort/bin/*
+            counting_sort/bin/*
+            quick_3way_sort/bin/*
+            quick_sort_random_pivot/bin/*
+            tim_sort/bin/*
+          retention-days: 3
+
+  execute:
+    needs: build
+    strategy:
+      matrix:
+        os: [ ubuntu-24.04, ubuntu-24.04-arm ]
+    runs-on: { { matrix.os } }
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts-${{ matrix.os }}
+
+      - name: Run executables counting_sort
+        continue-on-error: true
+        run: ./counting_sort/counting_sort || true
+
+      - name: Run executables quick_sort
+        continue-on-error: true
+        run: ./quick_sort/quick_sort || true
+
+      - name: Run executables quick_3way_sort
+        continue-on-error: true
+        run: ./quick_3way_sort/quick_3way_sort || true
+
+      - name: Run executables quick_sort_random_pivot
+        continue-on-error: true
+        run: ./quick_sort_random_pivot/quick_sort_random_pivot || true
+
+      - name: Run executables tim_sort
+        continue-on-error: true
+        run: ./tim_sort/tim_sort || true
+
+      - name: Upload CSV artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: benchmark-csv
+          path: '**/*.csv'
+          retention-days: 7
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Compress artifacts
+        run: |
+          tar -czf artifacts-ubuntu-24.04.tar.gz build-artifacts-ubuntu-24.04/*
+          tar -czf artifacts-ubuntu-24.04-arm.tar.gz build-artifacts-ubuntu-24.04-arm/*
+
+      - name: Create GitHub release
+        if: ${{ github.event_name == 'push' }}
+        id: create_release
+        uses: softprops/action-gh-release@v2
+        with:
+          body: |
+            This is an automated release.
+            Created by ${{ github.actor }} on date ${{ github.event.created_at }}.
+          tag_name: auto/${{ steps.get_date.outputs.date }}-${{ github.sha }}
+          files: |
+            artifacts-ubuntu-24.04.tar.gz
+            artifacts-ubuntu-24.04-arm.tar.gz

@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "sort.h"
 #include "utils.h"
 
 
@@ -147,7 +148,6 @@ int main(int argc, char *argv[]) {
 
 #ifdef BENCHMARK_MODE
 
-#include "utils.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
         // Generate sample points based on scaling type
         std::vector<int> sample_lengths = generate_sample_points(min_length, max_length, num_samples, linear_scaling);
 
-        for (int curr_length: sample_lengths) {
+        for (const int curr_length: sample_lengths) {
             Run run;
             run.min = min_val;
             run.max = max_val;

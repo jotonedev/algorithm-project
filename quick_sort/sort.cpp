@@ -10,23 +10,18 @@
 #include <string>
 #include <vector>
 
+#include "sort.h"
 #include "utils.h"
 
-// Swap function to exchange elements at indices k and l
-static void swap(int *a, int k, int l){
-    int temp = a[k];
-    a[k] = a[l];
-    a[l] = temp;
-}
 
 // Partition function to rearrange the elements around the pivot
 int partition(int *a, int i, int j) {
-    int k = i;            // index of the pivot's final position after the partition function completes         
+    int k = i; // index of the pivot's final position after the partition function completes
     int pivot = a[j - 1]; // Choose the last element as the pivot
 
-    for (int l = i; l < j; l++) {// Exclude pivot from comparisons
+    for (int l = i; l < j; l++) { // Exclude pivot from comparisons
         if (a[l] <= pivot) {
-            swap(a, k, l);// Place smaller elements on the left
+            swap(a, k, l); // Place smaller elements on the left
             k++;
         }
     }
@@ -42,7 +37,7 @@ void quick_sort(int *a, int i, int j) {
 
     // Inductive case: partition the array and sort the partitions
     int k = partition(a, i, j);
-    quick_sort(a, i, k);   // Sort elements less than or equal to the pivot
+    quick_sort(a, i, k); // Sort elements less than or equal to the pivot
     quick_sort(a, k + 1, j); // Sort elements greater than the pivot
 }
 
@@ -106,8 +101,6 @@ int main(int argc, char *argv[]) {
 
 #ifdef BENCHMARK_MODE
 
-#include "utils.h"
-
 int main(int argc, char *argv[]) {
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " [length|max] [linear|exponential] [output_file]" << std::endl;
@@ -130,7 +123,7 @@ int main(int argc, char *argv[]) {
         output_file = argv[3];
     } else {
         // Generate a filename based on test parameters and timestamp
-        output_file = generate_filename(test_length ? "length" : "max", linear_scaling);
+        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "quick_sort");
     }
 
     int min_val = 100;
