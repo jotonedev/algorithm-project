@@ -13,7 +13,7 @@
 
 
 // Swap function to exchange elements at indices k and l
-static void swap(int *a, int k, int l) {
+void swap(int *a, int k, int l) {
     int temp = a[k];
     a[k] = a[l];
     a[l] = temp;

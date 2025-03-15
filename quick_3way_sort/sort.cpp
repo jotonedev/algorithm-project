@@ -15,7 +15,7 @@
 
 
 // Partition function
-void static partition_3way(int *a, int i, int j, int *k, int *l) {
+void partition_3way(int *a, int i, int j, int *k, int *l) {
     // The function partitions the array into three parts:
     // - Elements less than the pivot
     // - Elements equal to the pivot

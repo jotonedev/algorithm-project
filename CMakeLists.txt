@@ -24,7 +24,7 @@ ExternalProject_Add(counting_sort
         CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
         BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND
+        INSTALL_COMMAND ""
 )
 
 

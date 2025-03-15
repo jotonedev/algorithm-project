@@ -27,7 +27,7 @@ struct RunResult {
  * @param k the index of the first element
  * @param l the index of the second element
  */
-static void swap(int *a, int k, int l);
+void swap(int *a, int k, int l);
 
 
 /**
