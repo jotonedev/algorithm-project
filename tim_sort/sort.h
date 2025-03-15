@@ -2,12 +2,35 @@
 #define TIM_SORT_H
 
 // Define a threshold for switching to insertion sort.
-// For very small subarrays, insertion sort is more efficient than merge sort.
 #define THRESHOLD 64
+
+// Define a minimum size for merging.
+#define MIN_MERGE 32
+
+// Define the maximum number of pending runs on the stack.
+// This needs to be large enough to handle worst-case scenarios but small enough to fit in cache.
+#define MAX_PENDING_RUNS 85
+
+// Structure to represent a run in the array.
+struct Run_t {
+    int start;  // Start index of the run.
+    int length; // Length of the run.
+};
+
+// Structure to manage the stack of pending runs.
+struct RunStack_t {
+    struct Run_t stack[MAX_PENDING_RUNS];
+    int num_runs;  // Number of runs currently on the stack.
+} typedef RunStack;
 
 void insertion_sort(int arr[], int left, int right);
 void merge(int arr[], int left, int mid, int right, int* temp_arr);
 int calculate_minrun(int n);
-void tim_sort(int arr[], int n, int temp_arr[]);
+void tim_sort(int arr[], int n, int* temp_arr, RunStack* run_stack);
+int count_run(int arr[], int start, int n);
+void extend_run_and_sort(int arr[], int start, int* end, int n, int min_run);
+void push_run(RunStack* stack, int start, int length);
+void merge_collapse(int arr[], RunStack* stack, int* temp_arr);
+void merge_runs(int arr[], RunStack* stack, int a, int b, int* temp_arr);
 
 #endif
