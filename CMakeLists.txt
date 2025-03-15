@@ -24,7 +24,7 @@ ExternalProject_Add(counting_sort
         CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
         BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND ""
+        INSTALL_COMMAND cmake --install . --config Release
 )
 
 
@@ -35,7 +35,7 @@ ExternalProject_Add(quick_sort
         CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
         BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND ""
+        INSTALL_COMMAND cmake --install . --config Release
 )
 
 
@@ -46,7 +46,7 @@ ExternalProject_Add(quick_3way_sort
         CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
         BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND ""
+        INSTALL_COMMAND cmake --install . --config Release
 )
 
 
@@ -57,7 +57,7 @@ ExternalProject_Add(quick_sort_random_pivot
         CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
         BUILD_COMMAND cmake --build . --config Release --target install
-        INSTALL_COMMAND ""
+        INSTALL_COMMAND cmake --install . --config Release
 )
 
 
@@ -68,5 +68,5 @@ ExternalProject_Add(tim_sort
         CMAKE_ARGS
         -DCMAKE_BUILD_TYPE=Release
         BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND ""
+        INSTALL_COMMAND cmake --install . --config Release
 )

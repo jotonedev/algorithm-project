@@ -34,11 +34,7 @@ jobs:
         with:
           name: build-artifacts-${{ matrix.os }}
           path:
-            quick_sort/bin/*
-            counting_sort/bin/*
-            quick_3way_sort/bin/*
-            quick_sort_random_pivot/bin/*
-            tim_sort/bin/*
+            bin/*
           retention-days: 3
 
   execute:
@@ -56,23 +52,23 @@ jobs:
 
       - name: Run executables counting_sort
         continue-on-error: true
-        run: ./counting_sort/counting_sort || true
+        run: ./bin/counting_sort || true
 
       - name: Run executables quick_sort
         continue-on-error: true
-        run: ./quick_sort/quick_sort || true
+        run: ./bin/quick_sort || true
 
       - name: Run executables quick_3way_sort
         continue-on-error: true
-        run: ./quick_3way_sort/quick_3way_sort || true
+        run: ./bin/quick_3way_sort || true
 
       - name: Run executables quick_sort_random_pivot
         continue-on-error: true
-        run: ./quick_sort_random_pivot/quick_sort_random_pivot || true
+        run: ./bin/quick_sort_random_pivot || true
 
       - name: Run executables tim_sort
         continue-on-error: true
-        run: ./tim_sort/tim_sort || true
+        run: ./bin/tim_sort || true
 
       - name: Upload CSV artifacts
         uses: actions/upload-artifact@v3
@@ -90,8 +86,8 @@ jobs:
 
       - name: Compress artifacts
         run: |
-          tar -czf artifacts-ubuntu-24.04.tar.gz build-artifacts-ubuntu-24.04/*
-          tar -czf artifacts-ubuntu-24.04-arm.tar.gz build-artifacts-ubuntu-24.04-arm/*
+          tar -czf artifacts-ubuntu-24.04.tar.gz build-artifacts-ubuntu-24.04/bin/*
+          tar -czf artifacts-ubuntu-24.04-arm.tar.gz build-artifacts-ubuntu-24.04-arm/bin/*
 
       - name: Create GitHub release
         if: ${{ github.event_name == 'push' }}
