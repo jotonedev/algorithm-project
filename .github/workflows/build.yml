@@ -48,23 +48,23 @@ jobs:
 
       - name: Run executables counting_sort
         continue-on-error: true
-        run: ./counting_sort || true
+        run: chmod +x ./counting_sort && ./counting_sort || true
 
       - name: Run executables quick_sort
         continue-on-error: true
-        run: ./quick_sort || true
+        run: chmod +x ./quick_sort && ./quick_sort || true
 
       - name: Run executables quick_3way_sort
         continue-on-error: true
-        run: ./quick_3way_sort || true
+        run: chmod +x ./quick_3way_sort && ./quick_3way_sort || true
 
       - name: Run executables quick_sort_random_pivot
         continue-on-error: true
-        run: ./quick_sort_random_pivot || true
+        run: chmod +x ./quick_sort_random_pivot && ./quick_sort_random_pivot || true
 
       - name: Run executables tim_sort
         continue-on-error: true
-        run: ./tim_sort || true
+        run: chmod +x ./tim_sort && ./tim_sort || true
 
       - name: Upload CSV artifacts
         uses: actions/upload-artifact@v4
@@ -77,8 +77,17 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
-      - name: Download artifacts
+      - name: Download artifacts ubuntu-24.04
         uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts-ubuntu-24.04
+          path: build-artifacts-ubuntu-24.04
+
+      - name: Download artifacts ubuntu-24.04-arm
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts-ubuntu-24.04-arm
+          path: build-artifacts-ubuntu-24.04-arm
 
       - name: Compress artifacts
         run: |
