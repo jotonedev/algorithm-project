@@ -202,5 +202,7 @@ cython_debug/
 .clang-format
 
 cmake-build-debug/
-
 cmake-build-debug-event-trace/
+cmake-build-release/
+
+bin/
