@@ -3,6 +3,7 @@ import argparse
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
 from pathlib import Path
 
@@ -17,7 +18,7 @@ def plot_data(
 ) -> None:
     """Plot the data"""
     # Set the style
-    sns.set_theme(style="whitegrid", font_scale=1.1)
+    sns.set_theme(style="whitegrid", font_scale=1.9)
     fig, ax1 = plt.subplots(1, 1, figsize=(12, 10), gridspec_kw={'height_ratios': [1]})
 
     # Create the main plot
@@ -30,9 +31,10 @@ def plot_data(
         markersize=3,
     )
 
-    # Set the scale of the x-axis
+    # Set the scale
     if scale == "exp":
         ax1.set_xscale("log")
+        ax1.set_yscale("log")
 
     # Set the labels
     ax1.set_title(name)
@@ -44,14 +46,17 @@ def plot_data(
     ax1.set_ylabel("Time (µs)")
     ax1.grid(True)
 
-    # Disable the scientific notation
-    ax1.get_xaxis().get_major_formatter().set_scientific(False)
     # Increase the number of ticks
-    ax1.get_xaxis().set_major_locator(plt.MaxNLocator(10))
-    ax1.get_yaxis().set_major_locator(plt.MaxNLocator(10))
-
-    # Show the plot
-    plt.show()
+    if scale == "exp":
+        ax1.get_xaxis().set_major_locator(plt.LogLocator(base=10, numticks=5))
+        ax1.get_xaxis().set_minor_locator(plt.LogLocator(base=10, subs="auto", numticks=5))
+        ax1.get_yaxis().set_major_locator(plt.LogLocator(base=10, numticks=5))
+        ax1.get_yaxis().set_minor_locator(plt.NullLocator())
+    else:
+        ax1.get_xaxis().set_major_locator(plt.MaxNLocator(10))
+        ax1.get_yaxis().set_major_locator(plt.MaxNLocator(10))
+        # Remove the scientific notation on the x-axis
+        ax1.ticklabel_format(axis="x", style="plain")
 
     # Save the plot
     plt.tight_layout()
