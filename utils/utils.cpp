@@ -79,6 +79,9 @@ std::vector<int> generate_sample_points(const int min_val, const int max_val, co
         // Generate linearly spaced values
         for (int i = 0; i < num_samples; i++) {
             int value = min_val + static_cast<int>(i * step);
+            if (value == samples.back()) {  // Avoid duplicates
+                value++;
+            }
             samples.push_back(value);
         }
     } else { // Exponential scaling
@@ -88,6 +91,9 @@ std::vector<int> generate_sample_points(const int min_val, const int max_val, co
         // Generate exponentially spaced values
         for (int i = 0; i < num_samples; i++) {
             int value = static_cast<int>(min_val * std::pow(factor, i));
+            if (value == samples.back()) {  // Avoid duplicates
+                value++;
+            }
             samples.push_back(value);
         }
     }
