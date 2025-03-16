@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
         output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "counting_sort");
     }
 
-    int min_val = 100;
+    int min_val = 1;
     int max_val = 1000000;
     int length = 100000;
     int num_samples = 300; // Can be adjusted
@@ -198,28 +198,20 @@ int main(int argc, char *argv[]) {
             run.length = curr_length;
             run.resolution = get_resolution();
 
-            // Generate input data
-            int *data = generate_input_data(curr_length, min_val, max_val);
-
             // Run multiple times
             for (int r = 0; r < NUM_RUNS; r++) {
-                // Make a copy of the data for each run
-                int *data_copy = new int[curr_length];
-                std::copy(data, data + curr_length, data_copy);
-
+                // Generate input data
+                int *data = generate_input_data(curr_length, min_val, max_val);
                 // Execute and record time
-                run.time[r] = execute(curr_length, data_copy);
-
-                delete[] data_copy;
+                run.time[r] = execute(curr_length, data);
+                // Free the allocated memory
+                delete[] data;
             }
 
-            runs.push_back(run);
-            delete[] data;
-
             // Print results for this run
-            std::cout << "Length: " << curr_length << ", Min: " << run.min << ", Max: " << run.max
-                      << ", Time (median): " << *std::min_element(run.time, run.time + NUM_RUNS)
-                      << ", Resolution: " << run.resolution << std::endl;
+            std::cout << "Length: " << curr_length << ", Min: " << run.min << ", Max: " << run.max << ", Resolution: " << run.resolution << std::endl;
+
+            runs.push_back(run);
         }
     } else {
         // Test by varying max_val from 10 to 1,000,000
@@ -236,23 +228,21 @@ int main(int argc, char *argv[]) {
             run.length = length;
             run.resolution = get_resolution();
 
-            // Generate input data
-            int *data = generate_input_data(length, min_val, curr_max);
-
-            // Run multiple times
+            // Run multiple times for each sample point
             for (int r = 0; r < NUM_RUNS; r++) {
-                // Make a copy of the data for each run
-                int *data_copy = new int[length];
-                std::copy(data, data + length, data_copy);
 
+                // Generate input data
+                int *data = generate_input_data(length, min_val, curr_max);
                 // Execute and record time
-                run.time[r] = execute(length, data_copy);
-
-                delete[] data_copy;
+                run.time[r] = execute(length, data);
+                // Free the allocated memory
+                delete[] data;
             }
 
+            // Print results for this run
+            std::cout << "Length: " << run.length << ", Min: " << run.min << ", Max: " << run.max << ", Resolution: " << run.resolution << std::endl;
+
             runs.push_back(run);
-            delete[] data;
         }
     }
 
