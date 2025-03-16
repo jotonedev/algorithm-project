@@ -68,7 +68,7 @@ void quick_3way_sort(int *a, int i, int j) {
 long long execute(int n, int data[]) {
     // Initialize the clock to measure the execution time
     const auto start = std::chrono::steady_clock::now();
-    // Call the counting sort function
+    // Call the sort function
     quick_3way_sort(data, 0, n);
     // Measure the elapsed time
     const auto end = std::chrono::steady_clock::now();
@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
     int n = data.size();
     int *arr = data.data();
 
-    // Execute the counting sort algorithm
+    // Execute the sort algorithm
     try {
         execute(n, arr);
     } catch (const std::runtime_error &e) {
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
         output_file = argv[3];
     } else {
         // Generate a filename based on test parameters and timestamp
-        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "counting_sort");
+        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "quick_3way_sort");
     }
 
     int min_val = 1;
