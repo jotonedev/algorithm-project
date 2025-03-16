@@ -53,6 +53,9 @@ void check_result(const int n, const int data[]) {
 // Function to get the resolution of the clock
 long long get_resolution() {
     long long max_resolution = 0;
+
+    // On a modern powerful linux machine with realtime kernel enabled, the value of the resolution is so low
+    // that cannot be measured and will return 0. Because of this, we capture this value only for statistical purposes.
     for (int i = 0; i < 3; i++) {
         const auto start = std::chrono::steady_clock::now();
         const auto end = std::chrono::steady_clock::now();
@@ -79,8 +82,8 @@ std::vector<int> generate_sample_points(const int min_val, const int max_val, co
         // Generate linearly spaced values
         for (int i = 0; i < num_samples; i++) {
             int value = min_val + static_cast<int>(i * step);
-            if (value == samples.back()) {  // Avoid duplicates
-                value++;
+            if (value <= samples.back()) {  // Avoid duplicates
+                value = samples.back() + 1;
             }
             samples.push_back(value);
         }
@@ -91,8 +94,8 @@ std::vector<int> generate_sample_points(const int min_val, const int max_val, co
         // Generate exponentially spaced values
         for (int i = 0; i < num_samples; i++) {
             int value = static_cast<int>(min_val * std::pow(factor, i));
-            if (value == samples.back()) {  // Avoid duplicates
-                value++;
+            if (value <= samples.back()) {  // we want to increase the value not to have duplicates
+                value = samples.back() + 1;
             }
             samples.push_back(value);
         }
