@@ -1,7 +1,3 @@
-Cython
 seaborn
 pandas
-setuptools
-tqdm
 numpy
-psutil

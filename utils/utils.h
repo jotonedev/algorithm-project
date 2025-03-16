@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#define NUM_RUNS 7
+#define NUM_RUNS 32
 
 
 /**

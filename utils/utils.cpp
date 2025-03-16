@@ -32,6 +32,10 @@ int *generate_input_data(const int n, const int min, const int max) {
         data[i] = dis(gen);
     }
 
+    // Put in a random position the maximum value
+    int max_pos = dis(gen) % n;
+    data[max_pos] = max;
+
     return data;
 }
 

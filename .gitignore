@@ -206,3 +206,5 @@ cmake-build-debug-event-trace/
 cmake-build-release/
 
 bin/
+
+.results/
