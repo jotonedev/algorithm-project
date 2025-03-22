@@ -1,7 +1,11 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="quick_sort" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="length linear" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SuperBuild" TARGET_NAME="quick_sort" CONFIG_NAME="Debug" RUN_PATH="$PROJECT_DIR$/bin/quick_sort.exe">
-    <method v="2">
-      <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-    </method>
-  </configuration>
+    <configuration default="false" name="quick_sort" type="CMakeRunConfiguration" factoryName="Application"
+                   PROGRAM_PARAMS="length" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false"
+                   EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="SuperBuild" TARGET_NAME="quick_sort"
+                   CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="SuperBuild" RUN_TARGET_NAME="quick_sort">
+        <method v="2">
+            <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask"
+                    enabled="true"/>
+        </method>
+    </configuration>
 </component>

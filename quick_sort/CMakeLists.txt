@@ -15,8 +15,5 @@ add_executable(quick_sort sort.cpp ../utils/utils.cpp)
 target_include_directories(quick_sort PRIVATE ../utils)
 target_include_directories(quick_sort PRIVATE ./)
 
-# Enable benchmark mode compilation
-add_definitions(-DBENCHMARK_MODE)
-
 # Copy the artifacts to the bin directory
 install(TARGETS quick_sort DESTINATION ${PROJECT_DIR}/bin)

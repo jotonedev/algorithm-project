@@ -4,6 +4,7 @@ project(SuperBuild)
 include(ExternalProject)
 
 # Create library specific path variables
+set(BINARY_DIR ${PROJECT_SOURCE_DIR}/bin)
 set(tim_sort_SOURCE_DIR ${PROJECT_SOURCE_DIR}/tim_sort)
 set(quick_sort_SOURCE_DIR ${PROJECT_SOURCE_DIR}/quick_sort)
 set(quick_3way_sort_SOURCE_DIR ${PROJECT_SOURCE_DIR}/quick_3way_sort)
@@ -17,56 +18,12 @@ set(CMAKE_C_STANDARD 17)
 # Include the utils
 include_directories(${PROJECT_SOURCE_DIR}/utils)
 
-ExternalProject_Add(counting_sort
-        BUILD_ALWAYS 1
-        SOURCE_DIR ${counting_sort_SOURCE_DIR}
-        BINARY_DIR ${counting_sort_SOURCE_DIR}/build
-        CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=Release
-        BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND cmake --install . --config Release
-)
+add_subdirectory(${counting_sort_SOURCE_DIR})
 
+add_subdirectory(${quick_sort_SOURCE_DIR})
 
-ExternalProject_Add(quick_sort
-        BUILD_ALWAYS 1
-        SOURCE_DIR ${quick_sort_SOURCE_DIR}
-        BINARY_DIR ${quick_sort_SOURCE_DIR}/build
-        CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=Release
-        BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND cmake --install . --config Release
-)
+add_subdirectory(${quick_3way_sort_SOURCE_DIR})
 
+add_subdirectory(${quick_sort_random_pivot_SOURCE_DIR})
 
-ExternalProject_Add(quick_3way_sort
-        BUILD_ALWAYS 1
-        SOURCE_DIR ${quick_3way_sort_SOURCE_DIR}
-        BINARY_DIR ${quick_3way_sort_SOURCE_DIR}/build
-        CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=Release
-        BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND cmake --install . --config Release
-)
-
-
-ExternalProject_Add(quick_sort_random_pivot
-        BUILD_ALWAYS 1
-        SOURCE_DIR ${quick_sort_random_pivot_SOURCE_DIR}
-        BINARY_DIR ${quick_sort_random_pivot_SOURCE_DIR}/build
-        CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=Release
-        BUILD_COMMAND cmake --build . --config Release --target install
-        INSTALL_COMMAND cmake --install . --config Release
-)
-
-
-ExternalProject_Add(tim_sort
-        BUILD_ALWAYS 1
-        SOURCE_DIR ${tim_sort_SOURCE_DIR}
-        BINARY_DIR ${tim_sort_SOURCE_DIR}/build
-        CMAKE_ARGS
-        -DCMAKE_BUILD_TYPE=Release
-        BUILD_COMMAND cmake --build . --config Release
-        INSTALL_COMMAND cmake --install . --config Release
-)
+add_subdirectory(${tim_sort_SOURCE_DIR})

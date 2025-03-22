@@ -35,7 +35,7 @@ void quick_3way_sort(int *a, int i, int j);
  * @param data The array of integers
  * @return The execution time in nanoseconds
  */
-long long execute(int n, int data[]);
+long long benchmark_algorithm(int n, int data[]);
 
 /**
  * Main function to run the sort algorithm

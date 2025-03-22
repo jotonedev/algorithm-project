@@ -15,9 +15,6 @@ add_executable(quick_3way_sort sort.cpp ../utils/utils.cpp)
 target_include_directories(quick_3way_sort PRIVATE ../utils)
 target_include_directories(quick_3way_sort PRIVATE ./)
 
-# Enable benchmark mode compilation
-add_definitions(-DBENCHMARK_MODE)
-
 # Copy the artifacts to the bin directory
 install(TARGETS quick_3way_sort DESTINATION ${PROJECT_DIR}/bin)
 

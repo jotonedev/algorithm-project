@@ -1,12 +1,10 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <ctime>
+#include <cstring>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -14,7 +12,7 @@
 #include "utils.h"
 
 
-int find_max(int n, int data[]) {
+int find_max(const int n, const int data[]) {
     int max = data[0];
 
     for (int i = 1; i < n; i++) {
@@ -27,7 +25,7 @@ int find_max(int n, int data[]) {
 }
 
 
-int find_min(int n, int data[]) {
+int find_min(const int n, const int data[]) {
     int min = data[0];
 
     for (int i = 1; i < n; i++) {
@@ -40,7 +38,7 @@ int find_min(int n, int data[]) {
 }
 
 
-void counting_sort(int n, int k, int data[], int out[], int count[]) {
+void counting_sort(const int n, const int k, const int data[], int out[], int count[]) {
     // Find the minimum and maximum elements of the array
     int min_val = data[0];
 
@@ -67,183 +65,161 @@ void counting_sort(int n, int k, int data[], int out[], int count[]) {
     }
 }
 
+// ------------------------ Benchmarking Code ------------------------
 
-long long execute(int n, int data[]) {
+long long benchmark_algorithm(const int n, int data[]) {
     // Pre allocate the memory to avoid the overhead of malloc
-    int max = find_max(n, data);
-    int min = find_min(n, data);
-    int k = max - min + 1;
+    const int max = find_max(n, data);
+    const int min = find_min(n, data);
+    const int k = max - min + 1;
 
-    int *out = new int[n];
-    int *count = new int[k];
+    auto *data_copy = new int[n];
+    auto *out = new int[n];
+    auto *count = new int[k];
 
-    // Initialize the count array
-    for (int i = 0; i < k; i++) {
-        count[i] = 0;
-    }
-    // Initialize the output array
-    for (int i = 0; i < n; i++) {
-        out[i] = 0;
-    }
+    // Get the resolution of the clock
+    const auto min_time = get_minimum_time();
 
     // Initialize the clock to measure the execution time
-    const auto start = std::chrono::steady_clock::now();
-    // Call the counting sort function
-    counting_sort(n, k, data, out, count);
+    long long elapsed = 0;
     // Measure the elapsed time
-    const auto end = std::chrono::steady_clock::now();
-    const auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+    int i = 0;  // Counter to measure the number of iterations
+    const time_point_t start = std::chrono::steady_clock::now();  // Start the clock
+    while (elapsed < min_time) {  // Continue until the minimum time is reached
+        // Increment the counter
+        i++;
 
-// Verify the result
-#ifndef BENCHMARK_MODE // Execute only if not in benchmark mode
+        // Duplicate the input data
+        memcpy(data_copy, data, n * sizeof(int));
+        // Clear the arrays
+        memset(out, 0, n * sizeof(int));
+        memset(count, 0, k * sizeof(int));
+
+        // Call the sort function
+        counting_sort(n, k, data, out, count);
+        // Measure the elapsed time
+        time_point_t end = std::chrono::steady_clock::now();
+        elapsed = std::chrono::duration_cast<time_unit_t>(end - start).count();
+    }
+
+    // Free the allocated memory
+    delete[] out;
+    delete[] count;
+    delete[] data_copy;
+
+    // Compute the elapsed time in nanoseconds
+    return elapsed / i;
+}
+
+// ------------------------ Main Function ------------------------
+
+#ifndef BENCHMARK_MODE
+
+int main(int argc, char *argv[]) {
+    // Read array from stdin
+    const std::vector<int> data = read_input_data();
+
+    // Convert the vector to an array
+    const int n = data.size();
+    auto *arr = data.data();
+
+    const int max = find_max(n, arr);
+    const int min = find_min(n, arr);
+    const int k = max - min + 1;
+
+    // Pre allocate the memory
+    auto *out = new int[n];
+    auto *count = new int[k];
+    // Initialize the arrays
+    memset(out, 0, n * sizeof(int));
+    memset(count, 0, k * sizeof(int));
+
+    // Execute the sort algorithm
+    counting_sort(n, k, arr, out, count);
+
     // Print the sorted array
     for (int i = 0; i < n; i++) {
         std::cout << out[i] << " ";
     }
-    std::cout << std::endl;
-#else
-    check_result(n, out);
-#endif
 
     // Free the allocated memory
     delete[] out;
     delete[] count;
 
-    // Compute the elapsed time in nanoseconds
-    return elapsed.count();
-}
-
-
-#ifndef BENCHMARK_MODE
-
-int main(int argc, char *argv[]) {
-    // Read array from stdin without length given separated by space
-    std::vector<int> data;
-    std::string line;
-
-    // Read the array from standard input
-    std::getline(std::cin, line);
-    std::istringstream iss(line);
-    int num;
-    while (iss >> num) {
-        data.push_back(num);
-    }
-
-    // Convert the vector to an array
-    int n = data.size();
-    int *arr = data.data();
-
-    // Execute the counting sort algorithm
-    try {
-        execute(n, arr);
-    } catch (const std::runtime_error &e) {
-        std::cerr << e.what() << std::endl;
-        return 1;
-    }
-
     return 0;
 }
-#endif
 
+#else
 
-#ifdef BENCHMARK_MODE
-
-
-int main(int argc, char *argv[]) {
+int main(const int argc, char *argv[]) {
     set_cpu_affinity();
 
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " [length|max] [linear|exponential] [output_file]" << std::endl;
-        return 1;
+      std::cerr << "Usage: " << argv[0]
+                << " [length|max] [output_file]"
+                << std::endl;
+      return 1;
     }
 
-    std::string mode = argv[1];
-    bool test_length = (mode == "length");
-
-    // Default to exponential scaling if not specified
-    bool linear_scaling = false;
-    if (argc >= 3) {
-        std::string scaling_mode = argv[2];
-        linear_scaling = (scaling_mode == "linear");
-    }
+    const std::string mode = argv[1];
+    const bool test_length = (mode == "length");
 
     // Output filename
     std::string output_file;
     if (argc >= 4) {
-        output_file = argv[3];
+      output_file = argv[3];
     } else {
-        // Generate a filename based on test parameters and timestamp
-        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "counting_sort");
+      // Generate a filename based on test parameters and timestamp
+      output_file = generate_filename(test_length ? "length" : "max", "counting_sort");
     }
 
-    int min_val = 1;
-    int max_val = 1000000;
-    int length = 100000;
-    int num_samples = 300; // Can be adjusted
+    std::vector<RunResult> runs;
 
-    std::vector<Run> runs;
-
+    // Determine which parameter to vary and its range
+    int min_param, max_param;
+    bool vary_length;
     if (test_length) {
-        // Test by varying length from 100 to 100,000
-        int min_length = 100;
-        int max_length = 100000;
-
-        // Generate sample points based on scaling type
-        std::vector<int> sample_lengths = generate_sample_points(min_length, max_length, num_samples, linear_scaling);
-
-        for (const int curr_length: sample_lengths) {
-            Run run;
-            run.min = min_val;
-            run.max = max_val;
-            run.length = curr_length;
-            run.resolution = get_resolution();
-
-            // Run multiple times
-            for (int r = 0; r < NUM_RUNS; r++) {
-                // Generate input data
-                int *data = generate_input_data(curr_length, min_val, max_val);
-                // Execute and record time
-                run.time[r] = execute(curr_length, data);
-                // Free the allocated memory
-                delete[] data;
-            }
-
-            // Print results for this run
-            std::cout << "Length: " << curr_length << ", Min: " << run.min << ", Max: " << run.max << ", Resolution: " << run.resolution << std::endl;
-
-            runs.push_back(run);
-        }
+        min_param = 100;        // min_length
+        max_param = 100000;     // max_length
+        vary_length = true;
     } else {
-        // Test by varying max_val from 10 to 1,000,000
-        int min_max = 10;
-        int max_max = 1000000;
+        min_param = 10;         // min_max
+        max_param = 1000000;    // max_max
+        vary_length = false;
+    }
 
-        // Generate sample points based on scaling type
-        std::vector<int> sample_maxes = generate_sample_points(min_max, max_max, num_samples, linear_scaling);
+    // Generate sample points based on scaling type
+    std::vector<int> sample_points = generate_sample_points(min_param, max_param, NUM_SAMPLES);
 
-        for (int curr_max: sample_maxes) {
-            Run run;
-            run.min = min_val;
-            run.max = curr_max;
-            run.length = length;
-            run.resolution = get_resolution();
+    // Run tests for each sample point
+    for (const int param_value : sample_points) {
+        RunResult run = {};
 
-            // Run multiple times for each sample point
-            for (int r = 0; r < NUM_RUNS; r++) {
-
-                // Generate input data
-                int *data = generate_input_data(length, min_val, curr_max);
-                // Execute and record time
-                run.time[r] = execute(length, data);
-                // Free the allocated memory
-                delete[] data;
-            }
-
-            // Print results for this run
-            std::cout << "Length: " << run.length << ", Min: " << run.min << ", Max: " << run.max << ", Resolution: " << run.resolution << std::endl;
-
-            runs.push_back(run);
+        if (vary_length) {
+            run.max = 1000000;
+            run.length = param_value;
+        } else {
+            run.max = param_value;
+            run.length = 100000;
         }
+
+        // Run multiple times for each sample point
+        for (int r = 0; r < NUM_RUNS; r++) {
+            // Generate input data with appropriate parameters
+            const auto data = new int[run.length];
+            generate_input_data(data, run.length, run.min, run.max);
+            // Execute and record time
+            run.time[r] = benchmark_algorithm(run.length, data);
+            // Free the allocated memory
+            delete[] data;
+        }
+
+        // Print results for this run
+        std::cout << "Length: " << run.length
+                  << ", Min: " << run.min
+                  << ", Max: " << run.max << std::endl;
+
+        runs.push_back(run);
     }
 
     // Write results to CSV file

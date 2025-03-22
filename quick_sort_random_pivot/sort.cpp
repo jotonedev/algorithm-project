@@ -1,12 +1,9 @@
 #include <algorithm>
 #include <chrono>
 #include <cmath>
-#include <ctime>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -15,9 +12,9 @@
 
 
 // Partition function to rearrange the elements around the pivot
-int partition(int *a, int i, int j) {
-    int k = i; // index of the pivot's final position after the partition function completes
-    int pivot = a[j - 1]; // Choose the last element as the pivot
+int partition(int *a, const int i, const int j) {
+    int k = i; // index of the pivot's final position after the partition function
+    const int pivot = a[j - 1]; // Choose the last element as the pivot
 
     for (int l = i; l < j; l++) { // Exclude pivot from comparisons
         if (a[l] <= pivot) {
@@ -29,103 +26,97 @@ int partition(int *a, int i, int j) {
 }
 
 // Generate a random number between i and j
-int random_between(int i, int j) {
+int random_between(const int i, const int j) {
     return i + rand() % (j - i + 1); // Generate a random number between i and j
 }
 
 // Randomized partition function to rearrange the elements around the pivot
 int randomized_partition(int *a, int i, int j) {
-    int x = random_between(i, j - 1); // Select a random index between i and j-1
+    const int x = random_between(i, j - 1); // Select a random index between i and j-1
     swap(a, j - 1, x); // Swap it with the last element
     return partition(a, i, j); // Perform partitioning
 }
 
-void randomized_quick_sort(int *a, int i, int j) {
+void randomized_quick_sort(int *a, const int i, const int j) {
     if (i < j) {
-        int q = randomized_partition(a, i, j);
+        const int q = randomized_partition(a, i, j);
         randomized_quick_sort(a, i, q);
         randomized_quick_sort(a, q + 1, j);
     }
 }
 
+// ------------------------ Benchmarking Code ------------------------
 
-long long execute(int n, int data[]) {
+long long benchmark_algorithm(const int n, int data[]) {
+    // Pre allocate the memory to avoid the overhead of malloc
+    auto *data_copy = new int[n];
+
+    // Get the resolution of the clock
+    const auto min_time = get_minimum_time();
+
     // Initialize the clock to measure the execution time
-    const auto start = std::chrono::steady_clock::now();
-    // Call the quick sort function
-    randomized_quick_sort(data, 0, n);
+    long long elapsed = 0;
     // Measure the elapsed time
-    const auto end = std::chrono::steady_clock::now();
-    const auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start);
+    int i = 0;  // Counter to measure the number of iterations
+    const time_point_t start = std::chrono::steady_clock::now();  // Start the clock
+    while (elapsed < min_time) {  // Continue until the minimum time is reached
+        // Increment the counter
+        i++;
 
-    // Verify the result
-#ifndef BENCHMARK_MODE // Execute only if not in benchmark mode
-    // Print the sorted array
-    for (int i = 0; i < n; i++) {
-        std::cout << data[i] << " ";
+        // Duplicate the input data
+        memcpy(data_copy, data, n * sizeof(int));
+
+        // Call the sort function
+        randomized_quick_sort(data_copy, 0, n);
+        // Measure the elapsed time
+        time_point_t end = std::chrono::steady_clock::now();
+        elapsed = std::chrono::duration_cast<time_unit_t>(end - start).count();
     }
-    std::cout << std::endl;
-#else
-    check_result(n, data);
-#endif
+
+    // Free the allocated memory
+    delete[] data_copy;
 
     // Compute the elapsed time in nanoseconds
-    return elapsed.count();
+    return elapsed / i;
 }
 
+// ------------------------ Main Function ------------------------
 
 #ifndef BENCHMARK_MODE
 
 int main(int argc, char *argv[]) {
-    // Read array from stdin without length given separated by space
-    std::vector<int> data;
-    std::string line;
-
-    // Read the array from standard input
-    std::getline(std::cin, line);
-    std::istringstream iss(line);
-    int num;
-    while (iss >> num) {
-        data.push_back(num);
-    }
+    // Read array from stdin
+    std::vector<int> data = read_input_data();
 
     // Convert the vector to an array
-    int n = data.size();
+    const int n = data.size();
     int *arr = data.data();
 
-    // Execute the quick sort algorithm
-    try {
-        execute(n, arr);
-    } catch (const std::runtime_error &e) {
-        std::cerr << e.what() << std::endl;
-        return 1;
+    // Execute the sort algorithm
+    randomized_quick_sort(arr, 0, n);
+
+    // Print the sorted array
+    for (int i = 0; i < n; i++) {
+        std::cout << arr[i] << " ";
     }
 
     return 0;
 }
-#endif
 
+#else
 
-#ifdef BENCHMARK_MODE
-
-#include "utils.h"
-int main(int argc, char *argv[]) {
+int main(const int argc, char *argv[]) {
     set_cpu_affinity();
 
     if (argc < 2) {
-        std::cerr << "Usage: " << argv[0] << " [length|max] [linear|exponential] [output_file]" << std::endl;
-        return 1;
+          std::cerr << "Usage: " << argv[0]
+                    << " [length|max] [output_file]"
+                    << std::endl;
+          return 1;
     }
 
-    std::string mode = argv[1];
-    bool test_length = (mode == "length");
-
-    // Default to exponential scaling if not specified
-    bool linear_scaling = false;
-    if (argc >= 3) {
-        std::string scaling_mode = argv[2];
-        linear_scaling = (scaling_mode == "linear");
-    }
+    const std::string mode = argv[1];
+    const bool test_length = (mode == "length");
 
     // Output filename
     std::string output_file;
@@ -133,77 +124,56 @@ int main(int argc, char *argv[]) {
         output_file = argv[3];
     } else {
         // Generate a filename based on test parameters and timestamp
-        output_file = generate_filename(test_length ? "length" : "max", linear_scaling, "quick_random_pivot_sort");
+        output_file = generate_filename(test_length ? "length" : "max", "quick_sort_random_pivot");
     }
 
-    int min_val = 1;
-    int max_val = 1000000;
-    int length = 100000;
-    int num_samples = 300; // Can be adjusted
+    std::vector<RunResult> runs;
 
-    std::vector<Run> runs;
-
+    // Determine which parameter to vary and its range
+    int min_param, max_param;
+    bool vary_length;
     if (test_length) {
-        // Test by varying length from 100 to 100,000
-        int min_length = 100;
-        int max_length = 100000;
-
-        // Generate sample points based on scaling type
-        std::vector<int> sample_lengths = generate_sample_points(min_length, max_length, num_samples, linear_scaling);
-
-        for (const int curr_length: sample_lengths) {
-            Run run;
-            run.min = min_val;
-            run.max = max_val;
-            run.length = curr_length;
-            run.resolution = get_resolution();
-
-            // Run multiple times
-            for (int r = 0; r < NUM_RUNS; r++) {
-                // Generate input data
-                int *data = generate_input_data(curr_length, min_val, max_val);
-                // Execute and record time
-                run.time[r] = execute(curr_length, data);
-                // Free the allocated memory
-                delete[] data;
-            }
-
-            // Print results for this run
-            std::cout << "Length: " << curr_length << ", Min: " << run.min << ", Max: " << run.max << ", Resolution: " << run.resolution << std::endl;
-
-            runs.push_back(run);
-        }
+        min_param = 100;        // min_length
+        max_param = 100000;     // max_length
+        vary_length = true;
     } else {
-        // Test by varying max_val from 10 to 1,000,000
-        int min_max = 10;
-        int max_max = 1000000;
+        min_param = 10;         // min_max
+        max_param = 1000000;    // max_max
+        vary_length = false;
+    }
 
-        // Generate sample points based on scaling type
-        std::vector<int> sample_maxes = generate_sample_points(min_max, max_max, num_samples, linear_scaling);
+    // Generate sample points based on scaling type
+    std::vector<int> sample_points = generate_sample_points(min_param, max_param, NUM_SAMPLES);
 
-        for (int curr_max: sample_maxes) {
-            Run run;
-            run.min = min_val;
-            run.max = curr_max;
-            run.length = length;
-            run.resolution = get_resolution();
+    // Run tests for each sample point
+    for (const int param_value : sample_points) {
+        RunResult run = {};
 
-            // Run multiple times for each sample point
-            for (int r = 0; r < NUM_RUNS; r++) {
-
-                // Generate input data
-                int *data = generate_input_data(length, min_val, curr_max);
-                // Execute and record time
-                run.time[r] = execute(length, data);
-                // Free the allocated memory
-                delete[] data;
-            }
-
-            // Print results for this run
-            std::cout << "Length: " << run.length << ", Min: " << run.min << ", Max: " << run.max << ", Resolution: " << run.resolution << std::endl;
-
-            runs.push_back(run);
+        if (vary_length) {
+            run.max = 1000000;
+            run.length = param_value;
+        } else {
+            run.max = param_value;
+            run.length = 100000;
         }
+
+        // Run multiple times for each sample point
+        for (int r = 0; r < NUM_RUNS; r++) {
+            // Generate input data with appropriate parameters
+            const auto data = new int[run.length];
+            generate_input_data(data, run.length, run.min, run.max);
+            // Execute and record time
+            run.time[r] = benchmark_algorithm(run.length, data);
+            // Free the allocated memory
+            delete[] data;
+        }
+
+        // Print results for this run
+        std::cout << "Length: " << run.length
+                  << ", Min: " << run.min
+                  << ", Max: " << run.max << std::endl;
+
+        runs.push_back(run);
     }
 
     // Write results to CSV file
