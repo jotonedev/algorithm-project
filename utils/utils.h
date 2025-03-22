@@ -5,8 +5,8 @@
 #include <vector>
 
 // Number of runs to average the execution time
-constexpr int NUM_RUNS = 64;
-constexpr int NUM_SAMPLES = 250;
+constexpr int NUM_RUNS = 48;
+constexpr int NUM_SAMPLES = 200;
 
 // Standard types
 typedef std::chrono::nanoseconds time_unit_t;

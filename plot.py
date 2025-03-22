@@ -23,10 +23,10 @@ def plot_data(
     ax1.plot(
         data[x_axis],
         data["time"],
-        marker="o" if scale == "linear" else None,
+        marker="o",
         linestyle="-",
         color="black",
-        markersize=3 if scale == "linear" else None,
+        markersize=3,
     )
 
     # Set the scale
