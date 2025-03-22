@@ -86,7 +86,13 @@ def transform_data(df: pd.DataFrame) -> pd.DataFrame:
     df[time_columns] = df[time_columns] / 1_000
 
     # Create a new column with the median time
-    df["time"] = df[time_columns].median(axis=1)
+    # while removing outliers
+    df["time"] = df[time_columns].apply(
+        lambda row: row[(row >= row.quantile(0.25) - 1.5 * (row.quantile(0.75) - row.quantile(0.25))) &
+                        (row <= row.quantile(0.75) + 1.5 * (row.quantile(0.75) - row.quantile(0.25)))].median(),
+        axis=1
+    )
+
     # Create a new column with the standard deviation of the time
     df["time_std"] = df[time_columns].std(axis=1)
     # Drop the original time columns
@@ -120,7 +126,9 @@ def main(
         # Extract if the x-axis is the length or the maximum value
         x_axis = "length" if "length" in name else "max_val"
         # Extract the name of the plot
-        name = name.split("_sort_")[0].replace("_", " ") + " Sort"
+        splits = name.split("_")
+        # Remove the last two elements
+        name = " ".join(splits[:-2]).replace("_", " ")
         name = name.title()
 
         # Plot the data
