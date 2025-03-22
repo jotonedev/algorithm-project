@@ -15,4 +15,7 @@ add_executable(counting_sort sort.cpp ../utils/utils.cpp)
 target_include_directories(counting_sort PRIVATE ../utils)
 target_include_directories(counting_sort PRIVATE ./)
 
+# Enable benchmark mode compilation
+add_definitions(-DBENCHMARK_MODE)
+
 install(TARGETS counting_sort DESTINATION ${PROJECT_DIR}/bin)

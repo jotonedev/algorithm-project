@@ -15,5 +15,8 @@ add_executable(tim_sort sort.cpp ../utils/utils.cpp)
 target_include_directories(tim_sort PRIVATE ../utils)
 target_include_directories(tim_sort PRIVATE ./)
 
+# Enable benchmark mode compilation
+add_definitions(-DBENCHMARK_MODE)
+
 # Copy the artifacts to the bin directory
 install(TARGETS tim_sort DESTINATION ${PROJECT_DIR}/bin)
