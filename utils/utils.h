@@ -5,8 +5,8 @@
 #include <vector>
 
 // Number of runs to average the execution time
-constexpr int NUM_RUNS = 32;
-constexpr int NUM_SAMPLES = 400;
+constexpr int NUM_RUNS = 64;
+constexpr int NUM_SAMPLES = 300;
 
 // Standard types
 typedef std::chrono::nanoseconds time_unit_t;
@@ -51,7 +51,7 @@ void generate_input_data(int out[], int n, int min, int max);
  * @param data the array to check
  * @throws std::runtime_error if the array is not sorted
  */
-void check_result(int n, const int data[]);
+void check_result(int n, int data[]);
 
 /**
  * @brief Get the resolution of the clock
@@ -75,7 +75,7 @@ long long get_minimum_time();
  * @return the vector of sample values
  */
 std::vector<int> generate_sample_points(int min_val, int max_val,
-                                        int num_samples);
+                                        int num_samples, bool linear);
 
 /**
  * @brief Generate a timestamped filename for benchmark results
@@ -85,7 +85,7 @@ std::vector<int> generate_sample_points(int min_val, int max_val,
  * @param sort_type the name of the sorting algorithm
  * @return the generated filename
  */
-std::string generate_filename(const std::string &test_type,
+std::string generate_filename(const std::string &test_type, bool linear_scaling,
                               const std::string &sort_type);
 
 /**

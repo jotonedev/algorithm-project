@@ -23,10 +23,10 @@ def plot_data(
     ax1.plot(
         data[x_axis],
         data["time"],
-        marker="o",
+        marker="o" if scale == "linear" else None,
         linestyle="-",
         color="black",
-        markersize=3,
+        markersize=3 if scale == "linear" else None,
     )
 
     # Set the scale
@@ -45,11 +45,11 @@ def plot_data(
     ax1.grid(True)
 
     # Increase the number of ticks
-    if scale == "exp":
+    if scale == "log":
         ax1.get_xaxis().set_major_locator(plt.LogLocator(base=10, numticks=5))
         ax1.get_xaxis().set_minor_locator(plt.LogLocator(base=10, subs="auto", numticks=5))
         ax1.get_yaxis().set_major_locator(plt.LogLocator(base=10, numticks=5))
-        ax1.get_yaxis().set_minor_locator(plt.NullLocator())
+        ax1.get_yaxis().set_minor_locator(plt.LogLocator(base=10, subs="auto", numticks=5))
     else:
         ax1.get_xaxis().set_major_locator(plt.MaxNLocator(10))
         ax1.get_yaxis().set_major_locator(plt.MaxNLocator(10))
@@ -92,9 +92,6 @@ def transform_data(df: pd.DataFrame) -> pd.DataFrame:
     # Drop the original time columns
     df.drop(columns=time_columns, inplace=True)
 
-    # Drop the resolution column
-    df.drop(columns=["resolution"], inplace=True)
-
     return df
 
 
@@ -105,8 +102,7 @@ def list_csv_files(directory: Path) -> list[Path]:
 
 def main(
         in_dir: Path,
-        out_dir: Path,
-        scale: str = "linear",
+        out_dir: Path
 ) -> None:
     if not in_dir.exists():
         raise FileNotFoundError(f"Input directory not found: {in_dir}")
@@ -119,6 +115,8 @@ def main(
 
         # Get the name of the file
         name = file.stem
+        # Extract the scale
+        scale = "log" if "exponential" in name else "linear"
         # Extract if the x-axis is the length or the maximum value
         x_axis = "length" if "length" in name else "max_val"
         # Extract the name of the plot
@@ -126,15 +124,14 @@ def main(
         name = name.title()
 
         # Plot the data
-        out_file = out_dir / f"{file.stem}_{scale}.svg"
+        out_file = out_dir / f"{file.stem}.svg"
         plot_data(data, out_file, x_axis=x_axis, scale=scale, name=name)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Plot benchmark data from CSV files")
-    parser.add_argument("-i", "--input", type=Path, help="Directory containing CSV files", default=Path("bin/"))
+    parser.add_argument("-i", "--input", type=Path, help="Directory containing CSV files", default=Path(".results/"))
     parser.add_argument("-o", "--output", type=Path, help="Output directory for plots", default=Path(".results/"))
-    parser.add_argument("-s", "--scale", type=str, choices=["linear", "log"], default="linear", help="Scale for the plot (linear or logarithmic)")
     args = parser.parse_args()
 
     main(args.input, args.output)

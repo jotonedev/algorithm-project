@@ -64,22 +64,41 @@ long long get_minimum_time() {
 
 // Function to generate sample values either linearly or exponentially
 std::vector<int> generate_sample_points(const int min_val, const int max_val,
-                                        const int num_samples) {
+                                        const int num_samples,
+                                        const bool linear) {
   // Initialize vector to store sample values
   std::vector<int> samples;
-  samples.reserve(num_samples + 1);
+  samples.reserve(num_samples);
 
-  int step = (max_val - min_val) / (num_samples - 1);
-  if (step <= 0)
-    step = 1;
+  if (linear) { // Linear scaling
+    // Calculate linear step size
+    double step = static_cast<double>(max_val - min_val) / (num_samples - 1);
+    if (step <= 0)
+      step = 1;
 
-  // Generate linearly spaced values
-  for (int i = 0; i < num_samples + 1; i++) {
-    int value = min_val + i * step;
-    if (value <= samples.back() && !samples.empty()) { // Avoid duplicates
-      value = samples.back() + 1;
+    // Generate linearly spaced values
+    for (int i = 0; i < num_samples; i++) {
+      int value = min_val + static_cast<int>(i * step);
+      if (value <= samples.back()) { // Avoid duplicates
+        value = samples.back() + 1;
+      }
+      samples.push_back(value);
     }
-    samples.push_back(value);
+  } else { // Exponential scaling
+    // Calculate exponential scaling factor
+    const double factor = std::pow(static_cast<double>(max_val) / min_val,
+                                   1.0 / (num_samples - 1));
+
+    // Generate exponentially spaced values
+    for (int i = 0; i < num_samples; i++) {
+      int value = static_cast<int>(min_val * std::pow(factor, i));
+      if (value <=
+          samples
+              .back()) { // we want to increase the value not to have duplicates
+        value = samples.back() + 1;
+      }
+      samples.push_back(value);
+    }
   }
 
   return samples;
@@ -87,9 +106,11 @@ std::vector<int> generate_sample_points(const int min_val, const int max_val,
 
 // Function to generate a timestamped filename
 std::string generate_filename(const std::string &test_type,
+                              const bool linear_scaling,
                               const std::string &sort_type) {
   std::stringstream ss;
-  ss << sort_type << "_" << test_type << ".csv";
+  ss << sort_type << "_" << test_type << "_"
+     << (linear_scaling ? "linear" : "exponential") << ".csv";
 
   return ss.str();
 }
