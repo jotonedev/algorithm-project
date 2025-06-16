@@ -1,0 +1,16 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Benchmarks}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\vspace{0.5cm}
+In this section, is presented a benchmark analysis of the algorithm introduced before. These charts provide a comparison of these algorithms.
+
+In these benchmarks the size $\emph{n}$ of the array is in a range of 100-100000, and the dimension $\emph{m}$ of the values is between 10-1000000.
+The measure of the time of execution for each sample is done on multiple arrays of dimension $\emph{n}$ with values in a range $[1,...\emph{m}]$, and then it is calculates the average time of these tests. The parameters $\emph{n}$ and $\emph{m}$ are reported on the axes of the benchmark.
+
+
+From these benchmarks we can see that while Quicksort and its variants gives a reliable performance on general data, 3-Way Quicksort significantly reduces time of execution when duplicates elements are frequent. Counting Sort, even though is limited by input constraints, excels in terms of linear time complexity. Timsort proves to be the most adaptive and practical for real-world datasets. These results emphasize the importance of selecting an algorithm based on input structure and application requirements.
+
+%todo! mini explenation di cosa ci si aspettava da ogni grafico? idk TO DO TOGETHER!

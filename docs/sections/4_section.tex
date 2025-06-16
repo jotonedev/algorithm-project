@@ -1,0 +1,48 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Counting sort}
+%A\textbf{woo}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+
+\subsection{Description}
+Counting sort is a non-comparison based algorithm, that counts how many occurrences of a value in a given interval are in the array. Then while reading the array from the end, each value is moved at the start. This is done for every occurrence. Still, to work, every element must be in the range $[ 0, k ]$, with $k \in O(n)$, $n$ being the length of the array.
+Since it's non-comparison based, its worst case could be inferior than $O(n \log n)$, which makes this algorithm a better option for an array with the given conditions. 
+
+\subsection{Implementation}
+% counting sort code here
+
+\begin{minted}[breaklines=true, breaksymbol={}]{c}
+// n is the size of data
+// k is the size of the preallocated array count
+void counting_sort(int n, int k, int data[], int out[], int count[]) {
+    int min_val = data[0];
+
+    for (int i = 1; i < n; i++) {
+        if (data[i] < min_val) {
+            min_val = data[i];
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        count[data[i] - min_val]++;
+    }
+
+    for (int i = 1; i < k; i++) {
+        count[i] += count[i - 1];
+    }
+
+    for (int i = n - 1; i >= 0; i--) {
+        out[count[data[i] - min_val] - 1] = data[i];
+        count[data[i] - min_val]--;
+    }
+}
+\end{minted}
+
+\subsection{Complexity}
+Since the array is read once for counting the elements, and the array with the numbers of occurrences is read also once for moving each element to the right place, the complexity would be $O(n+k)$, but since $k \in O(n)$, the final complexity is $O(n)$, in every case, this meaning that it's a linear sorting algorithm.
+
+
+\end{multicols}

@@ -1,0 +1,65 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Quicksort 3 way}
+%A\textbf{woo}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+
+\subsection{Description}
+ This algorithm is a variant of the quicksort, but instead of two, it divides the array in three partitions, one designed on purpose to contain every element that is equal to the pivot. This makes this algorithm more efficient than its classical version because it skips sorting duplicate elements since they are in a specific partition that won't be the subject of a new recursive call, reducing the number of comparisons. The other two partition are made to contain the elements smaller than the pivot in one, and the larger ones in the other. The recursive calls will be done on these two partitions.
+
+\subsection{Implementation}
+% quicksort 3 way code here
+\begin{minted}[breaklines=true, breaksymbol={}]{c}
+void swap(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
+}
+
+void partition_3way(int *a, int i, int j, int *k, int *l) {
+    int pivot = a[j - 1];
+    int p1 = i, p2 = i, p3 = i;
+
+    while (p3 < j) {
+        if (a[p3] < pivot) {
+            swap(&a[p3], &a[p2]);
+            swap(&a[p2], &a[p1]);
+            p1++;
+            p2++;
+            p3++;
+        } else if (a[p3] == pivot) {
+            swap(&a[p3], &a[p2]);
+            p2++;
+            p3++;
+        } else {
+            p3++;
+        }
+    }
+
+    *k = p1;
+    *l = p2;
+}
+
+void quick_3way_sort(int *a, int i, int j) {
+    if (j - i <= 1) {
+        return;
+    }
+
+    int k, l;
+    partition_3way(a, i, j, &k, &l);
+
+    quick_3way_sort(a, i, k);
+    quick_3way_sort(a, l, j);
+}
+\end{minted}
+
+\subsection{Complexity}
+The complexity of this algorithm is similar to the complexity of its classical version when considering the average case $O(n \log n)$ and the worst case $O(n^2)$. The very difference between the two variant is given by the bast case, being in this variant $O(n)$ which occurs when the array is formed by only duplicate elements since no more recursive calls will be made.
+
+\subsection{Limitations}
+This algorithm, used in arrays without duplicate elements, could be slower than its original version.
+
+\end{multicols}

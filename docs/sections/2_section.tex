@@ -1,0 +1,64 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Quicksort}
+%A\textbf{woo}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+
+\subsection{Description}
+Quicksort is a sorting algorithm based on \emph{divide-and-conquer} paradigm.
+\begin{itemize}
+\item{Divide: Using a procedure named Partition, the array is divided in two parts (possibly empty), $A[1\dots p-1]$ and $A[p+1\dots A.length]$ such as the first part contains only element less or equal than A[p] (the pivot), and the second contains only elements greater than $A[p]$. The pivot could be the last element (as in Partition's Lomuto variant which is the one discussed in this paper) or chosen in other ways.}
+\item{Conquer: Using recursive calls of Quicksort, the two arrays $A[1\dots p-1]$ and $A[p+1\dots A.lenght]$ are being sorted.}
+\item{Combine: Because the subarrays are sorted, the entire array $A[1\dots A.length]$ is sorted.}
+\end{itemize}
+
+\subsection{Implementation}
+% quicksort code here
+\begin{minted}[breaklines=true, breaksymbol={}]{c}
+
+void swap(int *a, int k, int l){
+    int temp = a[k];
+    a[k] = a[l];
+    a[l] = temp;
+}
+
+int partition(int *a, int i, int j) {
+    int k = i;
+    int pivot = a[j - 1];
+
+    for (int l = i; l < j; l++) {
+        if (a[l] <= pivot) {
+            swap(a, k, l);
+            k++;
+        }
+    }
+    return k - 1;
+}
+
+void quick_sort(int *a, int i, int j) {
+    if (j - i <= 1) {
+        return;
+    }
+
+    int k = partition(a, i, j);
+    quick_sort(a, i, k);
+    quick_sort(a, k + 1, j);
+}
+\end{minted}
+
+\subsection{Complexity}
+The choice of the pivot in this algorithm significantly influences its efficiency. An optimal pivot is one that divides the arrays in two equal halves, so that is keeps the partitions balanced. This is the best case of complexity of this algorithm, which is $O(n \log n)$. This is also similar to the average case, except that the two partition probably won't be equally long, but still respecting a good balance, still leading to $O(n \log n)$.
+Let's assume instead that the pivot is always the larger element in the array, then one partition is gonna be empty, while the other is gonna almost the entire original array. If that happens repeatedly, it leads to a particular unlucky case scenario: every recursively call is gonna work on a nearly identical size partition reducing the size of the array by just one element in every step.
+That would lead to n recursive calls, each taking $O(n)$, and leading to the worst case scenario of $O(n^2)$.
+
+
+\subsection{Randomized Quicksort}
+An optimized version of Quicksort algorithm wants the pivot to be chosen randomly. That is done still by using the last element of the array as the pivot, but continuosly changing it by a random element in the array. This does not improve the average case complexity, or neither the worst case complexity, but optimized the algorithm with already sorted arrays. This is a better variant because with the classic quicksort, everytime the pivot is chosen in already sorted arrays, it is the greater or smallest elements. That leads to the partition of the array being an empty side, and one with every other element, meanwhile with the randomized version there is very reduced probability that the pivot (randomically) chosen is always the worst one. Because of this, it makes the worst case much less achievable.
+
+\subsection{Limitations}
+Even though  this algorithm on average it is efficient, there are some cases in which it works poorly. I.e. when sorting an already sorted array, or a reverse sorted array while using a bad way of selecting the pivot, leading to its worst time complexity case. It is also a non-stable algorithm, meaning that two elements which the value is the same could change their order while sorting the array. It is also not efficient on very small arrays, due to executing multiple recursive calls.
+
+\end{multicols}

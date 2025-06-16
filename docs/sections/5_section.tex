@@ -1,0 +1,104 @@
+{\color{gray}\hrule}
+\begin{center}
+\section{Timsort}
+%A\textbf{woo}
+\bigskip
+\end{center}
+{\color{gray}\hrule}
+\begin{multicols}{2}
+
+\subsection{Description}
+Timsort is a hybrid, stable sorting algorithm used as the standard sorting algorithm in many different programming languages. It combines techniques from insertion sort and merge sort. It identifies naturally occurring sorted sequences (called runs) in the array, and extends them to a minimum size if necessary using insertion sort.
+These runs are then managed on a stack, and the algorithm applies a series of merge operations based on specific invariants that balance the sizes of the runs. This merging process minimizes the number of comparisons required and adapts to the natural structure of the data, offering excellent performance for real-world datasets that often contain partially sorted sequences.
+
+\subsection{Implementation}
+
+Some parts of the code have been removed to avoid the report being too long given the complexity of the code.
+
+% Timsort code here
+\begin{minted}[breaklines=true, breaksymbol={}]{c}
+int count_run(int arr[], int start, int n) {
+    if (start == n - 1) {
+        return 1;
+    }
+
+    int curr = start;
+    // Determine if the run is increasing or decreasing based on the first two elements.
+    if (arr[curr] <= arr[curr + 1]) {
+        // Increasing run.
+        while (curr < n - 1 && arr[curr] <= arr[curr + 1]) {
+            curr++;
+        }
+    } else {
+        // Decreasing run.
+        while (curr < n - 1 && arr[curr] > arr[curr + 1]) {
+            curr++;
+        }
+        // Reverse the decreasing run
+        int left = start;
+        int right = curr;
+        while (left < right) {
+            int temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+        }
+    }
+    return curr - start + 1;
+}
+
+void extend_run_and_sort(int arr[], int start, int *end, int n, int min_run) {
+    int run_length = count_run(arr, start, n);
+    *end = start + run_length - 1;
+
+    // If the run is shorter than minrun, extend it to minrun.
+    if (run_length < min_run) {
+        int new_end = (start + min_run - 1 < n - 1) ? start + min_run - 1 : n - 1;
+        insertion_sort(arr, start, new_end);
+        *end = new_end;
+    }
+}
+
+void tim_sort(int arr[], int n, int *temp_arr, RunStack *run_stack) {
+    if (n < MIN_MERGE) {
+        // For very small arrays, use insertion sort directly.
+        insertion_sort(arr, 0, n - 1);
+        return;
+    }
+    // Calculate the optimal minimum run length for the length
+    int minrun = calculate_minrun(n);
+
+    run_stack->num_runs = 0;
+    int start = 0;
+    // Divide the array into runs and sort them.
+    while (start < n) {
+        int end;
+        extend_run_and_sort(arr, start, &end, n, minrun);
+        // Push the run onto the stack.
+        push_run(run_stack, start, end - start + 1);
+        // Merge runs in an optimal order
+        merge_collapse(arr, run_stack, temp_arr);
+
+        start = end + 1;
+    }
+
+    // Merge any remaining runs on the stack.
+    while (run_stack->num_runs > 1) {
+        int m = run_stack->num_runs - 2;
+        if (m >= 0) {
+            merge_runs(arr, run_stack, m, m + 1, temp_arr);
+        }
+    }
+}
+\end{minted}
+
+\subsection{Complexity}
+
+TimSort's asymptotic complexity is $O(n\log{n})$ in the worst-case scenario. However, because it exploits already sorted sequences (runs) in the input data, its performance often approaches $O(n)$ for nearly sorted arrays. The algorithm requires $O(n)$ extra space for its temporary array, making it less space-efficient than some in-place sorting methods but highly effective for real-world datasets where randomized inputs are rare.
+
+\subsection{Limitations}
+
+While Tim Sort performs exceptionally well on partially-sorted arrays, its overhead for detecting and extending runs may not provide significant benefits for completely random data, sometimes making it comparable to standard $O(n\log{n})$ algorithms in worst-case scenarios.
+
+\end{multicols}
